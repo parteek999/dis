@@ -11,7 +11,8 @@ var filter=new.Schema({
         Config.APP_CONSTANTS.DATABASE_CONSTANT.CATEGORY.MUSIC,
         Config.APP_CONSTANTS.DATABASE_CONSTANT.CATEGORY.DRINKING,
     ]},
-   
+        date:{ type: Date, required: true, default: Date.now },
+        
      
 })
 module.exports = mongoose.model('filter', filter);

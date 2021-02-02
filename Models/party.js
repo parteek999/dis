@@ -11,8 +11,8 @@ var party=new.Schema({
     partyName:{type: String, trim: true,unique: true, trim: true,required: true},
     partyPrice:{type:Number},
     // loc :  { type: {type:String}, coordinates: [Number]},
-    startTime:{ type: Number, default: (new Date()).getTime() },
-    endingTime:{ type: Number, default: (new Date()).getTime() },
+    startTime:{ type : Date, default: Date.now },
+    endingTime:{ type : Date, default: Date.now },
     descriptopn:{type: String, trim: true,required: true},
     loc: { type: [Number], index: { type: '2dsphere', sparse: true }},
 })
