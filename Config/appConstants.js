@@ -100,7 +100,12 @@ var DATABASE_CONSTANT ={
         BIRTHDAY:'birthday',
         MUSIC:'music',
         DRINKING:'drinking'
+    },
+    EVENTHOSTTYPE:{
+        INDIVIDUAL:'individual',
+        ORGANISATION:'organisation'
     }
+    
 };
 
 
