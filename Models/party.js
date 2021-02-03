@@ -11,10 +11,10 @@ const request = new Schema({
 });
 
 var party=new.Schema({
-    userType:{type: String,enum:[
-        Config.APP_CONSTANTS.DATABASE_CONSTANT.USERTYPE.GUEST,
-        Config.APP_CONSTANTS.DATABASE_CONSTANT.USERTYPE.HOST
-    ]},
+    // userType:{type: String,enum:[
+    //     Config.APP_CONSTANTS.DATABASE_CONSTANT.USERTYPE.GUEST,
+    //     Config.APP_CONSTANTS.DATABASE_CONSTANT.USERTYPE.HOST
+    // ]},
     partyName:{type: String, trim: true,unique: true, trim: true,required: true},
     partyPrice:{type:Number},
     venue:{ type: [Number], index: { type: '2dsphere', sparse: true }},
@@ -34,8 +34,7 @@ var party=new.Schema({
         eventhostType:{type :String,enum:[
             Config.APP_CONSTANTS.DATABASE_CONSTANT. EVENTHOSTTYPE.INDIVIDUAl,
             Config.APP_CONSTANTS.DATABASE_CONSTANT. EVENTHOSTTYPE. ORGANISATION,
-
-        ]},
+]},
       hostid:{type:Schema.ObjectId,ref:"user",default:null},
       userid:{type:Schema.ObjectId,ref:"user",default:null},
       request:[request],
