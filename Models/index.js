@@ -5,5 +5,6 @@ module.exports = {
     Users: require('./Users'),
     party: require('./party'),
     group: require('./group'),
+    admin: require('./admin'),
        
 };

@@ -77,9 +77,9 @@ const  CreateBranch= async (payload)=> {
             return {
                 ...savedData,
                 password: undefined
-               };
-     }
-        
+            };
+  }
+     
     
        
 
@@ -106,15 +106,13 @@ const  UpdateBranch= async (payload)=> {
            throw ERROR.BRANCH_NOT_FOUND;
        }
 
-        await DAO.findAndUpdate(Models.Branchs,{_id:payload._id}, payload);
-
-
-       return null;
+    await DAO.findAndUpdate(Models.Branchs,{_id:payload._id}, payload);
+     return null;
 
     }
-     catch (err){
-         throw err
-     }
+    catch (err){
+        throw err
+    }
  }
 
  const GetBranch = (payload) => {

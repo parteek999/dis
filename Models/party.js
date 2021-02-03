@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var Config = require('../Config');
 
 
-var party = new.Schema({
+var party = new Schema({
    
     name: { type: String, trim: true, unique: true, trim: true, required: true },
     price: { type: Number },
