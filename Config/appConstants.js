@@ -45,15 +45,15 @@ var DATABASE_CONSTANT ={
 
     
     GENDER:{
-        MALE:"Male",
-        FEMALE:"Female",
+        MALE:"male",
+        FEMALE:"female",
         OTHER:"other"
     },
 
     ORDER_STATUS:{
-        PENDING:"Pending",
-        CONFIRMED:"Confirmed",
-        REJECT: "Reject"
+        PENDING:"pending",
+        CONFIRMED:"confirmed",
+        REJECT: "reject"
     },
     
     DEVICE_TYPES: {

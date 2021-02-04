@@ -2,7 +2,7 @@
 	"host": "localhost",
 	"port": "8000",
 	"mongoDb": {
-		"URI": "mongodb://localhost/agentjack",
+		"URI": "mongodb://localhost/partykings",
 		"PORT": "27017"
 	}
 }

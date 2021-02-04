@@ -15,14 +15,14 @@ var Users = new Schema({
         required: true
     },
     dob: {type: String, required: true},
-    phoneNo: {type: String, required: true},
+    phoneno: {type: String, required: true},
    
     imgUrl:[ {type: String, default: null}],
     
     verification:{type:String},
     otp: {
         type: String,
-        required: true,
+      
     },
     
     
