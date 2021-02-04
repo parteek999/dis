@@ -76,8 +76,8 @@ const init = async () => {
 
     server.events.on('response', request => {   
            
-        console.log(`[${request.method.toUpperCase()} ${request.url.pathname} ]`)
-        console.log(`[${request.method.toUpperCase()} ${request.url.pathname} ](${request.response.statusCode || "error null status code"}) : ${request.info.responded-request.info.received} ms`);
+        // console.log(`[${request.method.toUpperCase()} ${request.url.pathname} ]`)
+        // console.log(`[${request.method.toUpperCase()} ${request.url.pathname} ](${request.response.statusCode || "error null status code"}) : ${request.info.responded-request.info.received} ms`);
     });
 
 
@@ -97,12 +97,12 @@ const init = async () => {
 };
     
 process.on('uncaughtException',(code) => {
-    console.log(`About to exit with code: ${code}`);
+    // console.log(`About to exit with code: ${code}`);
 });
 
 
 process.on('unhandledRejection',(code) => {
-    console.log(`About to exit with code: ${code}`);
+    // console.log(`About to exit with code: ${code}`);
 });
 
 init();

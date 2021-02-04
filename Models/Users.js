@@ -5,7 +5,7 @@ var Config = require('../Config');
 var Users = new Schema({
     email: {type: String, index:true, trim: true},
     password: {type: String},
-    fullname : {type: String, trim: true },
+    fullName : {type: String, trim: true },
     gender:{type:String,
         enum: [
             Config.APP_CONSTANTS.DATABASE_CONSTANT.GENDER.MALE,
@@ -15,7 +15,7 @@ var Users = new Schema({
         required: true
     },
     dob: {type: String},
-    phoneno: {type: String},
+    phoneNo: {type: String},
    
     imgUrl:[ {type: String, default: null}],
     

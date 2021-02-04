@@ -10,7 +10,7 @@ const Boom = require('@hapi/boom'),
     Config = require('../Config'),
     ERROR = Config.responseMessages.ERROR,
     SUCCESS = Config.responseMessages.SUCCESS;
-
+    
 
 function sendError(language,data,reply) {
     console.log("-----------------error------------------", data);
@@ -153,4 +153,5 @@ module.exports = {
     authorizationHeaderObj:authorizationHeaderObj,
     sendSuccess : sendSuccess,
     sendError : sendError,
+    // otp:otp
 };

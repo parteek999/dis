@@ -14,6 +14,7 @@ function saveData(model,data) {
     });
 }
 
+
 function getData(model, query, projection, options) {
     return new Promise((resolve, reject) => {
         try {
@@ -217,7 +218,7 @@ async function aggregateDataWithPopulate(model, group, populateOptions,options) 
     } catch (err) {
         return err;
     }
-}
+};
 
 module.exports = {
     saveData : saveData,
