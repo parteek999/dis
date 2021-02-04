@@ -13,39 +13,66 @@ const {sendPushNotification} = require('../Libs/notification');
 const mongoose = require('mongoose');
 
 const signup = async (payload) => {
-
-    let query = {
-        isBlocked: false,
-        email : payload.email
+    //  console.log(payload.password),
+    //  console.log(payload.verifypassword)
+     
+     let query = {
+       email : payload.email
     };
-   let result = await DAO.getData(Models.Users,query,{_id:1},{limit:1});
-
-   if(result.length){
+    let result = await DAO.getData(Models.Users,query,{_id:1},{limit:1});
+    
+    if(result.length){
        throw ERROR.EMAIL_ALREADY_EXIST;
    }
-
+   if(payload.password!=payload.verifypassword){
+    throw  ERROR.INVALID_PASSWORDMATCH;
+}
     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    payload.loginType = Config.APP_CONSTANTS.DATABASE_CONSTANT.ACCOUNT_TYPE.EMAIL;
+    // payload.loginType = Config.APP_CONSTANTS.DATABASE_CONSTANT.ACCOUNT_TYPE.EMAIL;
     result = await DAO.saveData(Models.Users,payload);
 
-
-    let tokenData={
-        scope:Config.APP_CONSTANTS.SCOPE.USER,
-        _id:result._id,
-        time:new Date(),
-       
-    };
-
-   
-      const accessToken = await TokenManager.GenerateToken(tokenData,Config.APP_CONSTANTS.SCOPE.USER);
-            
-            return {
-                accessToken,
-                user:{
-                    ...payload
-                }
-            }
+    return {
+        payload
+                 }
 }
+const  login= async (payload)=> {
+
+    try {
+        const { email, password } = payload;
+        // console.log(email);
+        // console.log(password);
+ 
+        const query = {
+            email,
+           
+         };
+ 
+       const result = await DAO.getDataOne(Models.Users,query,{});
+    //    console.log(result);
+ 
+      
+       if(result === null ) throw ERROR.INVALID_CREDENTIALS;
+       const checkPassword = Bcrypt.compareSync(password, result.password); //compare password string to encrypted string
+ 
+       if(!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
+ 
+       let tokenData={
+         scope:Config.APP_CONSTANTS.SCOPE.USER,
+         _id:result._id,
+         time:new Date(),
+         
+     };
+          const accessToken = await TokenManager.GenerateToken(tokenData,Config.APP_CONSTANTS.SCOPE.USER);
+ 
+              return {
+                 accessToken,
+                 
+             }
+ }
+     catch (err){
+         throw err
+     }
+ }
 module.exports={
-    signup
+    signup,login
 }

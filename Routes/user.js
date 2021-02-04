@@ -32,7 +32,7 @@ module.exports = [{
                 verifypassword:Joi.string().required(),
                 gender: Joi.string(),
                 dob: Joi.string(),
-                addPhotosURL: Joi.string(),
+                imgUrl: Joi.string(),
              }),
            
         },
@@ -43,4 +43,42 @@ module.exports = [{
         }
     }
 },
+{
+    method: 'POST',
+    path: '/user/login',
+    config: {
+        description: 'login',
+        auth: false,
+        tags: ['api', 'user'],
+        
+        handler: (request, reply)=> {
+            return Controller.user.login(request.payload, request.auth.credentials)
+                .then(response => {
+                    return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                })
+                .catch(error => {
+                    winston.error("=====error=============", error);
+                    return UniversalFunctions.sendError("en", error, reply);
+                });
+        },
+
+        validate: {
+            payload: Joi.object({
+                email: Joi.string().email().lowercase().trim().required(),
+                password: Joi.string().trim().required()
+             }),
+            headers: UniversalFunctions.authorizationHeaderObjOptional,
+            failAction: UniversalFunctions.failActionFunction,
+            
+        },
+        
+        plugins: {
+            'hapi-swagger': {
+                payloadType: 'form'
+            }
+        }
+    }
+},
+
+
 ]

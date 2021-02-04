@@ -2,6 +2,14 @@
  * Created by Shumi on 17/5/18.
  */
 exports.ERROR = {
+    INVALID_PASSWORDMATCH: {
+        statusCode: 400,
+        customMessage: {
+            en : 'Invalid PASSWORD provided.'
+           
+        },
+        type: 'PASSWORD_DIDNOT_MATCH'
+    },
     INVALID_OPERATION : {
         statusCode:400,
         customMessage : {

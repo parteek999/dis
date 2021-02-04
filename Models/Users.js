@@ -3,9 +3,9 @@ var Schema = mongoose.Schema;
 var Config = require('../Config');
 
 var Users = new Schema({
-    email: {type: String, index:true, trim: true, required: true},
-    password: {type: String, required: true},
-    fullname : {type: String, trim: true, required: true},
+    email: {type: String, index:true, trim: true},
+    password: {type: String},
+    fullname : {type: String, trim: true },
     gender:{type:String,
         enum: [
             Config.APP_CONSTANTS.DATABASE_CONSTANT.GENDER.MALE,
@@ -14,8 +14,8 @@ var Users = new Schema({
         ],
         required: true
     },
-    dob: {type: String, required: true},
-    phoneno: {type: String, required: true},
+    dob: {type: String},
+    phoneno: {type: String},
    
     imgUrl:[ {type: String, default: null}],
     
