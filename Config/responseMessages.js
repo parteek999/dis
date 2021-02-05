@@ -1,6 +1,4 @@
-/**
- * Created by Shumi on 17/5/18.
- */
+
 exports.ERROR = {
     INVALID_PASSWORDMATCH: {
         statusCode: 400,

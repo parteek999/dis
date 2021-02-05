@@ -12,18 +12,17 @@ var Users = new Schema({
             Config.APP_CONSTANTS.DATABASE_CONSTANT.GENDER.FEMALE,
             Config.APP_CONSTANTS.DATABASE_CONSTANT.GENDER.OTHER,
         ],
-        required: true
     },
     dob: {type: String},
     phoneNo: {type: String},
-   
+    isVerified:{type:Boolean,default:false},
     imgUrl:[ {type: String, default: null}],
     
     verification:{type:String},
     otp: {
-        type: String,
-      
+        type: Number,
     },
+    
     
     
 })

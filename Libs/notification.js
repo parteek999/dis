@@ -36,25 +36,26 @@ function sendPushNotification(message1,deviceToken) {
     });
 }
 
-function otp(){
+function OTP(phoneNo){
+    console.log(phoneNo);
 const accountsid='ACe2eaa3359611950eac5c30f614427fbc';
-const authtoken='7aa3d1f35f858963a74ae93f0e104728';
+const authtoken='4c3a8a27a717ba61df011978d69584c2';
 const client=require('twilio')( accountsid,authtoken);
 
-OTP = Math.floor(Math.random() * 10000); 
+var value = Math.floor(1000 + Math.random() * 9000); 
    
     
 client.messages.create({
-    body:OTP ,
+    body:value ,
     from:'+16163446313',
-    to:'+918569808687',
+    to:phoneNo,
 
 })
 .then((message)=>console.log(message))
 .catch((err)=>console.log(err));
-return OTP
+return value
 }
 module.exports = {
     sendPushNotification,
-    otp
+    OTP
 };

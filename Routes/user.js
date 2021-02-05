@@ -14,7 +14,7 @@ module.exports = [
         auth: false,
         tags: ['api', 'user'],
         handler: (request, reply)=> {
-            return Controller.user.signup(request.payload, request.auth.credentials)
+            return Controller.user.signup(request.payload)
                 .then(response => {
                     return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                 })
@@ -29,11 +29,10 @@ module.exports = [
                 fullName: Joi.string().trim().required(),
                 phoneNo:Joi.string().trim().required(),
                 password:Joi.string().required(),
-                // verifypassword:Joi.string().required(),
                 gender:Joi.any().valid("male","female","other").error(() => 'Gender should be Male (or) Female (or) other'),
                 dob:Joi.string(),
                 imgUrl:Joi.array().items(Joi.string().allow(null).allow('')),
-                otp:Joi.string(),
+                
             
              }),
                    },
@@ -76,33 +75,34 @@ module.exports = [
         }
     }
 },
-// {
-//     method: 'POST',
-//     path: '/user/otp',
-//     config: {
-//         description: 'otp',
-//         auth: false,
-//         tags: ['api', 'user'],
-//         handler: (request, reply)=> {
-//             return Controller.user.otp(request.payload, request.auth.credentials)
-//                 .then(response => {
-//                     return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-//                 })
-//                 .catch(error => {
-//                     winston.error("=====error=============", error);
-//                     return UniversalFunctions.sendError("en", error, reply);
-//                 });
-//         },
-//         validate: {
-//             payload: Joi.object({
-//               otp:Joi.string(),
-//             }),
-//                    },
-//         plugins: {
-//             'hapi-swagger': {
-//                 payloadType: 'form'
-//             }
-//         }
-//     }
-// },
+{
+    method: 'POST',
+    path: '/user/verifyOtp',
+    config: {
+        description: 'verifyOtp',
+        auth: false,
+        tags: ['api', 'user'],
+        handler: (request, reply)=> {
+            return Controller.user.verifyotp(request.payload, request.auth.credentials)
+                .then(response => {
+                    return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                })
+                .catch(error => {
+                    winston.error("=====error=============", error);
+                    return UniversalFunctions.sendError("en", error, reply);
+                });
+        },
+        validate: {
+            payload: Joi.object({
+              _id:Joi.string(),  
+              otp:Joi.string(),
+            }),
+                   },
+        plugins: {
+            'hapi-swagger': {
+                payloadType: 'form'
+            }
+        }
+    }
+},
 ]

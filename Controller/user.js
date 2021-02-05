@@ -13,21 +13,27 @@ const signup = async (payload) => {
      let query = {
        email 
     };
+    // console.log(query);
+    payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
     let result = await DAO.getData(Models.Users,query,{_id:1},{limit:1});
-    console.log(result);
-    if(result.length){
+     if(result.length){
        throw ERROR.EMAIL_ALREADY_EXIST;
    }
+   let final=await DAO.saveData(Models.Users,payload);
     
-//    if(payload.password!=payload.verifypassword){
-//     throw  ERROR.INVALID_PASSWORDMATCH;
-// }
-
-    payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    result = await DAO.saveData(Models.Users,payload);
-    Libs.otp()
+    //  console.log(payload.phoneNo)
+     var otp = await Libs.OTP(payload.phoneNo)
+     console.log(otp)
+     
+   
+    let res = await DAO.getDataOne(Models.Users,query,{_id:1},{limit:1});
+    // console.log(res);
+    
+    const data = await DAO.findAndUpdate(Models.Users, { _id :res}, {otp:otp}, {});
+   
+    
     return {
-        payload
+        final
                  }
 }
 const  login= async (payload)=> {
@@ -63,25 +69,34 @@ const  login= async (payload)=> {
          throw err
      }
  }
-// const otp = async (payload) => {
-//     const {otp} = payload
-//      let query = {
-//        otp 
-//     };
-    
-//     let result= await Libs.otp()
-// //    if(payload.password!=payload.verifypassword){
-// //     throw  ERROR.INVALID_PASSWORDMATCH;
-// // }
 
-//     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-//     result = await DAO.saveData(Models.Users,payload);
+ 
+const verifyotp = async (payload) => {
+    const {_id,otp} = payload
+     let query = {
+      _id,
+      isVerified: false,
+    };
 
-//     return {
-//         payload
-//                  }
-// }
+let res = await DAO.getDataOne(Models.Users,query,{otp:1,_id:0},{limit:1});
+    console.log(res)
+    console.log(otp)
+    if(otp!=res.otp){
+            throw  ERROR.INCORRECT_DETAILS;
+        }
+      let tokenData={
+        scope:Config.APP_CONSTANTS.SCOPE.USER,
+        _id:res,
+        time:new Date(),
+    };
+    const accessToken = await TokenManager.GenerateToken(tokenData,Config.APP_CONSTANTS.SCOPE.USER);
+    const data = await DAO.findAndUpdate(Models.Users, { _id:query._id}, {isVerified: true}, {});
+     return {
+        accessToken,
+                 }
+}
 module.exports={
     signup,
-    login
+    login,
+    verifyotp
 }
