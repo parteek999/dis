@@ -3,4 +3,5 @@
  */
 module.exports = {
     user: require('./user'),
+    party: require('./party'),
 };

@@ -32,9 +32,7 @@ module.exports = [
                 gender:Joi.any().valid("male","female","other").error(() => 'Gender should be Male (or) Female (or) other'),
                 dob:Joi.string(),
                 imgUrl:Joi.array().items(Joi.string().allow(null).allow('')),
-                
-            
-             }),
+         }),
                    },
         plugins: {
             'hapi-swagger': {
