@@ -35,7 +35,7 @@ var GenerateToken = (tokenData,userType) => {
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_ADMIN;
             }
             
-            let token = Jwt.sign(tokenData, secretKey);
+            let token = Jwt.sign(tokenData, secretKey,{expiresIn:'30m'});
 
             return resolve(token);
         }   catch (err) {

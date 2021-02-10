@@ -22,7 +22,7 @@ var Users = new Schema({
     otp: {
         type: Number,
     },
-    
+    accessToken:{type:String}
     
 })
 module.exports = mongoose.model('Users', Users);
