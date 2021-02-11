@@ -100,8 +100,6 @@ const verifyotp = async (payload) => {
         accessToken,
     }
 }
-
-
 const forgotpassword = async (payload) => {
     try {
         const { email } = payload;
@@ -151,7 +149,6 @@ const resetpassword = async (payload) => {
         throw err
     }
 }
-
 module.exports = {
     signup,
     login,

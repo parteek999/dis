@@ -10,8 +10,8 @@ const createEvent = async (payload) => {
   const { venue, startTime, endingTime } = payload;
   let query = {
     venue,
-    }
- let res = await DAO.getDataOne(Models.party, query, {}, {})
+  }
+  let res = await DAO.getDataOne(Models.party, query, {}, {})
   console.log(res);
   // if (res!= null) {
   //   console.log("hi");
@@ -25,8 +25,8 @@ const createEvent = async (payload) => {
   //       }
   //     }
   //   }
-  
-    let final = await DAO.saveData(Models.party, payload);
+
+  let final = await DAO.saveData(Models.party, payload);
 
   return {
     final
@@ -34,20 +34,36 @@ const createEvent = async (payload) => {
 }
 
 const searchEvent = async (payload) => {
+  let res= await Models.party.find( { loc :
+    {
+$nearSphere: {
+$geometry: {
+type : "Point",
+coordinates : [-73.97,40.77 ]
+},
+$minDistance: 1000,
+$maxDistance: 80000
+}
+}
+},{_id:1,name:1},{})
+
+  // let res = await DAO.getData(Models.party, 
+  //   {
+  //     loc:
+  //     {
+  //       $nearSphere: {
+  //         $geometry: {
+  //           type: "Point",
+  //           coordinates: [-73.97, 40.77]
+  //         },
+  //         $minDistance: 1000,
+  //         $maxDistance: 80000
+  //       }
+  //     }
+  //   }
+
+  // , {_id:1,name:1},{});
   
-    let res= await DAO.aggregateData(Models.party, [
-       {     
-        $geoNear: {
-           near: { type: "Point", coordinates: [ 60 ,59  ] },
-           distanceField: "dist.calculated", 
-           maxDistance: 2,
-           query: { category: "Parks" },
-           includeLocs: "dist.location",
-           spherical: true
-        },
-      }
-      
-   ],{});
 
   return {
     res
@@ -57,5 +73,5 @@ const searchEvent = async (payload) => {
 module.exports = {
   createEvent,
   searchEvent
-  
+
 }
