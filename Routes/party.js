@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi');
 const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const winston = require('winston');
-
+const fs = require('fs'); 
 
 module.exports = [
     {
@@ -82,5 +82,29 @@ module.exports = [
             }
         }
     },
-
+    {
+        method: "POST",
+        path: "/images",
+        config: {
+            auth: false,
+            payload: {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 2 * 1000 * 1000,
+                
+            }
+        },
+        handler: (request, reply) => {
+            var result = [];
+            console.log("hello");
+            for(var i = 0; i < request.payload["file"].length; i++) {
+                result.push(request.payload["file"][i].hapi);
+                request.payload["file"][i].pipe(fs.createWriteStream(request.payload["file"][i].hapi.filename))
+                console.log(__dirname)
+            }
+             return result;
+            
+        }
+    }
 ]
