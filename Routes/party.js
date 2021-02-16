@@ -4,7 +4,8 @@ const Joi = require('@hapi/joi');
 const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const winston = require('winston');
-const fs = require('fs'); 
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = [
     {
@@ -86,25 +87,43 @@ module.exports = [
         method: "POST",
         path: "/images",
         config: {
+            tags: ['api'],
             auth: false,
             payload: {
                 output: "stream",
                 parse: true,
                 allow: "multipart/form-data",
                 maxBytes: 2 * 1000 * 1000,
+
+            },
+
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                },
                 
+            },
+            validate: {
+                payload: Joi.object({
+                    file: Joi.array().items(Joi.any()
+                        .meta({ swaggerType: 'file' }).required()
+                        // .description('file')
+                        ),
+                     }),
+                     failAction: UniversalFunctions.failActionFunction,  
             }
         },
+        
+
         handler: (request, reply) => {
-            var result = [];
-            console.log("hello");
-            for(var i = 0; i < request.payload["file"].length; i++) {
-                result.push(request.payload["file"][i].hapi);
-                request.payload["file"][i].pipe(fs.createWriteStream(request.payload["file"][i].hapi.filename))
-                console.log(__dirname)
-            }
-             return result;
-            
-        }
+            return Controller.party.imageUpload(request.payload)
+                .then(response => {
+                    return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                })
+                .catch(error => {
+                    winston.error("=====error=============", error);
+                    return UniversalFunctions.sendError("en", error, reply);
+                });
+        },
     }
 ]

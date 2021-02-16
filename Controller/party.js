@@ -2,8 +2,9 @@ const DAO = require('../DAOManager').queries,
   Models = require('../Models');
 Config = require('../Config');
 ERROR = Config.responseMessages.ERROR;
-
-
+const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const mail= require('../DAOManager/mail');
 
 const createEvent = async (payload) => {
   //    console.log(payload);
@@ -32,20 +33,20 @@ const createEvent = async (payload) => {
     final
   }
 }
-
 const searchEvent = async (payload) => {
-  let res= await Models.party.find( { loc :
+  let res = await Models.party.find({
+    loc:
     {
-$nearSphere: {
-$geometry: {
-type : "Point",
-coordinates : [-73.97,40.77 ]
-},
-$minDistance: 1000,
-$maxDistance: 80000
-}
-}
-},{_id:1,name:1},{})
+      $nearSphere: {
+        $geometry: {
+          type: "Point",
+          coordinates: [-73.97, 40.77]
+        },
+        $minDistance: 1000,
+        $maxDistance: 80000
+      }
+    }
+  }, { _id: 1, name: 1 }, {})
 
   // let res = await DAO.getData(Models.party, 
   //   {
@@ -63,15 +64,19 @@ $maxDistance: 80000
   //   }
 
   // , {_id:1,name:1},{});
-  
+
 
   return {
     res
   }
 }
-
+const imageUpload = async (payload) => {
+  const { file } = payload;
+   let a=await mail.Uplaod(file);
+   return a
+}
 module.exports = {
   createEvent,
-  searchEvent
-
+  searchEvent,
+  imageUpload
 }

@@ -15,7 +15,7 @@ var party = new Schema({
           default: [0, 0],
         }
       },
-
+    image:{type:String},
     imageUrl: { type: String },
     name: { type: String, trim: true},
     price: { type: Number },
