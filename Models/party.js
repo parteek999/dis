@@ -4,13 +4,13 @@ var Config = require('../Config');
 
 
 var party = new Schema({
-    location: {
+    loc: {
         type: {
           type: String,
           enum: ['Point'],
           default: 'Point',
         },
-        cordinates: {
+        coordinates: {
           type: [Number],
           default: [0, 0],
         }
@@ -60,6 +60,6 @@ var party = new Schema({
     },
     
 })
-party.index({location: '2dsphere'}),
+party.index({coordinates: '2dsphere'}),
 
 module.exports = mongoose.model('party', party);

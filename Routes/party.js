@@ -4,8 +4,6 @@ const Joi = require('@hapi/joi');
 const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const winston = require('winston');
-const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
 
 module.exports = [
     {
@@ -29,18 +27,18 @@ module.exports = [
                 payload: Joi.object({
                     name: Joi.string().trim().required(),
                     price: Joi.number().required(),
-                    venue: Joi.string().required(),
-                    startTime: Joi.date(),
-                    endingTime: Joi.date(),
-                    description: Joi.string().required(),
-                    guestLimit: Joi.number().required(),
-                    category: Joi.string().required(),
-                    eventhostType: Joi.string().required(),
-                    imageUrl: Joi.string().required(),
+                //     venue: Joi.string().required(),
+                //     startTime: Joi.date(),
+                //     endingTime: Joi.date(),
+                //     description: Joi.string().required(),
+                //     guestLimit: Joi.number().required(),
+                //     category: Joi.string().required(),
+                //     eventhostType: Joi.string().required(),
+                //     imageUrl: Joi.string().required(),
 
-                    location: Joi.object({
+                    loc: Joi.object({
                         type: Joi.string(),
-                        cordinates: Joi.array().items(Joi.number())
+                        coordinates: Joi.array().items(Joi.number())
                     })
                 }),
             },
@@ -101,29 +99,28 @@ module.exports = [
                 'hapi-swagger': {
                     payloadType: 'form',
                 },
-                
+
+            },
+            handler: (request, reply) => {
+                return Controller.party.imageUpload(request.payload)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
             },
             validate: {
                 payload: Joi.object({
                     file: Joi.array().items(Joi.any()
                         .meta({ swaggerType: 'file' }).required()
-                        // .description('file')
-                        ),
-                     }),
-                     failAction: UniversalFunctions.failActionFunction,  
+                        .description('file')
+                    ),
+                }),
+                headers: UniversalFunctions.authorizationHeaderObjOptional,
+                failAction: UniversalFunctions.failActionFunction
             }
-        },
-        
-
-        handler: (request, reply) => {
-            return Controller.party.imageUpload(request.payload)
-                .then(response => {
-                    return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                })
-                .catch(error => {
-                    winston.error("=====error=============", error);
-                    return UniversalFunctions.sendError("en", error, reply);
-                });
         },
     }
 ]

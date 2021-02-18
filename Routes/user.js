@@ -33,11 +33,12 @@ module.exports = [
                     dob: Joi.string(),
                     imgUrl: Joi.array().items(Joi.string().allow(null).allow('')),
                 }),
+                
             },
             plugins: {
                 'hapi-swagger': {
-                    payloadType: 'form'
-                }
+                    payloadType: 'form', 
+                },failAction: UniversalFunctions.failActionFunction, 
             }
         }
     },

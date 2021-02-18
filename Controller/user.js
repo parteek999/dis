@@ -15,26 +15,26 @@ const signup = async (payload) => {
     let query = {
         email
     };
-    // console.log(query);
+    console.log(query);
     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    let result = await DAO.getData(Models.Users, query, { _id: 1, isVerified: 1 }, { limit: 1 });
-    console.log(result);
-    if (result[0].isVerified) {
-        if (result.length) {
-            throw ERROR.EMAIL_ALREADY_EXIST;
-        }
-    }
+    // let result = await DAO.getData(Models.Users, query, { _id: 1, isVerified: 1 }, { limit: 1 });
+    // console.log(result);
+    // // if (result[0].isVerified) {
+    //     if (result.length) {
+    //         throw ERROR.EMAIL_ALREADY_EXIST;
+    //     }
+    // }
     let final = await DAO.saveData(Models.Users, payload);
 
     //  console.log(payload.phoneNo)
-    var otp = await Libs.OTP(payload.phoneNo)
-    console.log(otp)
+    // var otp = await Libs.OTP(payload.phoneNo)
+    // console.log(otp)
 
 
-    let res = await DAO.getDataOne(Models.Users, query, { _id: 1 }, { limit: 1 });
+    // let res = await DAO.getDataOne(Models.Users, query, { _id: 1 }, { limit: 1 });
     // console.log(res);
 
-    const data = await DAO.findAndUpdate(Models.Users, { _id: res }, { otp: otp }, {});
+    // const data = await DAO.findAndUpdate(Models.Users, { _id: res }, { otp: otp }, {});
 
 
     return {
@@ -100,6 +100,7 @@ const verifyotp = async (payload) => {
         accessToken,
     }
 }
+
 const forgotpassword = async (payload) => {
     try {
         const { email } = payload;

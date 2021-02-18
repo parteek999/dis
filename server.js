@@ -18,13 +18,13 @@ const Hapi = require('@hapi/hapi'),
 
 if (process.env.NODE_ENV !== 'local' && process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'testing'
     && process.env.NODE_ENV !== 'client' ) {
-    console.log(
-        `Please specify one of the following environments to run your server
-            - development
-            - production
+    // console.log(
+    //     `Please specify one of the following environments to run your server
+    //         - development
+    //         - production
 
-    Example :NODE_ENV=development pm2 start server.js --log-date-format 'DD-MM HH:mm:ss.SSS' --name="dev" -i 2`
-    );
+    // Example :NODE_ENV=development pm2 start server.js --log-date-format 'DD-MM HH:mm:ss.SSS' --name="dev" -i 2`
+    // );
     // throw { abc: 'abc' };
     process.env.NODE_ENV ='development'
 }

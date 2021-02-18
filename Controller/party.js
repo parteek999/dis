@@ -1,19 +1,18 @@
 const DAO = require('../DAOManager').queries,
-  Models = require('../Models');
+Models = require('../Models');
 Config = require('../Config');
 ERROR = Config.responseMessages.ERROR;
-const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
+
 const mail= require('../DAOManager/mail');
 
 const createEvent = async (payload) => {
-  //    console.log(payload);
-  const { venue, startTime, endingTime } = payload;
-  let query = {
-    venue,
-  }
-  let res = await DAO.getDataOne(Models.party, query, {}, {})
-  console.log(res);
+      console.log(payload);
+  // const { venue } = payload;
+  // let query = {
+  //   venue,
+  // }
+  // let res = await DAO.getDataOne(Models.party, query, {}, {})
+  // console.log(res);
   // if (res!= null) {
   //   console.log("hi");
   //   if (venue == res.venue) {
@@ -34,36 +33,36 @@ const createEvent = async (payload) => {
   }
 }
 const searchEvent = async (payload) => {
-  let res = await Models.party.find({
-    loc:
-    {
-      $nearSphere: {
-        $geometry: {
-          type: "Point",
-          coordinates: [-73.97, 40.77]
-        },
-        $minDistance: 1000,
-        $maxDistance: 80000
-      }
-    }
-  }, { _id: 1, name: 1 }, {})
-
-  // let res = await DAO.getData(Models.party, 
+  // let res = await Models.party.find({
+  //   loc:
   //   {
-  //     loc:
-  //     {
-  //       $nearSphere: {
-  //         $geometry: {
-  //           type: "Point",
-  //           coordinates: [-73.97, 40.77]
-  //         },
-  //         $minDistance: 1000,
-  //         $maxDistance: 80000
-  //       }
+  //     $nearSphere: {
+  //       $geometry: {
+  //         type: "Point",
+  //         coordinates: [-73.97, 40.77]
+  //       },
+  //       $minDistance: 0,
+  //       $maxDistance: 8000,
   //     }
   //   }
+  // }, { _id: 1, name: 1 }, {})
 
-  // , {_id:1,name:1},{});
+  let res = await DAO.getData(Models.party, 
+    {
+      loc:
+      {
+        $nearSphere: {
+          $geometry: {
+            type: "Point",
+            coordinates: [21,22]
+          },
+          $minDistance: 0,
+          $maxDistance: 80000
+        }
+      }
+    }
+
+  , {_id:1,name:1},{});
 
 
   return {
@@ -80,3 +79,4 @@ module.exports = {
   searchEvent,
   imageUpload
 }
+
