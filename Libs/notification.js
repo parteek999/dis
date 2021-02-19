@@ -3,15 +3,6 @@ const serverKey = 'lolu';
 const fcm = new FCM(serverKey);
 
 
-
-
-/*
- ==============================================
- Send the notification
- =============================================
- */
-
-
 function sendPushNotification(message1,deviceToken) {
 
 
@@ -49,7 +40,6 @@ client.messages.create({
     body:value ,
     from:'+16163446313',
     to:phoneNo,
-
 })
 .then((message)=>console.log(message))
 .catch((err)=>console.log(err));

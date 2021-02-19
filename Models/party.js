@@ -4,6 +4,7 @@ var Config = require('../Config');
 
 
 var party = new Schema({
+    // _id:{type:String},
     loc: {
         type: {
           type: String,
@@ -15,6 +16,7 @@ var party = new Schema({
           default: [0, 0],
         }
       },
+    fullName:{type:String},
     image:{type:String},
     imageUrl: { type: String },
     name: { type: String, trim: true},

@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 var Config = require('../Config');
 
 var Users = new Schema({
-    email: {type: String, index:true, trim: true},
+    countrycode:{type:String},
+    email: {type: String, trim: true},
     password: {type: String},
     fullName : {type: String, trim: true },
     gender:{type:String,
@@ -16,13 +17,12 @@ var Users = new Schema({
     dob: {type: String},
     phoneNo: {type: String},
     isVerified:{type:Boolean,default:false},
+    isblocked:{type:Boolean,default:false},
     imgUrl:[ {type: String, default: null}],
     
     verification:{type:String},
-    otp: {
-        type: Number,
-    },
-    accessToken:{type:String}
+    otp: {type: Number,default:null},
+    // accessToken:{type:String}
     
 })
 module.exports = mongoose.model('Users', Users);

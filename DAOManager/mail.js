@@ -69,9 +69,7 @@ async function upload(file) {
            reject (err)
         }
     })
-
 }
-
 module.exports = {
     sentmail: sentmail,
     Uplaod:upload

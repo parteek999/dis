@@ -11,10 +11,12 @@ module.exports = [
         path: '/party/createEvent',
         config: {
             description: 'createEvent',
-            auth: false,
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            },
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.party.createEvent(request.payload)
+                return Controller.party.createEvent(request.payload,request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -27,22 +29,24 @@ module.exports = [
                 payload: Joi.object({
                     name: Joi.string().trim().required(),
                     price: Joi.number().required(),
-                //     venue: Joi.string().required(),
-                //     startTime: Joi.date(),
-                //     endingTime: Joi.date(),
-                //     description: Joi.string().required(),
-                //     guestLimit: Joi.number().required(),
-                //     category: Joi.string().required(),
-                //     eventhostType: Joi.string().required(),
-                //     imageUrl: Joi.string().required(),
+                    venue: Joi.string().required(),
+                    startTime: Joi.date(),
+                    endingTime: Joi.date(),
+                    description: Joi.string().required(),
+                    guestLimit: Joi.number().required(),
+                    category: Joi.string().required(),
+                    eventhostType: Joi.string().required(),
+                    imageUrl: Joi.string().required(),
+                    // _id:Joi.string().required(),
 
                     loc: Joi.object({
                         type: Joi.string(),
                         coordinates: Joi.array().items(Joi.number())
                     })
                 }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction,
             },
-
             plugins: {
                 'hapi-swagger': {
                     // payloadType: 'form'

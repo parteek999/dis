@@ -5,8 +5,10 @@ ERROR = Config.responseMessages.ERROR;
 
 const mail= require('../DAOManager/mail');
 
-const createEvent = async (payload) => {
-      console.log(payload);
+const createEvent = async (payload,userDetails) => {
+      // console.log(payload);
+      console.log(userDetails);
+
   // const { venue } = payload;
   // let query = {
   //   venue,
@@ -27,11 +29,25 @@ const createEvent = async (payload) => {
   //   }
 
   let final = await DAO.saveData(Models.party, payload);
+  console.log(final)
+  const query1={
+    fullName:userDetails.fullName
+  }
+  console.log(query1);
+  const query2={
+    _id:final._id
+  }
+console.log(query2);
+
+  const data = await DAO.findAndUpdate(Models.party,query2,query1,{});
+  //  console.log(data)
+
 
   return {
     final
   }
 }
+
 const searchEvent = async (payload) => {
   // let res = await Models.party.find({
   //   loc:

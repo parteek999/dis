@@ -27,6 +27,7 @@ module.exports = [
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
                     fullName: Joi.string().trim().required(),
+                    countrycode:Joi.string().required(),
                     phoneNo: Joi.string().trim().required(),
                     password: Joi.string().required(),
                     gender: Joi.any().valid("male", "female", "other").error(() => 'Gender should be Male (or) Female (or) other'),
@@ -124,7 +125,6 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     email: Joi.string(),
-
                 }),
             },
             plugins: {
@@ -134,7 +134,6 @@ module.exports = [
             }
         }
     },
-    
     {
         method: 'POST',
         path: '/user/resetpassword',
@@ -154,7 +153,8 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    accessToken:Joi.string(),
+                    // accessToken:Joi.string(),
+                    email: Joi.string().email().lowercase().trim().required(),
                     newpassword:Joi.string(),
 
                 }),
