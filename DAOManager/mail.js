@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
-async function sentmail(accessToken) {
+async function sentmail(email) {
     return new Promise((resolve, reject) => {
         let transport = nodemailer.createTransport({
             service: 'gmail',
@@ -11,24 +11,19 @@ async function sentmail(accessToken) {
                 pass: "Testingmail123"
             }
         });
-
-        //  step 2 
+        var value = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
         let mailoptions = {
             from: 'testingpmai999@gmail.com',
-            to: 'parteekgupta999@gmail.com',
+            to: email,
             subject: 'testing email',
-            //   text:'Heloo new man',
-            html: `<h2>please click on given link to activate your account</h2>
-             <p>facebook.com/authentication/activate/${accessToken}</p>
-      `
-        };
-        // step 3
+            html: `<p>your new password is = ${value}</p>`};
+
         transport.sendMail(mailoptions, function (err, data) {
             if (err) {
                 reject(err)
             }
             else {
-                resolve(data)
+                resolve(value)
             }
         })
     })

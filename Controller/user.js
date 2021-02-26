@@ -1,148 +1,114 @@
 
 const DAO = require('../DAOManager').queries,
-    mail = require('../DAOManager').mail,
     Config = require('../Config'),
     ERROR = Config.responseMessages.ERROR,
     TokenManager = require('../Libs/TokenManager'),
     Models = require('../Models'),
-    Bcrypt = require('bcryptjs'),
-    Libs = require('../Libs/notification');
+    Bcrypt = require('bcryptjs');
+const mail = require('../DAOManager').mail;
 
 
 
 const signup = async (payload) => {
-     const { email } = payload
+    const { email } = payload
     let query = {
         email
     };
-    // console.log(query);
-     let result = await DAO.getData(Models.Users, query, { _id: 1, fullName: 1, isVerified: 1 }, { limit: 1 });
-    //  console.log(result._id);
-    // console.log(result);
-    // console.log(result.length);
-    // if (result.isverified === true) { throw "email is already verified" };
+
+    let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
     if (result.length) {
         throw ERROR.EMAIL_ALREADY_EXIST;
     }
-
     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    let final = await DAO.saveData(Models.Users, payload);
-    //console.log(final)
-    console.log(final._id)
-    // var otp = await Libs.OTP(payload.phoneNo)
-    // console.log(otp)
-    var ot=1234;
-    const query1={otp:ot}
-    console.log(query1)
-    const data = await DAO.findAndUpdate(Models.Users, { _id:final._id}, query1,{new:true});
-    console.log(data)
+    const final = await DAO.saveData(Models.Users, payload);
 
-    return {
-        data
-    }
+    let tokenData = {
+        scope: Config.APP_CONSTANTS.SCOPE.USER,
+        _id: result._id,
+        time: new Date(),
+    };
+    const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
+
+    return { final, Token }
+
 }
 const login = async (payload) => {
 
     try {
         const { email, password } = payload;
         const query = {
-            email,isVerified:true,
+            email
         };
-        const result = await DAO.getDataOne(Models.Users, query, {});
-        console.log(result);
-        if (result === null) throw ERROR.INVALID_CREDENTIALS;
-        const checkPassword = Bcrypt.compareSync(password, result.password);
+        const final = await DAO.getDataOne(Models.Users, query, {});
+
+        if (final === null) throw ERROR.EMAIL_NOT_FOUND;
+
+        const checkPassword = Bcrypt.compareSync(password, final.password);
         if (!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
+
         let tokenData = {
             scope: Config.APP_CONSTANTS.SCOPE.USER,
-            _id: result._id,
+            _id: final._id,
             time: new Date(),
         };
         const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
-        return {
-            Token,
-        }
+        return { final, Token }
+
     }
     catch (err) {
         throw err
     }
 }
-const verifyotp = async (payload) => {
-    const { _id, otp } = payload
-    let query = {
-        _id,
-        isVerified: false,
-    };
-    let res = await DAO.getDataOne(Models.Users, query, { otp: 1, _id: 0 }, { limit: 1 });
-    // console.log(res)
-    // console.log(otp)
-    if (otp != res.otp) {
-        throw ERROR.INCORRECT_DETAILS;
-    }
-    let tokenData = {
-        scope: Config.APP_CONSTANTS.SCOPE.USER,
-        _id: res,
-        time: new Date(),
-    };
-    const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
-    const data = await DAO.findAndUpdate(Models.Users, { _id: query._id }, { isVerified: true }, {});
+const changePassword = async (payload, userDetails) => {
+    const { newPassword } = payload
+    var Pass = Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
+    const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { password: Pass }, { new: true });
+
     return {
-        accessToken,
+        final
     }
 }
-const forgotpassword = async (payload) => {
-    try {
-        const { email } = payload;
-        const query = {
-            email,
+const forgetPassword = async (payload, userDetails) => {
+    const { email } = payload
+    let query = {
+        email
+    };
+    let result = await DAO.getData(Models.Users, query, {}, {});
 
-        };
-        const result = await DAO.getDataOne(Models.Users, query, {});
-        //  console.log(result);
-        if (result === null) throw "email dosent exists";
-        let tokenData = {
-            scope: Config.APP_CONSTANTS.SCOPE.USER,
-            _id: result._id,
-            time: new Date(),
-        };
-        const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER)
-        // const data = await DAO.findAndUpdate(Models.Users, { email: result.email }, { accessToken: accessToken }, {})
-        const qwe = await mail.sentmail(accessToken);
-        console.log(qwe)
-
-        return {
-            accessToken,
-        }
+    if (result === null) {
+        throw "email dosen't exist";
     }
-    catch (err) {
-        throw err
+    const qwe = await mail.sentmail(email);
+    const newPassword = Bcrypt.hashSync(qwe, Config.APP_CONSTANTS.SERVER.SALT);
+    const final = await DAO.findAndUpdate(Models.Users, { email: email }, { password: newPassword }, { new: true });
+
+
+    return {
+        final
     }
 }
-const resetpassword = async (payload) => {
-    try {
-        const { accessToken, newpassword } = payload;
-        const query = {
-            email,
-        };
-        const result = await DAO.getDataOne(Models.Users, query, {});
-        if (result === null) throw "email dosent exists";
-        let pass = Bcrypt.hashSync(newpassword, Config.APP_CONSTANTS.SERVER.SALT);
-        console.log(pass);
-        const data = await DAO.findAndUpdate(Models.Users, { email:query }, { password: pass }, {});
-        console.log(data);
-        return {
-            result,
+const editProfile = async (payload, userDetails) => {
 
-        }
+    let query = {
+        email: payload.email,
+    };
+    let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
+    if (result.length) {
+        throw ERROR.EMAIL_ALREADY_EXIST;
     }
-    catch (err) {
-        throw err
+    const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, payload, { new: true });
+    return {
+        final
     }
 }
+
+
+
+
 module.exports = {
     signup,
     login,
-    verifyotp,
-    forgotpassword,
-    resetpassword
+    changePassword,
+    forgetPassword,
+    editProfile
 }

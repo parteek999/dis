@@ -27,32 +27,38 @@ module.exports = [
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
                     fullName: Joi.string().trim().required(),
-                    countrycode:Joi.string().required(),
+                    countrycode: Joi.string().required(),
                     phoneNo: Joi.string().trim().required(),
                     password: Joi.string().required(),
-                    gender: Joi.any().valid("male", "female", "other").error(() => 'Gender should be Male (or) Female (or) other'),
-                    dob: Joi.string(),
-                    imgUrl: Joi.array().items(Joi.string().allow(null).allow('')),
+                    profilepic:Joi.string(),
+                    imgurl:  Joi.array().items(Joi.string()),
+                    // xyz:Joi.array().items(Joi.object({
+                    //     full: Joi.string().trim().required(),
+                    //     code: Joi.string().required(),
+                    // }))
+                    
+
                 }),
-                
+                headers: UniversalFunctions.authorizationHeaderObjOptional,
+                failAction: UniversalFunctions.failActionFunction
+
             },
             plugins: {
                 'hapi-swagger': {
-                    payloadType: 'form', 
-                },failAction: UniversalFunctions.failActionFunction, 
+                     payloadType: 'form',
+                }
             }
         }
     },
     {
-        method: 'POST',
+        method: 'GET',
         path: '/user/login',
         config: {
             description: 'login',
             auth: false,
             tags: ['api', 'user'],
-
             handler: (request, reply) => {
-                return Controller.user.login(request.payload, request.auth.credentials)
+                return Controller.user.login(request.query, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -61,12 +67,13 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
-
             validate: {
-                payload: Joi.object({
+                query: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
                     password: Joi.string().trim().required()
                 }),
+                headers: UniversalFunctions.authorizationHeaderObjOptional,
+                failAction: UniversalFunctions.failActionFunction
             },
             plugins: {
                 'hapi-swagger': {
@@ -77,13 +84,15 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/user/verifyOtp',
+        path: '/user/changePassword',
         config: {
-            description: 'verifyOtp',
-            auth: false,
+            description: 'changePassword',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            },
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.verifyotp(request.payload, request.auth.credentials)
+                return Controller.user.changePassword(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -94,9 +103,11 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    _id: Joi.string(),
-                    otp: Joi.string(),
+                    newPassword: Joi.string(),
+
                 }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction,
             },
             plugins: {
                 'hapi-swagger': {
@@ -107,13 +118,14 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/user/forgotpassword',
+        path: '/user/forgetPassword',
         config: {
-            description: 'forgotpassword',
+            description: 'forgetPassword',
             auth: false,
+            
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.forgotpassword(request.payload, request.auth.credentials)
+                return Controller.user.forgetPassword(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -126,6 +138,7 @@ module.exports = [
                 payload: Joi.object({
                     email: Joi.string(),
                 }),
+                failAction: UniversalFunctions.failActionFunction,
             },
             plugins: {
                 'hapi-swagger': {
@@ -136,13 +149,16 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/user/resetpassword',
+        path: '/user/editProfile',
         config: {
-            description: 'resetpassword',
+            description: 'editProfile',
             auth: false,
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            },
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.resetpassword(request.payload, request.auth.credentials)
+                return Controller.user.editProfile(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -153,11 +169,15 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    // accessToken:Joi.string(),
                     email: Joi.string().email().lowercase().trim().required(),
-                    newpassword:Joi.string(),
-
+                    fullName: Joi.string().trim().required(),
+                    countrycode: Joi.string().required(),
+                    phoneNo: Joi.string().trim().required(),
+                    profilepic:Joi.string(),
+                
                 }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction,
             },
             plugins: {
                 'hapi-swagger': {

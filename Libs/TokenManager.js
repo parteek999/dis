@@ -1,7 +1,3 @@
-/**
- * Created by Shumi on 18/5/18.
- */
-
 const Jwt = require('jsonwebtoken'),
     Config = require('../Config'),
     DAO = require('../DAOManager').queries,
@@ -9,33 +5,27 @@ const Jwt = require('jsonwebtoken'),
     UniversalFunctions = require('../Utils/UniversalFunctions'),
     _ = require('lodash')
     ERROR = Config.responseMessages.ERROR;
-
 var GenerateToken = (tokenData,userType) => {
     return new Promise((resolve, reject) => {
-        try {
-            
+        try {            
            let secretKey;
             switch(userType){
                 case Config.APP_CONSTANTS.SCOPE.USER:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER;
-                    break;
-                
+                    break;                
                 case Config.APP_CONSTANTS.SCOPE.ADMIN:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_ADMIN;
                     break;
-
                 case Config.APP_CONSTANTS.SCOPE.BRANCH:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_BRANCH;
                     break;   
                 case Config.APP_CONSTANTS.SCOPE.CAPTAIN:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_CAPTAIN;
-                    break;        
-                
+                    break;                        
                 default:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_ADMIN;
             }
-            
-            let token = Jwt.sign(tokenData, secretKey,{expiresIn:'30m'});
+                let token = Jwt.sign(tokenData, secretKey,{expiresIn:'30m'});
 
             return resolve(token);
         }   catch (err) {

@@ -241,3 +241,16 @@ module.exports = {
     bulkFindAndUpdateOne : bulkFindAndUpdateOne,
     findAndUpdatePopulate:findAndUpdatePopulate
 };
+
+
+ accesskeyID  =>  "AKIASVQOVWTMN6FLY6PG"
+ secretaccesskey =>   "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"
+ "ap-south-1:7c67535d-d64c-476a-beb3-44a76f8ce1ae",  // Identity pool ID
+ "Asia Pacific (Mumbai) ap-south-1"      ,// Region
+ bucketname =>"bucket921/dis"
+
+
+
+
+ 
+ 

@@ -1,6 +1,3 @@
-/**
- * Created by Shumi on 17/5/18.
- */
 'use strict';
 
 let mongoose = require('mongoose'),
@@ -14,9 +11,8 @@ mongoose.Promise = Promise;
 const util = require('util');
 const fs = require('fs');
 
-//Connect to MongoDB
-mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI,{ useNewUrlParser: true ,useFindAndModify:false}).then(success => {
-    winston.info('MongoDB Connected');
+mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI,{ useUnifiedTopology: true,useNewUrlParser: true ,useFindAndModify:false}).then(success => {
+    console.log('MongoDB Connected')
     Run();
 }).catch(err => {
     console.log("====================",err)
@@ -28,25 +24,12 @@ mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI,{ useNewUrlParser: tru
 
 const  Run = async () => {
 
-    /*-------------------------------------------------------------------------------
-     * add admin
-     * -----------------------------------------------------------------------------*/
   let password=   "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
     
     let adminDetails = {
         name : "Agent Jack Admin",
         email: "ershumigupta@gmail.com",
-        password: password,           //qwerty
-    };
-    let adminDetails1 = {
-        name : "Agent Jack Admin",
-        email: "shumigupta04@gmail.com",
-        password: password,           //qwerty
-    };
-    let adminDetails2 = {
-        name : "Agent Jack Admin",
-        email: "admin@agentjack.com",
-        password: password,           //qwerty
+        password: password,           
     };
 
     CreateAdmin(adminDetails);
