@@ -1,6 +1,6 @@
 {
 	"host": "localhost",
-	"port": "3000",
+	"port": "8000",
 	"mongoDb": {
 		"URI": "mongodb://localhost/dis",
 		"PORT": "27017"
