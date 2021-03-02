@@ -1,5 +1,5 @@
 const FCM = require('fcm-node');
-const serverKey = 'lolu';
+const serverKey = 'abcd';
 const fcm = new FCM(serverKey);
 
 

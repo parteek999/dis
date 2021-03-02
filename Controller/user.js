@@ -59,13 +59,27 @@ const login = async (payload) => {
         throw err
     }
 }
-const changePassword = async (payload, userDetails) => {
-    const { newPassword } = payload
-    var Pass = Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
-    const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { password: Pass }, { new: true });
+const changePassword = async (request, userDetails) => {
+    const { newpassword, confirmpassword } = request.payload
+    console.log(request.query)
+    var str = request.info.referrer;
+    const n = str.split("=")[1]
+    console.log(n)
 
+    if (newpassword === confirmpassword) {
+        console.log("not here")
+
+        // var Pass = Bcrypt.hashSync(newpassword, Config.APP_CONSTANTS.SERVER.SALT);
+        console.log("here too");
+        const final = await DAO.findAndUpdate(Models.Users, {email:n}, { password: newpassword }, { new: true });
+        console.log("here");
+    }
+
+    else {
+        throw "password dosent match"
+    }
     return {
-        final
+        
     }
 }
 const forgetPassword = async (payload, userDetails) => {
@@ -79,12 +93,15 @@ const forgetPassword = async (payload, userDetails) => {
         throw "email dosen't exist";
     }
     const qwe = await mail.sentmail(email);
-    const newPassword = Bcrypt.hashSync(qwe, Config.APP_CONSTANTS.SERVER.SALT);
-    const final = await DAO.findAndUpdate(Models.Users, { email: email }, { password: newPassword }, { new: true });
+
+    // console.log(qwe)
+    // const newPassword = Bcrypt.hashSync(qwe, Config.APP_CONSTANTS.SERVER.SALT);
+    // const final = await DAO.findAndUpdate(Models.Users, { email: email }, { password: newPassword }, { new: true });
 
 
     return {
-        final
+        //    final
+        qwe
     }
 }
 const editProfile = async (payload, userDetails) => {
@@ -98,12 +115,18 @@ const editProfile = async (payload, userDetails) => {
     }
     const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, payload, { new: true });
     return {
-        final
+        email: final.email,
+        fullName: final.fullName,
+        countrycode: final.countrycode,
+        phoneNo: final.phoneNo,
+        profilepic: final.profilepic,
+        imgurl: final.imgurl,
+        deviceType: final.deviceType,
+        deviceToken: final.deviceToken,
+
+
     }
 }
-
-
-
 
 module.exports = {
     signup,

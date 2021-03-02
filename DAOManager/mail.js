@@ -11,19 +11,23 @@ async function sentmail(email) {
                 pass: "Testingmail123"
             }
         });
-        var value = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+        // var value = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
         let mailoptions = {
             from: 'testingpmai999@gmail.com',
             to: email,
             subject: 'testing email',
-            html: `<p>your new password is = ${value}</p>`};
+            html: `<p> <a href="http://localhost:5000/create?id=${email}">link</a>
+             your new password is = </p>`
+            // ${value}
+            //  </p>`
+        };
 
         transport.sendMail(mailoptions, function (err, data) {
             if (err) {
                 reject(err)
             }
             else {
-                resolve(value)
+                resolve(data)
             }
         })
     })

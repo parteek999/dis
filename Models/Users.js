@@ -9,6 +9,13 @@ var Users = new Schema({
     fullName: { type: String, trim: true },
     profilepic: { type: String ,default:null},
     imgurl:[ {type: String, default: null}],
+    deviceToken: {type: String,default:null, trim: true},
+    deviceType: {
+        type: String, enum: [
+            Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
+            Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
+        ]
+    },
 })
 
 module.exports = mongoose.model('Users', Users);

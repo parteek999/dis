@@ -32,11 +32,11 @@ module.exports = [
                     password: Joi.string().required(),
                     profilepic:Joi.string(),
                     imgurl:  Joi.array().items(Joi.string()),
-                    // xyz:Joi.array().items(Joi.object({
-                    //     full: Joi.string().trim().required(),
-                    //     code: Joi.string().required(),
-                    // }))
-                    
+                    deviceType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
+                    ),
+                    deviceToken:Joi.string()
 
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
@@ -87,13 +87,17 @@ module.exports = [
         path: '/user/changePassword',
         config: {
             description: 'changePassword',
-            auth: {
-                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
-            },
+            auth:false, 
+            // {
+            //     strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            // },
             tags: ['api', 'user'],
+
             handler: (request, reply) => {
-                return Controller.user.changePassword(request.payload, request.auth.credentials)
-                    .then(response => {
+                 console.log(request)
+            //    console.log(request.payload)
+                return Controller.user.changePassword(request, request.auth.credentials)
+                        .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
                     .catch(error => {
@@ -103,10 +107,10 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    newPassword: Joi.string(),
-
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
+                    newpassword: Joi.string(),
+                    confirmpassword:Joi.string(),
+               }),
+                // headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction,
             },
             plugins: {
@@ -158,6 +162,7 @@ module.exports = [
             },
             tags: ['api', 'user'],
             handler: (request, reply) => {
+                    
                 return Controller.user.editProfile(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
@@ -169,11 +174,16 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    email: Joi.string().email().lowercase().trim().required(),
-                    fullName: Joi.string().trim().required(),
-                    countrycode: Joi.string().required(),
-                    phoneNo: Joi.string().trim().required(),
-                    profilepic:Joi.string(),
+                    email: Joi.string().email().lowercase().trim().required().allow(null).allow('').optional(),
+                    fullName: Joi.string().trim().required().allow(null).allow('').optional(),
+                    countrycode: Joi.string().required().allow(null).allow('').optional(),
+                    phoneNo: Joi.string().trim().required().allow(null).allow('').optional(),
+                    profilepic:Joi.string().allow(null).allow('').optional(),
+                    deviceType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
+                    ),
+                    deviceToken:Joi.string()
                 
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
@@ -186,4 +196,5 @@ module.exports = [
             }
         }
     },
+       
 ]
