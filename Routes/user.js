@@ -90,7 +90,7 @@ module.exports = [
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.resetPassword(request, request.auth.credentials)
+                return Controller.user.resetPassword(request,reply)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })

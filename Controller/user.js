@@ -7,7 +7,7 @@ const DAO = require('../DAOManager').queries,
     Bcrypt = require('bcryptjs');
 const mail = require('../DAOManager').mail;
 var path = require('path');
-
+let fs = require('fs');
 
 
 const signup = async (payload) => {
@@ -60,18 +60,19 @@ const login = async (payload) => {
         throw err
     }
 }
-const resetPassword = async (request, userDetails) => {
+const resetPassword = async (request,reply) => {
     const { newpassword, confirmpassword } = request.payload
-    console.log(request.query.id);
+
     // console.log(request.query)
     // var str = request.info.referrer;
     // const n = str.split("=")[1]
     // console.log(n)
     var pass = Bcrypt.hashSync(newpassword, Config.APP_CONSTANTS.SERVER.SALT);
-    const final = await DAO.findAndUpdate(Models.Users, { email: request.query.id }, { password: pass }, { new: true });
-    return {
-
-    }
+    var b = request.query.id
+    const a = { password: pass };
+    const final = await DAO.findAndUpdate(Models.Users, { email: b }, a, { new: true });
+    return 
+    // reply.file(path.join(__dirname, '../public/form1.html'))
 }
 const forgetPassword = async (payload, userDetails) => {
     const { email } = payload
