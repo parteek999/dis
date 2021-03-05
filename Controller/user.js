@@ -6,6 +6,7 @@ const DAO = require('../DAOManager').queries,
     Models = require('../Models'),
     Bcrypt = require('bcryptjs');
 const mail = require('../DAOManager').mail;
+var path = require('path');
 
 
 
@@ -59,27 +60,17 @@ const login = async (payload) => {
         throw err
     }
 }
-const changePassword = async (request, userDetails) => {
+const resetPassword = async (request, userDetails) => {
     const { newpassword, confirmpassword } = request.payload
-    console.log(request.query)
-    var str = request.info.referrer;
-    const n = str.split("=")[1]
-    console.log(n)
-
-    if (newpassword === confirmpassword) {
-        console.log("not here")
-
-        // var Pass = Bcrypt.hashSync(newpassword, Config.APP_CONSTANTS.SERVER.SALT);
-        console.log("here too");
-        const final = await DAO.findAndUpdate(Models.Users, {email:n}, { password: newpassword }, { new: true });
-        console.log("here");
-    }
-
-    else {
-        throw "password dosent match"
-    }
+    console.log(request.query.id);
+    // console.log(request.query)
+    // var str = request.info.referrer;
+    // const n = str.split("=")[1]
+    // console.log(n)
+    var pass = Bcrypt.hashSync(newpassword, Config.APP_CONSTANTS.SERVER.SALT);
+    const final = await DAO.findAndUpdate(Models.Users, { email: request.query.id }, { password: pass }, { new: true });
     return {
-        
+
     }
 }
 const forgetPassword = async (payload, userDetails) => {
@@ -93,19 +84,12 @@ const forgetPassword = async (payload, userDetails) => {
         throw "email dosen't exist";
     }
     const qwe = await mail.sentmail(email);
-
-    // console.log(qwe)
-    // const newPassword = Bcrypt.hashSync(qwe, Config.APP_CONSTANTS.SERVER.SALT);
-    // const final = await DAO.findAndUpdate(Models.Users, { email: email }, { password: newPassword }, { new: true });
-
-
     return {
-        //    final
+
         qwe
     }
 }
 const editProfile = async (payload, userDetails) => {
-
     let query = {
         email: payload.email,
     };
@@ -123,15 +107,41 @@ const editProfile = async (payload, userDetails) => {
         imgurl: final.imgurl,
         deviceType: final.deviceType,
         deviceToken: final.deviceToken,
-
-
     }
 }
+const changePassword = async (payload, userDetails) => {
+    console.log(userDetails);
+    const { newpassword } = payload;
+    var pass = Bcrypt.hashSync(newpassword, Config.APP_CONSTANTS.SERVER.SALT);
+    const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { password: pass }, { new: true });
+
+}
+// const renderapi=async (request,reply)=>{
+//     //  console.log(request),
+//     //  console.log(reply);
+//     console.log("hi");
+//    return reply.view('../public/form.html');
+
+// // reply.file(path.join(__dirname,'./uploads/form.html'));
+// //   return reply.file('./uploads/form.html')
+// }
+const create = (req, reply) => {
+    console.log(req.query.id);
+    return reply.view('form', { key: req.query.id })
+}
+const hello = async (req, reply) => {
+    return reply.file(path.join(__dirname, '../public/form.html'));
+}
+
+
 
 module.exports = {
     signup,
     login,
-    changePassword,
+    resetPassword,
     forgetPassword,
-    editProfile
+    editProfile,
+    changePassword,
+    // renderapi,
+    hello, create
 }

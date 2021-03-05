@@ -1,59 +1,43 @@
-'use strict';
-
 let mongoose = require('mongoose'),
     Config = require('../Config'),
     DAO = require('../DAOManager').queries,
     Models = require('../Models'),
     bcrypt = require('bcryptjs'),
     winston = require('winston');
-
 mongoose.Promise = Promise;
 const util = require('util');
 const fs = require('fs');
-
-mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI,{ useUnifiedTopology: true,useNewUrlParser: true ,useFindAndModify:false}).then(success => {
+mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false }).then(success => {
     console.log('MongoDB Connected')
     Run();
 }).catch(err => {
-    console.log("====================",err)
-    winston.info({ERROR: err});
+    console.log("====================", err)
+    winston.info({ ERROR: err });
     process.exit(1);
 });
-
-
-
-const  Run = async () => {
-
-  let password=   "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
-    
+const Run = async () => {
+    let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
     let adminDetails = {
-        name : "Agent Jack Admin",
+        name: "Agent Jack Admin",
         email: "ershumigupta@gmail.com",
-        password: password,           
+        password: password,
     };
-
     CreateAdmin(adminDetails);
     CreateAdmin(adminDetails1);
     CreateAdmin(adminDetails2);
-
 }
-
 const CreateAdmin = async (adminDetails) => {
     return new Promise((resolve, reject) => {
         try {
             console.log("====================");
-            let adminData = DAO.findAndUpdate(Models.Admins,{email:adminDetails.email}, adminDetails, { lean: true, upsert: true, new : true});
-
+            let adminData = DAO.findAndUpdate(Models.Admins, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
             return resolve("Admin Added");
         } catch (err) {
-            
-            console.log("====================",err)
+            console.log("====================", err)
             return reject(err);
         }
     });
-}    
-
-
+}
 function checkFolderAlreadyExist() {
 
     let _dirPath = "./uploads";
@@ -70,5 +54,5 @@ function checkFolderAlreadyExist() {
     }
 }
 module.exports = {
-    Run:Run
+    Run: Run
 }

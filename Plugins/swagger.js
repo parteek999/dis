@@ -1,6 +1,4 @@
-/**
- * Created by Shumi on 17/5/18.
- */
+
 
 'use strict';
 const Inert = require('inert');
@@ -13,7 +11,7 @@ exports.plugin = {
     register: async (server) => {
         const swaggerOptions = {
             info: {
-                title: 'On Toes API Doc'
+                title: 'Dis API Doc'
 
             },
         };

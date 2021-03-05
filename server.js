@@ -3,6 +3,7 @@ const Hapi = require('@hapi/hapi'),
     Config = require('./Config'),
     winston = require('winston'),
     mongoose = require('mongoose');
+const { REPL_MODE_SLOPPY } = require('repl');
 const Models = require('./Models/'),
     DAO = require('./DAOManager').queries,
     SocketManager = require('./Libs/SocketManager');
@@ -36,8 +37,17 @@ const init = async () => {
         }
     });
     await server.register(Plugins);
+
     await server.route(Routes);
 
+    server.views({
+        engines: {
+          html: require('handlebars')
+        },
+        path: './public',
+        
+      })
+    
 
     server.route(
         [{
@@ -51,22 +61,22 @@ const init = async () => {
             config: {
                 auth: false
             }
-        }]
-    );
-    server.route(
-        [{
+        },
+        {
             method: 'GET',
-            path: '/create/{file*}',
+            path: '/qwe/{file*}',
             handler: {
                 directory: {
-                    path: './uploads/form.html'
+                    path: './public'
                 }
             },
             config: {
                 auth: false
             }
-        }]
+        }
+        ]
     );
+
 
     server.events.on('response', request => {
     });

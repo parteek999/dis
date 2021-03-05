@@ -1,5 +1,5 @@
 var SERVER = {
-    APP_NAME: 'OnToes',
+    APP_NAME: 'Dis',
     SECRET:"#DubaIIeOkCfGdHahSHHSh",
     SALT:11,
     JWT_SECRET_KEY_BRANCH:"#GD%$HFD&&$DFDKI12~#^%&*+_->?L%QF",

@@ -21,7 +21,6 @@ async function sentmail(email) {
             // ${value}
             //  </p>`
         };
-
         transport.sendMail(mailoptions, function (err, data) {
             if (err) {
                 reject(err)
@@ -32,7 +31,6 @@ async function sentmail(email) {
         })
     })
 }
-
 async function upload(file) {
     return new Promise((resolve, reject) => {
         try {
@@ -40,6 +38,7 @@ async function upload(file) {
                 var result = [];
                 console.log("hello");
                 for (var i = 0; i < file.length; i++) {
+
 
                     result.push(file[i].hapi);
                     console.log(file[i].hapi);
@@ -49,7 +48,7 @@ async function upload(file) {
                     let r = file[i].pipe(fs.createWriteStream('./uploads/' + p))
                     console.log(r.path)
                 }
-                 resolve(result);
+                resolve(result);
             }
             else {
                 var result = [];
@@ -64,12 +63,12 @@ async function upload(file) {
                 resolve(result);
             }
         }
-        catch(err){
-           reject (err)
+        catch (err) {
+            reject(err)
         }
     })
 }
 module.exports = {
     sentmail: sentmail,
-    Uplaod:upload
+    Uplaod: upload
 };

@@ -1,6 +1,4 @@
-/**
- * Created by Shumi on 17/5/18.
- */
+
 'use strict';
 
 function saveData(model,data) {
