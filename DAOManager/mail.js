@@ -16,7 +16,7 @@ async function sentmail(email) {
             from: 'testingpmai999@gmail.com',
             to: email,
             subject: 'testing email',
-            html: `<p> <a href="http://localhost:5000/create?id=${email}">link</a>
+            html: `<p> <a href="http://15.206.146.120:8000/create?id=${email}">link</a>
              your new password is = </p>`
             // ${value}
             //  </p>`
