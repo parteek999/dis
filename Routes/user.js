@@ -5,6 +5,7 @@ const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const winston = require('winston');
 
+
 module.exports = [
     {
         method: 'POST',
@@ -90,7 +91,7 @@ module.exports = [
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.resetPassword(request,reply)
+                return Controller.user.resetPassword(request, reply)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -146,14 +147,12 @@ module.exports = [
             }
         }
     },
-
-
     {
         method: 'POST',
         path: '/user/editProfile',
         config: {
             description: 'editProfile',
-            auth: false,
+            // auth: false,
             auth: {
                 strategies: [Config.APP_CONSTANTS.SCOPE.USER]
             },
@@ -250,7 +249,6 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     message: Joi.string().required().trim(),
-
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
@@ -281,10 +279,6 @@ module.exports = [
             }
         }
     },
-
-
-
-
     {
         method: 'GET',
         path: '/hello',
@@ -304,6 +298,40 @@ module.exports = [
             }
         }
     },
+    {
+        method: 'POST',
+        path: '/user/bookmarked',
+        config: {
+            description: 'bookmarked',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            },
+            tags: ['api'],
+            handler: (request, reply) => {
+                return Controller.user.bookMarked(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
 
+            validate: {
+                payload: Joi.object({
+                    article_Id: Joi.string(),
+                    mark:Joi.number(),
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
 
 ]

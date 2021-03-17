@@ -7,30 +7,30 @@ let mongoose = require('mongoose'),
 mongoose.Promise = Promise;
 const util = require('util');
 const fs = require('fs');
-mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false }).then(success => {
-    console.log('MongoDB Connected')
+mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useUnifiedTopology: true,useCreateIndex: true,useNewUrlParser: true, useFindAndModify: false }).then(success => {
+    // console.log('MongoDB Connected')
     Run();
 }).catch(err => {
-    console.log("====================", err)
+    console.log( err)
     winston.info({ ERROR: err });
     process.exit(1);
 });
+
 const Run = async () => {
     let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
-    let adminDetails = {
-        name: "Agent Jack Admin",
-        email: "ershumigupta@gmail.com",
-        password: password,
+    let adminDetails2 = {
+        name : "Agent Jack Admin",
+        email: "admin@agentjack.com",
+        password: password,           //qwerty
     };
-    CreateAdmin(adminDetails);
-    CreateAdmin(adminDetails1);
     CreateAdmin(adminDetails2);
+   
 }
 const CreateAdmin = async (adminDetails) => {
     return new Promise((resolve, reject) => {
         try {
-            console.log("====================");
-            let adminData = DAO.findAndUpdate(Models.Admins, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
+            
+            let adminData = DAO.findAndUpdate(Models.Admin, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
             return resolve("Admin Added");
         } catch (err) {
             console.log("====================", err)

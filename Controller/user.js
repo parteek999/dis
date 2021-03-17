@@ -9,7 +9,6 @@ const mail = require('../DAOManager').mail;
 var path = require('path');
 let fs = require('fs');
 
-
 const signup = async (payload) => {
     const { email } = payload
     let query = {
@@ -25,7 +24,7 @@ const signup = async (payload) => {
 
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
-        _id: result._id,
+        _id:final._id,
         time: new Date(),
     };
     const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
@@ -60,7 +59,7 @@ const login = async (payload) => {
         throw err
     }
 }
-const resetPassword = async (request,reply) => {
+const resetPassword = async (request, reply) => {
     const { newpassword, confirmpassword } = request.payload
 
     // console.log(request.query)
@@ -71,7 +70,7 @@ const resetPassword = async (request,reply) => {
     var b = request.query.id
     const a = { password: pass };
     const final = await DAO.findAndUpdate(Models.Users, { email: b }, a, { new: true });
-    return 
+    return
     // reply.file(path.join(__dirname, '../public/form1.html'))
 }
 const forgetPassword = async (payload, userDetails) => {
@@ -133,8 +132,22 @@ const create = (req, reply) => {
 const hello = async (req, reply) => {
     return reply.file(path.join(__dirname, '../public/form.html'));
 }
-
-
+const bookMarked = async (payload, userDetails) => {
+    console.log("hello")
+    const { article_Id, mark } = payload
+    if (mark == 0) {
+        final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { $push: { article_Id: article_Id } }, { new: true });
+        console.log("hi")
+    }
+    else if (mark == 1) {
+        console.log("hi there");
+        final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { $pull: { article_Id: article_Id } }, { new: true });
+    }
+    else {
+        throw "invalid mark";
+    }
+    return final
+}
 
 module.exports = {
     signup,
@@ -144,5 +157,7 @@ module.exports = {
     editProfile,
     changePassword,
     // renderapi,
-    hello, create
+    hello,
+    create,
+    bookMarked
 }
