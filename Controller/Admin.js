@@ -37,8 +37,35 @@ const Login = async (payload) => {
 const getUser = (payload, userDetails) => {
     return DAO.getData(Models.Users);
 }
+const article = async (payload) => {
+    try {
+       
+        const query = {
+            email
+        };
+        const result = await DAO.getDataOne(Models.Admin, query);
+        if (result === null) throw ERROR.INVALID_CREDENTIALS;
+        const checkPassword = Bcrypt.compareSync(password, result.password); //compare password string to encrypted string
 
+        if (!checkPassword) throw ERROR.INVALID_CREDENTIALS;
+
+        let tokenData = {
+            scope: Config.APP_CONSTANTS.SCOPE.ADMIN,
+            _id: result._id,
+            time: new Date(),
+            // exp:Math.floor(Date.now() / 1000) + 1800
+        };
+        const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.ADMIN);
+        return {
+            accessToken
+        }
+    }
+    catch (err) {
+        throw err
+    }
+}
 module.exports = {
     Login,
-    getUser
+    getUser,
+    article
 }

@@ -12,10 +12,10 @@ module.exports = [
         path: '/news/createArticle',
         config: {
             description: "createArticle",
-            // auth:false,
-            auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
+            auth:false,
+            // auth: {
+            //     strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            // },
             tags: ['api'],
 
             handler: (request, reply) => {
@@ -30,8 +30,42 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                article:Joi.string(),
-               
+                   article:Joi.object().keys({title:Joi.string(),description:Joi.string()}),
+                   
+                   
+                }),
+                // headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction },
+            plugins: {
+                'hapi-swagger': {
+                    // payloadType: 'form',
+                }
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/news/getArticle',
+        config: {
+            description: "getArticle",
+            // auth:false,
+            auth: {
+                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+
+            handler: (request, reply) => {
+                return Controller.news.getArticle(request.query,request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction },

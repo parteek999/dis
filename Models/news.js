@@ -4,14 +4,16 @@ const mongoose = require('mongoose'),
     Config = require('../Config');
 
 const news = new Schema({
-    admin_id:{type:Schema.ObjectId,ref:"Admin"},
-    article:{type:String}
+    article:{
+        title:{type:String},
+        description:{type:String}
+    },
+    isDeleted:{type:Boolean,default: false,},
 }, {
     timestamps: {
         createdAt: 'createdAt',
         updatedAt: 'updatedAt'
     }
-
 });
 
 module.exports = mongoose.model('news', news);

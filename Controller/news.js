@@ -1,3 +1,5 @@
+const { query } = require('winston');
+
 const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
     ERROR = Config.responseMessages.ERROR,
@@ -7,14 +9,19 @@ const DAO = require('../DAOManager').queries,
     Bcrypt = require('bcryptjs'),
     request = require("request");
 
-const news = async (payload,userDetails) => {
-    let query={
-        article:payload.article,
-        admin_id:userDetails._id
-    }
-    final = await DAO.saveData(Models.news,query);
+const news = async (payload, userDetails) => {
+
+    console.log(payload);
+    final = await DAO.saveData(Models.news, payload);
     return final
 }
+const getArticle = async (payload, userdetails) => {
+    console.log(userdetails);
+    const query = {
+        isDeleted: false
+    }
+    return DAO.getData(Models.news, query);
+}
 module.exports = {
-    news
+    news, getArticle
 }

@@ -7,6 +7,7 @@
      email: {type: String, unique: true, index: true},
      password: {type: String, required:true},
      passwordResetToken: {type: String, unique: true, sparse:true},
+    
  }, {
      timestamps: {
          createdAt: 'createdAt',
