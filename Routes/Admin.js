@@ -72,6 +72,78 @@ module.exports = [
             }
         }
     },
-    
+    {
+        method: 'GET',
+        path: '/admin/blockunblockUser',
+        config: {
+            description: 'blockunblockuser',
+            auth:false, 
+            // {
+            //     strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            // },
+            tags: ['api'],
+            handler: (request, reply)=> {
+
+                   console.log("request.query")
+                return Controller.Admin.blockunblockUser(request.query, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                    id:Joi.string().required()
+                }),
+                
+
+
+                // headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+     {
+        method: 'GET',
+        path: '/admin/singleUser',
+        config: {
+            description: 'singleUser',
+            auth:false,
+            //  {
+            //     strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            // },
+            tags: ['api'],
+            handler: (request, reply)=> {
+                return Controller.Admin.singleUser(request.query, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                    id:Joi.string().required(),
+                }),
+                // headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
    
 ]

@@ -321,7 +321,7 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     article_Id: Joi.string(),
-                    mark:Joi.number(),
+                    mark: Joi.number(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
@@ -333,5 +333,38 @@ module.exports = [
             }
         }
     },
+    {
+        method: 'POST',
+        path: '/user/formSubmit',
+        config: {
+            description: 'formSubmit',
+            auth: false,
 
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.formSubmit(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    fname: Joi.string(),
+                    email: Joi.string(),
+                    phoneNumber: Joi.string(),
+                    about: Joi.string(),
+                }),
+                failAction: UniversalFunctions.failActionFunction,
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
 ]

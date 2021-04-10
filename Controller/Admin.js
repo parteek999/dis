@@ -34,8 +34,17 @@ const Login = async (payload) => {
         throw err
     }
 }
-const getUser = (payload, userDetails) => {
+const getUser = async (payload, userDetails) => {
     return DAO.getData(Models.Users);
+}
+const singleUser=async(payload,userDetails)=>{
+    console.log("1212121212",payload.id)
+
+    const query={
+        _id:payload.id
+    }
+    let final= await DAO.getDataOne(Models.Users,query,{},{})
+    return final
 }
 const article = async (payload) => {
     try {
@@ -64,8 +73,28 @@ const article = async (payload) => {
         throw err
     }
 }
+const blockunblockUser=async (payload)=>{
+    console.log("121121212121",payload.id)
+    let query= {_id:payload.id}
+    // let data;
+    let result= await DAO.getDataOne(Models.Users,query)
+    console.log(result)
+    if(result.isBlock===false){
+        data={isBlock:true}
+        return final=await DAO.findAndUpdate(Models.Users,query,data,{new:true})
+    }
+    else{
+         data={isBlock:false}
+         return final=await DAO.findAndUpdate(Models.Users,query,data,{new:true})
+        }
+     
+    
+
+}
 module.exports = {
     Login,
     getUser,
-    article
+    article,
+    singleUser,
+    blockunblockUser
 }

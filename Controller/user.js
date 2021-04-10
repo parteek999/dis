@@ -8,7 +8,7 @@ const DAO = require('../DAOManager').queries,
 const mail = require('../DAOManager').mail;
 var path = require('path');
 let fs = require('fs');
-
+ 
 const signup = async (payload) => {
     const { email } = payload
     let query = {
@@ -148,6 +148,14 @@ const bookMarked = async (payload, userDetails) => {
     }
     return final
 }
+const formSubmit = async (payload) => {
+    const { fname,email,phoneNumber,about } = payload
+    let query = {
+        fname,email,phoneNumber,about
+    }
+    return {query}
+
+}
 
 module.exports = {
     signup,
@@ -159,5 +167,6 @@ module.exports = {
     // renderapi,
     hello,
     create,
-    bookMarked
+    bookMarked,
+    formSubmit
 }
