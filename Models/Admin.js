@@ -3,7 +3,7 @@
      Config = require('../Config');
  
  const Admins = new Schema({
-     name: {type: String, default: null},
+     name: {type: String, default:""},
      email: {type: String, unique: true, index: true},
      password: {type: String, required:true},
      passwordResetToken: {type: String, unique: true, sparse:true},

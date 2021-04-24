@@ -1,11 +1,12 @@
+const { Model } = require('mongoose');
+
 const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
     ERROR = Config.responseMessages.ERROR,
-    UniversalFunctions = require('../Utils/UniversalFunctions'),
     TokenManager = require('../Libs/TokenManager'),
     Models = require('../Models'),
-    Bcrypt = require('bcryptjs'),
-    request = require("request");
+    Bcrypt = require('bcryptjs');
+   
 
 const Login = async (payload) => {
     try {
@@ -34,21 +35,75 @@ const Login = async (payload) => {
         throw err
     }
 }
-const getUser = async (payload, userDetails) => {
-    return DAO.getData(Models.Users);
-}
-const singleUser=async(payload,userDetails)=>{
-    console.log("1212121212",payload.id)
 
-    const query={
-        _id:payload.id
+
+const changePassword = async (request, userDetails) => {
+
+        let { oldPasword, newPassword } = request
+        console.log(oldPasword, newPassword)
+
+        const result = await DAO.getDataOne(Models.Admin, { _id: userDetails._id })
+       
+        console.log(result.password)
+       
+        var checkPassword = await Bcrypt.compareSync(oldPasword, result.password)
+       
+        console.log(checkPassword)
+        if (checkPassword===false) throw ERROR.INVALID_PASSWORDMATCH;
+        const pass= await Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
+        
+        const final = await DAO.findAndUpdate(Models.Admin, { _id:userDetails._id},{ password: pass }, { new: true });   
+       
+        console.log(final)
+       
+        return {final}
+
+}
+
+const userCount = async (payload, userDetails) => {
+    
+    // let Data = await DAO.getData(Models.Users);
+    let result= Models.Users.find({}).count()
+    
+    return result
+}
+
+const paginateUser=async (payload,userDteails)=>{
+let {limit,pageNo}=payload
+console.log(limit,pageNo)
+const options={
+    sort:{createdAt:-1},
+    skip:pageNo*limit,
+    // pageNO*limit
+    // ,
+    limit:10
+}
+let result= await DAO.getData(Models.Users,{},{},options);
+console.log(result)
+return result
+}
+
+const getUser = async (payload, userDetails) => {
+    const options={
+        sort:{createdAt:-1},
+        limit:10
     }
-    let final= await DAO.getDataOne(Models.Users,query,{},{})
+    return DAO.getData(Models.Users,{},{},options);
+}
+
+const singleUser = async (payload, userDetails) => {
+    console.log("1212121212", payload.id)
+
+    const query = {
+        _id: payload.id
+    }
+    let final = await DAO.getDataOne(Models.Users, query, {}, {})
     return final
 }
+
 const article = async (payload) => {
     try {
-       
+
         const query = {
             email
         };
@@ -73,28 +128,36 @@ const article = async (payload) => {
         throw err
     }
 }
-const blockunblockUser=async (payload)=>{
-    console.log("121121212121",payload.id)
-    let query= {_id:payload.id}
+
+const blockunblockUser = async (payload) => {
+    console.log("121121212121", payload.id)
+    let query = { _id: payload.id }
     // let data;
-    let result= await DAO.getDataOne(Models.Users,query)
+    let result = await DAO.getDataOne(Models.Users, query)
     console.log(result)
-    if(result.isBlock===false){
-        data={isBlock:true}
-        return final=await DAO.findAndUpdate(Models.Users,query,data,{new:true})
+    if (result.isBlock === false) {
+        data = { isBlock: true }
+        return final = await DAO.findAndUpdate(Models.Users, query, data, { new: true })
     }
-    else{
-         data={isBlock:false}
-         return final=await DAO.findAndUpdate(Models.Users,query,data,{new:true})
-        }
-     
-    
+    else {
+        data = { isBlock: false }
+        return final = await DAO.findAndUpdate(Models.Users, query, data, { new: true })
+    }
+
+
 
 }
+
 module.exports = {
+
     Login,
+    changePassword,
+    userCount,
     getUser,
     article,
     singleUser,
-    blockunblockUser
+    blockunblockUser,
+    paginateUser
+
+
 }

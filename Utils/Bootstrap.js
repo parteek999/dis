@@ -9,36 +9,39 @@ const util = require('util');
 const fs = require('fs');
 mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useUnifiedTopology: true,useCreateIndex: true,useNewUrlParser: true, useFindAndModify: false }).then(success => {
     // console.log('MongoDB Connected')
-    Run();
+    // Run();
 }).catch(err => {
     console.log( err)
     winston.info({ ERROR: err });
     process.exit(1);
 });
 
-const Run = async () => {
-    let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
-    let adminDetails2 = {
-        name : "Agent Jack Admin",
-        email: "admin@agentjack.com",
-        password: password,           //qwerty
-    };
-    CreateAdmin(adminDetails2);
-   
-}
-const CreateAdmin = async (adminDetails) => {
-    return new Promise((resolve, reject) => {
-        try {
+// const Run = async () => {
+//     let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
+//     let adminDetails2 = {
+//         name : "Agent Jack Admin",
+//         email: "admin@agentjack.com",
+//         password: password,           //qwerty
+//     };
+//     CreateAdmin(adminDetails2);
+// }
+
+
+// const CreateAdmin = async (adminDetails) => {
+//     return new Promise((resolve, reject) => {
+//         try {
             
-            let adminData = DAO.findAndUpdate(Models.Admin, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
-            return resolve("Admin Added");
-        } catch (err) {
-            console.log("====================", err)
-            return reject(err);
-        }
-    });
-}
-function checkFolderAlreadyExist() {
+//             let adminData = DAO.findAndUpdate(Models.Admin, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
+//             return resolve("Admin Added");
+//         } catch (err) {
+//             console.log("====================", err)
+//             return reject(err);
+//         }
+//     });
+// }
+
+
+function checkFolderAlreadyExist() {ss
 
     let _dirPath = "./uploads";
     console.log(fs.existsSync(_dirPath));
@@ -53,6 +56,6 @@ function checkFolderAlreadyExist() {
         console.log('folder already exist ');
     }
 }
-module.exports = {
-    Run: Run
-}
+// module.exports = {
+//     Run: Run
+// }

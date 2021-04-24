@@ -15,7 +15,7 @@ module.exports = [
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.signup(request.payload)
+                return Controller.user.signUp(request.payload)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -24,21 +24,16 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
+
             validate: {
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
-                    fullName: Joi.string().trim().required(),
-                    countrycode: Joi.string().required(),
-                    phoneNo: Joi.string().trim().required(),
-                    password: Joi.string().required(),
-                    profilepic: Joi.string(),
-                    imgurl: Joi.array().items(Joi.string()),
-                    deviceType: Joi.string().valid(
-                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
-                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
-                    ),
-                    deviceToken: Joi.string()
-
+                    name: Joi.string().trim().required(),
+                    countryCode: Joi.string().required(),
+                    phoneNo:  Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
+                    password:Joi.string().min(6).message("Password length atleast 6 digits").required(),
+                    // profilepic:Joi.array().items(Joi.string()),
+                 
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
                 failAction: UniversalFunctions.failActionFunction
@@ -51,6 +46,7 @@ module.exports = [
             }
         }
     },
+
     {
         method: 'GET',
         path: '/user/login',
@@ -83,6 +79,7 @@ module.exports = [
             }
         }
     },
+    
     {
         method: 'POST',
         path: '/user/resetPassword',
@@ -102,6 +99,7 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
+                    
                     newpassword: Joi.string().required(),
                     confirmpassword: Joi.string().required().valid(Joi.ref('newpassword')).options({ messages: { 'any.only': '{{#label}} does not match' } }),
 

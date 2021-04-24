@@ -9,29 +9,43 @@ const mail = require('../DAOManager').mail;
 var path = require('path');
 let fs = require('fs');
  
-const signup = async (payload) => {
-    const { email } = payload
+const signUp = async (payload) => {
+    const { email,name,password,countryCode,phoneNo } = payload
     let query = {
         email
     };
-
     let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
     if (result.length) {
         throw ERROR.EMAIL_ALREADY_EXIST;
     }
     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    const final = await DAO.saveData(Models.Users, payload);
+    
+    console.log("1212121212121212",payload)
+    var number= (countryCode+phoneNo)
+
+ var Data = {
+     password:password,
+     email:email,
+     name:name,
+     countryCode:countryCode,
+     phoneNo:phoneNo,
+     fullNo:number
+     
+ }
+    const final = await DAO.saveData(Models.Users,Data );
 
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
         _id:final._id,
         time: new Date(),
     };
+
     const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
 
     return { final, Token }
 
 }
+
 const login = async (payload) => {
 
     try {
@@ -52,13 +66,17 @@ const login = async (payload) => {
             time: new Date(),
         };
         const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
-        return { final, Token }
+      
+        return { final }
 
     }
     catch (err) {
         throw err
     }
 }
+
+
+
 const resetPassword = async (request, reply) => {
     const { newpassword, confirmpassword } = request.payload
 
@@ -158,7 +176,7 @@ const formSubmit = async (payload) => {
 }
 
 module.exports = {
-    signup,
+    signUp,
     login,
     resetPassword,
     forgetPassword,

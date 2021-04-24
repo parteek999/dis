@@ -7,6 +7,9 @@ const winston = require('winston');
 
 
 module.exports = [
+
+
+    //................LOGIN......................//
     {
         method: 'POST',
         path: '/admin/login',
@@ -41,6 +44,46 @@ module.exports = [
             }
         }
     },
+
+    //.............CHANGEPASSWORD................//
+    {
+        method: 'POST',
+        path: '/admin/changePassword',
+        config: {
+            description: 'changePassword',
+            auth: {
+                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                console.log("12121212",request.payload)
+                return Controller.Admin.changePassword(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    oldPasword:Joi.string().required(),
+                    newPassword: Joi.string().required(),
+                    
+
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction,
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+
     {
         method: 'GET',
         path: '/admin/getUser',
@@ -72,6 +115,77 @@ module.exports = [
             }
         }
     },
+
+    {
+        method: 'GET',
+        path: '/admin/userCount',
+        config: {
+            description: 'userCount',
+            auth: {
+                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+            handler: (request, reply)=> {
+                return Controller.Admin.userCount(request.query, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({}),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+    
+    {
+        method: 'POST',
+        path: '/admin/paginateUser',
+        config: {
+            description: 'paginateUser',
+            auth: {
+                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api', 'admin'],
+            handler: (request, reply)=> {
+                console.log(request.payload)
+                return Controller.Admin.paginateUser(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    limit: Joi.number().required(),
+                    pageNo: Joi.number().required(),
+                 }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+
+
+
     {
         method: 'GET',
         path: '/admin/blockunblockUser',

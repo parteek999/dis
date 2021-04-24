@@ -6,7 +6,8 @@ const mongoose = require('mongoose'),
 const news = new Schema({
     article:{
         title:{type:String},
-        description:{type:String}
+        description:{type:String},
+        image:{type:String}
     },
     isDeleted:{type:Boolean,default: false,},
 }, {
