@@ -11,9 +11,16 @@ var Users = new Schema({
     phoneNo: { type: String },
     fullNo:{type:String,default:""},
     // accessToken:{type:String,default:""},
+    socialId:{type: String, index: true, unique: true, trim: true,sparse: true},
     name: { type: String, trim: true },
     profilePic: { type: String, default: "" },
     deviceToken: { type: String, default: "", trim: true },
+    article_Id:[{type: String, default: ""}],
+    loginType:{
+        type: String, enum: [
+            Config.APP_CONSTANTS.DATABASE_CONSTANT.ACCOUNT_TYPE.GMAIL
+        ],index: true
+    },
     deviceType: {
         type: String, enum: [
             Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,

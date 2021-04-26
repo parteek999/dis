@@ -7,6 +7,8 @@ const winston = require('winston');
 
 
 module.exports = [
+
+    //...................SIGNUP.........................//
     {
         method: 'POST',
         path: '/user/signUp',
@@ -30,10 +32,15 @@ module.exports = [
                     email: Joi.string().email().lowercase().trim().required(),
                     name: Joi.string().trim().required(),
                     countryCode: Joi.string().required(),
-                    phoneNo:  Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-                    password:Joi.string().min(6).message("Password length atleast 6 digits").required(),
+                    phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
+                    password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
                     // profilepic:Joi.array().items(Joi.string()),
-                 
+                    deviceType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
+                    ),
+                    deviceToken:Joi.string()
+
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
                 failAction: UniversalFunctions.failActionFunction
@@ -46,7 +53,7 @@ module.exports = [
             }
         }
     },
-
+    //...................LOGIN..........................//
     {
         method: 'GET',
         path: '/user/login',
@@ -67,9 +74,56 @@ module.exports = [
             validate: {
                 query: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
-                    password: Joi.string().trim().required()
+                    password: Joi.string().trim().required(),
+                    deviceType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
+                    ),
+                    deviceToken:Joi.string()
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    // payloadType: 'form'
+                }
+            }
+        }
+    },
+    //..................SOCIALLOGIN...................//    
+    {
+        method: 'POST',
+        path: '/user/socialLogin',
+        config: 
+        {
+            description: 'socialLogin',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.socialLogin(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    socialId: Joi.string().trim().required(),
+                    email: Joi.string().email().lowercase().trim().required(),
+                    name: Joi.string().trim().required(),
+                    countryCode: Joi.string().required(),
+                    phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
+                    password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
+                    deviceType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
+                    ),
+                    deviceToken:Joi.string()
+                }),
                 failAction: UniversalFunctions.failActionFunction
             },
             plugins: {
@@ -79,7 +133,7 @@ module.exports = [
             }
         }
     },
-    
+    //...................RESETPASSWORD....................//    
     {
         method: 'POST',
         path: '/user/resetPassword',
@@ -99,7 +153,7 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    
+
                     newpassword: Joi.string().required(),
                     confirmpassword: Joi.string().required().valid(Joi.ref('newpassword')).options({ messages: { 'any.only': '{{#label}} does not match' } }),
 
@@ -113,6 +167,7 @@ module.exports = [
             }
         }
     },
+    //..................FORGOTPASSWORD...................//    
     {
         method: 'POST',
         path: '/user/forgetPassword',
@@ -145,6 +200,7 @@ module.exports = [
             }
         }
     },
+    //..................EDITPROFILE...................//    
     {
         method: 'POST',
         path: '/user/editProfile',
@@ -190,6 +246,7 @@ module.exports = [
             }
         }
     },
+    //..................CHANGEPASSWORD...................//        
     {
         method: 'POST',
         path: '/user/changePassword',
@@ -225,6 +282,7 @@ module.exports = [
             }
         }
     },
+    //..................SENDNOTIFICATION...................//        
     {
         method: 'POST',
         path: '/user/sendNotification',
@@ -258,6 +316,7 @@ module.exports = [
             }
         }
     },
+    //..................CERATE...................//    
     {
         method: 'GET',
         path: '/create',
@@ -277,6 +336,7 @@ module.exports = [
             }
         }
     },
+    //..................HELLO...................//    
     {
         method: 'GET',
         path: '/hello',
@@ -296,6 +356,7 @@ module.exports = [
             }
         }
     },
+    //..................BOOKMARKED...................//    
     {
         method: 'POST',
         path: '/user/bookmarked',
@@ -331,6 +392,43 @@ module.exports = [
             }
         }
     },
+    //..................BOOKMARKEDID...................//    
+    {
+        method: 'POST',
+        path: '/user/bokmarkedId',
+        config: {
+            description: 'bookmarkedId',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            },
+            tags: ['api'],
+            handler: (request, reply) => {
+                return Controller.user.bookmarkedId(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+
+            validate: {
+                payload: Joi.object({
+                    article_Id: Joi.array().required(),
+
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
+    //..................FORMSUBMIT...................//    
     {
         method: 'POST',
         path: '/user/formSubmit',

@@ -7,6 +7,9 @@ const winston = require('winston');
 
 
 module.exports = [
+
+
+    
     {
         method: 'POST',
         path: '/news/createArticle',

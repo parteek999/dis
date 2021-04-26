@@ -8,9 +8,9 @@ const DAO = require('../DAOManager').queries,
 const mail = require('../DAOManager').mail;
 var path = require('path');
 let fs = require('fs');
- 
+
 const signUp = async (payload) => {
-    const { email,name,password,countryCode,phoneNo } = payload
+    const { email, name, password, countryCode, phoneNo } = payload
     let query = {
         email
     };
@@ -19,24 +19,24 @@ const signUp = async (payload) => {
         throw ERROR.EMAIL_ALREADY_EXIST;
     }
     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    
-    console.log("1212121212121212",payload)
-    var number= (countryCode+phoneNo)
 
- var Data = {
-     password:password,
-     email:email,
-     name:name,
-     countryCode:countryCode,
-     phoneNo:phoneNo,
-     fullNo:number
-     
- }
-    const final = await DAO.saveData(Models.Users,Data );
+    console.log("1212121212121212", payload)
+    var number = (countryCode + phoneNo)
+
+    var Data = {
+        password: password,
+        email: email,
+        name: name,
+        countryCode: countryCode,
+        phoneNo: phoneNo,
+        fullNo: number
+
+    }
+    const final = await DAO.saveData(Models.Users, Data);
 
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
-        _id:final._id,
+        _id: final._id,
         time: new Date(),
     };
 
@@ -66,13 +66,44 @@ const login = async (payload) => {
             time: new Date(),
         };
         const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
-      
-        return { final }
+
+        return { final, Token }
 
     }
     catch (err) {
         throw err
     }
+}
+const socialLogin = async (payload) => {
+
+    const query = {
+        socialId: payload.socialId,
+        email:payload.email,
+        isBlocked: false
+    };
+    let result = await DAO.getDataOne(Models.Users, query, {});
+    console.log(result)
+    if (result!=null) {
+        throw "SOCIAL_ID_ALREADY_EXIST";
+    }
+    let final = await DAO.saveData(Models.Users, payload);
+    let tokenData = {
+        scope: Config.APP_CONSTANTS.SCOPE.USER,
+        _id: final._id,
+        time: new Date(),
+        // exp:Math.floor(Date.now() / 1000) + 1800
+    };
+    const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
+
+    return {
+        accessToken,
+        // user: {
+        //     ...payload
+        // }
+        final
+
+    }
+
 }
 
 
@@ -167,17 +198,31 @@ const bookMarked = async (payload, userDetails) => {
     return final
 }
 const formSubmit = async (payload) => {
-    const { fname,email,phoneNumber,about } = payload
+    const { fname, email, phoneNumber, about } = payload
     let query = {
-        fname,email,phoneNumber,about
+        fname, email, phoneNumber, about
     }
-    return {query}
-
+    return { query }
 }
+
+const bookmarkedId = async (payload) => {
+    console.log(payload)
+
+    let query = {
+        _id: { '$in': payload.article_Id },
+        isDeleted: false
+
+    };
+    let final = await DAO.getData(Models.news, query, {}, {})
+    return final
+}
+
+
 
 module.exports = {
     signUp,
     login,
+    socialLogin,
     resetPassword,
     forgetPassword,
     editProfile,
@@ -186,5 +231,6 @@ module.exports = {
     hello,
     create,
     bookMarked,
+    bookmarkedId,
     formSubmit
 }
