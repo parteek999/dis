@@ -31,6 +31,9 @@ async function sentmail(email) {
         })
     })
 }
+
+
+
 async function upload(file) {
     return new Promise((resolve, reject) => {
         try {

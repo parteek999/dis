@@ -139,10 +139,12 @@ module.exports = [
         path: '/user/resetPassword',
         config: {
             description: 'resetPassword',
-            auth: false,
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            },
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.resetPassword(request, reply)
+                return Controller.user.resetPassword(request,request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -154,10 +156,11 @@ module.exports = [
             validate: {
                 payload: Joi.object({
 
-                    newpassword: Joi.string().required(),
-                    confirmpassword: Joi.string().required().valid(Joi.ref('newpassword')).options({ messages: { 'any.only': '{{#label}} does not match' } }),
+                    newPassword: Joi.string().required(),
+                    oldPassword: Joi.string().required()
 
                 }),
+                headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction,
             },
             plugins: {
@@ -228,13 +231,7 @@ module.exports = [
                     fullName: Joi.string().trim().required().allow(null).allow('').optional(),
                     countrycode: Joi.string().required().allow(null).allow('').optional(),
                     phoneNo: Joi.string().trim().required().allow(null).allow('').optional(),
-                    profilepic: Joi.string().allow(null).allow('').optional(),
-                    deviceType: Joi.string().valid(
-                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
-                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
-                    ),
-                    deviceToken: Joi.string()
-
+                    profilePic: Joi.string().allow(null).allow('').optional(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction,
@@ -246,6 +243,10 @@ module.exports = [
             }
         }
     },
+
+
+
+
     //..................CHANGEPASSWORD...................//        
     {
         method: 'POST',
@@ -356,6 +357,10 @@ module.exports = [
             }
         }
     },
+
+
+
+
     //..................BOOKMARKED...................//    
     {
         method: 'POST',
@@ -463,4 +468,9 @@ module.exports = [
             }
         }
     },
+
 ]
+
+
+
+

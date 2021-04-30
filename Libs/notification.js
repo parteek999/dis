@@ -27,6 +27,8 @@ function sendPushNotification(message1,deviceToken) {
     });
 }
 
+
+
 function OTP(phoneNo){
     console.log(phoneNo);
 const accountsid='ACe2eaa3359611950eac5c30f614427fbc';
@@ -45,6 +47,10 @@ client.messages.create({
 .catch((err)=>console.log(err));
 return value
 }
+
+
+
+
 module.exports = {
     sendPushNotification,
     OTP

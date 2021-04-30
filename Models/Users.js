@@ -22,7 +22,7 @@ var Users = new Schema({
         ],index: true
     },
     deviceType: {
-        type: String, enum: [
+        type: String, default: "", enum: [
             Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
             Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
         ]

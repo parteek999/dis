@@ -7,10 +7,11 @@ const DAO = require('../DAOManager').queries,
     Bcrypt = require('bcryptjs');
 const mail = require('../DAOManager').mail;
 var path = require('path');
+var upload = require('../DAOManager/mail');
 let fs = require('fs');
 
 const signUp = async (payload) => {
-    const { email, name, password, countryCode, phoneNo } = payload
+    const { email, name, password, countryCode, phoneNo, deviceToken, deviceType } = payload
     let query = {
         email
     };
@@ -18,18 +19,21 @@ const signUp = async (payload) => {
     if (result.length) {
         throw ERROR.EMAIL_ALREADY_EXIST;
     }
-    payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
+    pass = await Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
 
-    console.log("1212121212121212", payload)
-    var number = (countryCode + phoneNo)
+    // console.log("1212121212121212", payload)
+    var number = await (countryCode + phoneNo)
 
     var Data = {
-        password: password,
+        password: pass,
         email: email,
         name: name,
         countryCode: countryCode,
         phoneNo: phoneNo,
-        fullNo: number
+        fullNo: number,
+        deviceType: deviceType,
+        deviceToken: deviceToken,
+
 
     }
     const final = await DAO.saveData(Models.Users, Data);
@@ -49,20 +53,24 @@ const signUp = async (payload) => {
 const login = async (payload) => {
 
     try {
-        const { email, password } = payload;
+        const { email, password, deviceToken, deviceType } = payload;
         const query = {
             email
         };
-        const final = await DAO.getDataOne(Models.Users, query, {});
+        const result = await DAO.getDataOne(Models.Users, query, {});
+        console.log("12121212", result)
+        console.log("90990909090909090", payload)
+        if (result === null) throw ERROR.EMAIL_NOT_FOUND;
 
-        if (final === null) throw ERROR.EMAIL_NOT_FOUND;
-
-        const checkPassword = Bcrypt.compareSync(password, final.password);
+        const checkPassword = Bcrypt.compareSync(password, result.password);
         if (!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
+        if (result.deviceToken) {
+            final = await DAO.findAndUpdate(Models.Users, { email: email }, { deviceToken: deviceToken, deviceType: deviceType }, { new: true });
+        }
 
         let tokenData = {
             scope: Config.APP_CONSTANTS.SCOPE.USER,
-            _id: final._id,
+            _id: result._id,
             time: new Date(),
         };
         const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
@@ -74,19 +82,32 @@ const login = async (payload) => {
         throw err
     }
 }
-const socialLogin = async (payload) => {
 
+const socialLogin = async (payload) => {
+    const { email, name, password, countryCode, phoneNo, deviceToken, deviceType,socialId } = payload
     const query = {
         socialId: payload.socialId,
-        email:payload.email,
+        email: payload.email,
         isBlocked: false
     };
-    let result = await DAO.getDataOne(Models.Users, query, {});
-    console.log(result)
-    if (result!=null) {
-        throw "SOCIAL_ID_ALREADY_EXIST";
+    let pass = await Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
+    var number = await (countryCode + phoneNo);
+   
+    var Data = {
+        password: pass,
+        email: email,
+        name: name,
+        countryCode: countryCode,
+        phoneNo: phoneNo,
+        fullNo: number,
+        deviceType: deviceType,
+        deviceToken: deviceToken,
+        socialId:socialId
     }
-    let final = await DAO.saveData(Models.Users, payload);
+
+
+    let result = await DAO.getDataOne(Models.Users, query, {});
+    result !== null ? final = await DAO.findAndUpdate(Models.Users, { socialId: socialId }, { deviceToken: payload.deviceToken, deviceType: payload.deviceType }, { new: true }) : final = await DAO.saveData(Models.Users, Data);
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
         _id: final._id,
@@ -97,31 +118,46 @@ const socialLogin = async (payload) => {
 
     return {
         accessToken,
-        // user: {
-        //     ...payload
-        // }
         final
 
     }
+}
 
+const resetPassword = async (request, userDetails) => {
+    const { newPassword, oldPassword } = request.payload
+    const result = await DAO.getDataOne(Models.Users, { _id: userDetails._id })
+    var checkPassword = await Bcrypt.compareSync(oldPassword, result.password)
+    if (checkPassword===false) throw ERROR.INVALID_PASSWORDMATCH;
+    const pass= await Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
+    const final = await DAO.findAndUpdate(Models.Users, { _id:userDetails._id},{ password: pass }, { new: true });   
+    console.log(final)
+    return {final}
+}
+const editProfile = async (payload, userDetails) => {
+    let query = {
+        email: payload.email,
+    };
+    let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
+    if (result.length) {
+        throw ERROR.EMAIL_ALREADY_EXIST;
+    }
+    var number = await (final.countryCode + final.phoneNo)
+    const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, payload, { new: true });
+    return {
+        email: final.email,
+        fullName: final.fullName,
+        countrycode: final.countrycode,
+        phoneNo: final.phoneNo,
+        profilepic: final.profilepic,
+        fullNo: number,
+        imgurl: final.imgurl,
+    }
 }
 
 
 
-const resetPassword = async (request, reply) => {
-    const { newpassword, confirmpassword } = request.payload
 
-    // console.log(request.query)
-    // var str = request.info.referrer;
-    // const n = str.split("=")[1]
-    // console.log(n)
-    var pass = Bcrypt.hashSync(newpassword, Config.APP_CONSTANTS.SERVER.SALT);
-    var b = request.query.id
-    const a = { password: pass };
-    const final = await DAO.findAndUpdate(Models.Users, { email: b }, a, { new: true });
-    return
-    // reply.file(path.join(__dirname, '../public/form1.html'))
-}
+
 const forgetPassword = async (payload, userDetails) => {
     const { email } = payload
     let query = {
@@ -136,26 +172,6 @@ const forgetPassword = async (payload, userDetails) => {
     return {
 
         qwe
-    }
-}
-const editProfile = async (payload, userDetails) => {
-    let query = {
-        email: payload.email,
-    };
-    let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
-    if (result.length) {
-        throw ERROR.EMAIL_ALREADY_EXIST;
-    }
-    const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, payload, { new: true });
-    return {
-        email: final.email,
-        fullName: final.fullName,
-        countrycode: final.countrycode,
-        phoneNo: final.phoneNo,
-        profilepic: final.profilepic,
-        imgurl: final.imgurl,
-        deviceType: final.deviceType,
-        deviceToken: final.deviceToken,
     }
 }
 const changePassword = async (payload, userDetails) => {
@@ -181,6 +197,13 @@ const create = (req, reply) => {
 const hello = async (req, reply) => {
     return reply.file(path.join(__dirname, '../public/form.html'));
 }
+
+
+
+
+
+
+
 const bookMarked = async (payload, userDetails) => {
     console.log("hello")
     const { article_Id, mark } = payload
@@ -197,14 +220,6 @@ const bookMarked = async (payload, userDetails) => {
     }
     return final
 }
-const formSubmit = async (payload) => {
-    const { fname, email, phoneNumber, about } = payload
-    let query = {
-        fname, email, phoneNumber, about
-    }
-    return { query }
-}
-
 const bookmarkedId = async (payload) => {
     console.log(payload)
 
@@ -219,6 +234,42 @@ const bookmarkedId = async (payload) => {
 
 
 
+const formSubmit = async (payload) => {
+    const { fname, email, phoneNumber, about } = payload
+    let query = {
+        fname, email, phoneNumber, about
+    }
+    return { query }
+}
+
+
+
+const uploadImages = async (payload, userDetail) => {
+
+
+    let imgDetail = await upload.upload(payload)
+    var imgName = [];
+    const query = {
+        _id: userDetail._id
+    }
+
+    for (var i = 0; i < imgDetail.length; i++) {
+        imgName.push(imgDetail[i].filename)
+
+    }
+    //console.log(query)
+    console.log(imgName)
+
+    let result = await DAO.update(Models.User, query, { $push: { images: imgName } }, {})
+
+    //console.log(userDetail)
+
+    //console.log("--------------------------",request.payload)
+
+    return result
+
+}
+
 module.exports = {
     signUp,
     login,
@@ -232,5 +283,6 @@ module.exports = {
     create,
     bookMarked,
     bookmarkedId,
-    formSubmit
+    formSubmit,
+    uploadImages
 }

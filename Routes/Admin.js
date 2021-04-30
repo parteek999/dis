@@ -84,6 +84,7 @@ module.exports = [
         }
     },
 
+
     {
         method: 'GET',
         path: '/admin/getUser',
@@ -116,6 +117,7 @@ module.exports = [
         }
     },
 
+
     {
         method: 'GET',
         path: '/admin/userCount',
@@ -147,6 +149,7 @@ module.exports = [
             }
         }
     },
+
     
     {
         method: 'POST',
@@ -225,6 +228,8 @@ module.exports = [
             }
         }
     },
+
+    
      {
         method: 'GET',
         path: '/admin/singleUser',

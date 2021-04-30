@@ -8,7 +8,7 @@ mongoose.Promise = Promise;
 const util = require('util');
 const fs = require('fs');
 mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useUnifiedTopology: true,useCreateIndex: true,useNewUrlParser: true, useFindAndModify: false }).then(success => {
-    // console.log('MongoDB Connected')
+     console.log('MongoDB Connected')
     // Run();
 }).catch(err => {
     console.log( err)

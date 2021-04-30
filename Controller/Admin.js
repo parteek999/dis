@@ -36,7 +36,6 @@ const Login = async (payload) => {
     }
 }
 
-
 const changePassword = async (request, userDetails) => {
 
         let { oldPasword, newPassword } = request
@@ -71,9 +70,10 @@ const userCount = async (payload, userDetails) => {
 const paginateUser=async (payload,userDteails)=>{
 let {limit,pageNo}=payload
 console.log(limit,pageNo)
+let page=pageNo-1
 const options={
     sort:{createdAt:-1},
-    skip:pageNo*limit,
+    skip:page*limit,
     // pageNO*limit
     // ,
     limit:10
