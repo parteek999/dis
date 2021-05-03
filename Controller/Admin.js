@@ -6,6 +6,7 @@ const DAO = require('../DAOManager').queries,
     TokenManager = require('../Libs/TokenManager'),
     Models = require('../Models'),
     Bcrypt = require('bcryptjs');
+    var upload = require('../Libs/uploadManager');
    
 
 const Login = async (payload) => {
@@ -148,6 +149,26 @@ const blockunblockUser = async (payload) => {
 
 }
 
+const uploadImages = async (payload, userDetail) => {
+
+    console.log(payload)
+
+    const { title, description } = payload
+    let imgDetail = await upload.upload(payload)
+
+    console.log("3434343", imgDetail)
+    var Data = {
+        title: title,
+        description: description,
+        image: imgDetail,
+    }
+    let result = await DAO.saveData(Models.rights, Data)
+    return result
+
+}
+
+
+
 module.exports = {
 
     Login,
@@ -157,7 +178,8 @@ module.exports = {
     article,
     singleUser,
     blockunblockUser,
-    paginateUser
+    paginateUser,
+    uploadImages
 
 
 }
