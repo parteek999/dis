@@ -1,6 +1,6 @@
 const Config = require('../Config'),
-    ERROR = Config.responseMessages.ERROR,
-    fs = require('fs');
+ERROR = Config.responseMessages.ERROR,
+fs = require('fs');
 const AWS = require('aws-sdk');
 
 const ID = 'AKIAIB6SIGOKRDBWKIEQ';
@@ -15,8 +15,8 @@ function uuidv4() {
     });
 }
 
-const upload = (payload) => {
 
+const upload = (payload) => {
     return new Promise((resolve, reject) => {
         try {
             var unique = uuidv4()

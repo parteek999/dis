@@ -1,10 +1,11 @@
 
 module.exports = { 
+
     Users: require('./Users'),
     Admin:require('./Admin'),
     news:require('./news'),
-    rights:require('./rights')
-   
-    
+    rights:require('./rights'),
+    registration:require('./registration'),
+    Directory:require('./Directory'),
        
 };
