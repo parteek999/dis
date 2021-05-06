@@ -136,18 +136,17 @@ const blockunblockUser = async (payload) => {
     // let data;
     let result = await DAO.getDataOne(Models.Users, query)
     console.log(result)
-    if (result.isBlock === false) {
-        data = { isBlock: true }
+    if (result.isBlocked === false) {
+        data = { isBlocked: true }
         return final = await DAO.findAndUpdate(Models.Users, query, data, { new: true })
     }
     else {
-        data = { isBlock: false }
+        data = { isBlocked: false }
         return final = await DAO.findAndUpdate(Models.Users, query, data, { new: true })
     }
-
-
-
 }
+
+
 
 const uploadImages = async (payload, userDetail) => {
 

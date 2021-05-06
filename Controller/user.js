@@ -10,6 +10,9 @@ var path = require('path');
 var upload = require('../DAOManager/mail');
 let fs = require('fs');
 
+
+
+
 const signUp = async (payload) => {
     const { email, name, password, countryCode, phoneNo, deviceToken, deviceType } = payload
     let query = {
@@ -49,7 +52,6 @@ const signUp = async (payload) => {
     return { final, Token }
 
 }
-
 const login = async (payload) => {
 
     try {
@@ -82,6 +84,9 @@ const login = async (payload) => {
         throw err
     }
 }
+
+
+
 
 const socialLogin = async (payload) => {
     const { email, name, password, countryCode, phoneNo, deviceToken, deviceType, socialId } = payload
@@ -122,7 +127,6 @@ const socialLogin = async (payload) => {
 
     }
 }
-
 const resetPassword = async (request, userDetails) => {
     const { newPassword, oldPassword } = request.payload
     const result = await DAO.getDataOne(Models.Users, { _id: userDetails._id })
@@ -153,7 +157,6 @@ const editProfile = async (payload, userDetails) => {
         imgurl: final.imgurl,
     }
 }
-
 
 
 
@@ -201,9 +204,6 @@ const hello = async (req, reply) => {
 
 
 
-
-
-
 const bookMarked = async (payload, userDetails) => {
     console.log("hello")
     const { article_Id, mark } = payload
@@ -231,9 +231,6 @@ const bookmarkedId = async (payload) => {
     let final = await DAO.getData(Models.news, query, {}, {})
     return final
 }
-
-
-
 const formSubmit = async (payload) => {
     const { fname, email, phoneNumber, about } = payload
     let query = {

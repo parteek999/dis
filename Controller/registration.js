@@ -16,4 +16,5 @@ const register = async (payload) => {
 
 module.exports = {
     register,
+
 }
