@@ -160,7 +160,6 @@ const editProfile = async (payload, userDetails) => {
 
 
 
-
 const forgetPassword = async (payload, userDetails) => {
     const { email } = payload
     let query = {
@@ -184,6 +183,10 @@ const changePassword = async (payload, userDetails) => {
     const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { password: pass }, { new: true });
 
 }
+
+
+
+
 // const renderapi=async (request,reply)=>{
 //     //  console.log(request),
 //     //  console.log(reply);

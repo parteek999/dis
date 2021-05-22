@@ -14,13 +14,15 @@ module.exports = [
 
     {
         method: 'POST',
-        path: '/directory/directory',
+        path: '/directory/addDirectory',
         config: {
             description: 'directory',
-             auth:false,
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
             tags: ['api', 'directory'],
             handler: (request, reply) => {
-                return Controller.directory.directory(request.payload,request.auth.credentials)
+                return Controller.directory.directory(request.payload, request.auth.credentials)
 
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
@@ -40,29 +42,101 @@ module.exports = [
 
             validate: {
 
-                 payload: Joi.object({
+                payload: Joi.object({
                     file: Joi.any().meta({ swaggerType: 'file' }).optional(),
                     directoryName: Joi.string(),
                     aboutDirectory: Joi.string(),
-                    phoneNO:Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number"),
+                    phoneNO: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number"),
                     address: Joi.string(),
                     website: Joi.string(),
                     startTime: Joi.string().regex(/(0[1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|([1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|(1[0-2]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))/),
-                    endTime:  Joi.string().regex(/(0[1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|([1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|(1[0-2]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))/),
-                    facebookLInk:Joi.string(),
-                    instagramLInk:Joi.string(),
-                    twitterLink:Joi.string(),
+                    endTime: Joi.string().regex(/(0[1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|([1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|(1[0-2]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))/),
+                    facebookLInk: Joi.string(),
+                    instagramLInk: Joi.string(),
+                    twitterLink: Joi.string(),
 
                 }),
-                //  headers: UniversalFunctions.authorizationHeaderObj,
+                headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
-                
+
             },
 
 
             plugins: {
                 'hapi-swagger': {
-                     payloadType: 'form'
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+
+    {
+        method: 'GET',
+        path: '/directory/getDirectory',
+        config: {
+            description: "getDirectory",
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api', "getDirectory"],
+            handler: (request, reply) => {
+                return Controller.directory.getDirectory(request.query, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
+
+
+    {
+        method: 'POST',
+        path: '/directory/deleteDirectory',
+        config: {
+            description: 'deleteDirectory',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api', 'directory'],
+            handler: (request, reply) => {
+                return Controller.directory.deleteDirectory(request.payload, request.auth.credentials)
+
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+
+            validate: {
+                payload: Joi.object({
+                    id: Joi.string().required()
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+
+            },
+
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
                 }
             }
         }

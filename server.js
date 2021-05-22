@@ -55,7 +55,7 @@ const init = async () => {
             path: '/{file*}',
             handler: {
                 directory: {
-                    path: 'uploads'
+                    path: './uploads'
                 }
             },
             config: {

@@ -146,15 +146,10 @@ const blockunblockUser = async (payload) => {
     }
 }
 
-
-
 const uploadImages = async (payload, userDetail) => {
-
     console.log(payload)
-
     const { title, description } = payload
     let imgDetail = await upload.upload(payload)
-
     console.log("3434343", imgDetail)
     var Data = {
         title: title,
@@ -163,7 +158,6 @@ const uploadImages = async (payload, userDetail) => {
     }
     let result = await DAO.saveData(Models.rights, Data)
     return result
-
 }
 
 

@@ -6,10 +6,7 @@ const SUCCESS = Config.responseMessages.SUCCESS;
 const ERROR = Config.responseMessages.ERROR;
 const winston = require('winston');
 
-
-
 module.exports = [
-
 
     {
         method: 'POST',
@@ -78,7 +75,7 @@ module.exports = [
                             Iattend: Joi.array().items(Joi.string()),
                             schoolName: Joi.string().required(),
                             highestGrade:Joi.number().required(),
-                            completedEducation:Joi.string().required().valid("Comleted/Finished School", "Graduated from School", "Never Attended School"), 
+                            completedEducation:Joi.string().required().valid("Completed/Finished School", "Graduated from School", "Never Attended School"), 
                             tertiaryEducation:Joi.array().items(Joi.string()),
                         }).required(),
                         sectionE:
@@ -98,9 +95,76 @@ module.exports = [
             },
             plugins: {
                 'hapi-swagger': {
-                    //  payloadType: 'form'
+                    //   payloadType: 'form'
                 }
             }
         }
-    }
+    },
+
+    {
+        method: 'GET',
+        path: '/Registration/getRegistration',
+        config: {
+            description: "getRegistration",
+            auth: {
+                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api',"Registration"],
+            handler: (request, reply) => {
+                return Controller.registeration.getRegistration(request.query,request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
+
+    {
+        method: 'GET',
+        path: '/Registration/singleRegistration',
+        config: {
+            description: "singleRegistration",
+            auth: {
+                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+
+            handler: (request, reply) => {
+                return Controller.registeration.singleRegistration(request.query,request.auth.credentials)
+                    
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                    id:Joi.string(),
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
 ];

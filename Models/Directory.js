@@ -2,6 +2,7 @@ const mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     Config = require('../Config');
 
+
 const Directory = new Schema({
     directoryName: { type: String },
     aboutDirectory: { type: String },
@@ -14,10 +15,8 @@ const Directory = new Schema({
     facebookLInk: { type: String },
     instagramLInk: { type: String },
     twitterLink: { type: String },
-    isDeleted: { type: Boolean, default: false, },
+    isDeleted: { type: Boolean, default: false },
 }, { timestamps: true });
-
-
 
 
 

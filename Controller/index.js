@@ -5,5 +5,7 @@ module.exports = {
     news:require('./news'),
     rights: require('./rights'),
     registeration:require('./registration'),
-    directory:require('./directory')
+    directory:require('./directory'),
+    Complaint:require('./Complaint'),
+    Contact:require('./contact')
 };

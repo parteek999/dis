@@ -9,16 +9,16 @@ const winston = require('winston');
 module.exports = [
     {
         method: 'POST',
-        path: '/news/createNews',
+        path: '/contact/addContact',
         config: {
-            description: 'createNews',
+            description: 'addContact',
              auth:   {
                      strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
                 },
-            tags: ['api', 'createNews'],
+            tags: ['api'],
             handler: (request, reply) => {
                 console.log(request.payload)
-                return Controller.news.createNews(request.payload, request.auth.credentials)
+                return Controller.Contact.addContact(request.payload, request.auth.credentials)
 
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
@@ -39,7 +39,7 @@ module.exports = [
                  payload: Joi.object({
                     file: Joi.any().meta({ swaggerType: 'file' }).optional(),
                     title:Joi.string(),
-                    description:Joi.string()
+                    number:Joi.string()
 
                 }),
                  headers: UniversalFunctions.authorizationHeaderObj,
@@ -55,16 +55,16 @@ module.exports = [
 
     {
         method: 'GET',
-        path: '/news/getNews',
+        path: '/contact/getContact',
         config: {
-            description: "getNews",
+            description: "getContact",
             auth: {
                 strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
             },
             tags: ['api'],
 
             handler: (request, reply) => {
-                return Controller.news.getNews(request.query,request.auth.credentials)
+                return Controller.Contact.getContact(request.query,request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -75,41 +75,6 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
-    },
-
-    {
-        method: 'GET',
-        path: '/news/singleNews',
-        config: {
-            description: "singleNews",
-            auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
-            tags: ['api'],
-
-            handler: (request, reply) => {
-                return Controller.news.singleNews(request.query,request.auth.credentials)
-                    
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                query: Joi.object({
-                    id:Joi.string(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction },
@@ -123,17 +88,16 @@ module.exports = [
 
     {
         method: 'POST',
-        path: '/news/deleteNews',
+        path: '/contact/deleteContact',
         config: {
-            description: "deleteNews",
+            description: 'deleteContact',
             auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
             },
-            tags: ['api'],
-
+            tags: ['api', 'contact'],
             handler: (request, reply) => {
-                return Controller.news.deleteNews(request.payload,request.auth.credentials)
-                    
+                return Controller.Contact.deleteContact(request.payload, request.auth.credentials)
+
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -142,17 +106,21 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
+
             validate: {
                 payload: Joi.object({
-                    id:Joi.string(),
+                    id: Joi.string().required()
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                failAction: UniversalFunctions.failActionFunction
+
+            },
+
             plugins: {
                 'hapi-swagger': {
-                    payloadType: 'form',
+                    payloadType: 'form'
                 }
             }
         }
-    }
+    },
 ]
