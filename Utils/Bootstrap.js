@@ -20,15 +20,15 @@ mongoose.connect(Config["development"].mongoDb.URI, { useUnifiedTopology: true,u
     process.exit(1);
 });
 
-// const Run = async () => {
-//     let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
-//     let adminDetails2 = {
-//         name : "NCPD ADMIN",
-//         email: "admin@NCPD.com",
-//         password: password,           //qwerty
-//     };
-//     CreateAdmin(adminDetails2);
-// }
+const Run = async () => {
+    let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
+    let adminDetails2 = {
+        name : "NCPD ADMIN",
+        email: "admin@NCPD.com",
+        password: password,           //qwerty
+    };
+    CreateAdmin(adminDetails2);
+}
 
 
 const CreateAdmin = async (adminDetails) => {
@@ -60,6 +60,6 @@ function checkFolderAlreadyExist() {
         console.log('folder already exist ');
     }
 }
-// module.exports = {
-//     Run: Run
-// }
+module.exports = {
+    Run: Run
+}
