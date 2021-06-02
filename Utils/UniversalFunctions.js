@@ -1,9 +1,3 @@
-/**
- * Created by Shumi on 17/5/18.
- */
-
-
-
 const Boom = require('@hapi/boom'),
     Joi = require('@hapi/joi'),
     winston = require('winston'),
@@ -153,5 +147,5 @@ module.exports = {
     authorizationHeaderObj:authorizationHeaderObj,
     sendSuccess : sendSuccess,
     sendError : sendError,
-    // otp:otp
+    
 };

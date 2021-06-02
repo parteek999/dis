@@ -2,10 +2,9 @@ var SERVER = {
     APP_NAME: 'Dis',
     SECRET:"#DubaIIeOkCfGdHahSHHSh",
     SALT:11,
-    JWT_SECRET_KEY_BRANCH:"#GD%$HFD&&$DFDKI12~#^%&*+_->?L%QF",
     JWT_SECRET_KEY_ADMIN:   "vdfeg%%$$##r#FEF$#@#&^^&(#",
     JWT_SECRET_KEY_USER:    "%#%$FDFGVRG%HRTB%^TG^$G",
-    JWT_SECRET_KEY_CAPTAIN:    "^&%$VFF%dfgef$%$%$GRTB%",
+    
    };
 
 var swaggerDefaultResponseMessages = [
@@ -18,42 +17,22 @@ var swaggerDefaultResponseMessages = [
 
 var SCOPE = {
         ADMIN: 'ADMIN',
-        BRANCH: 'BRANCH',
         USER: 'USER',
-        CAPTAIN:"CAPTAIN",
-        USER_CAPTAIN:"USER_CAPTAIN",
 
-        BRANCH_USERS_ADMIN:"BRANCH_USERS_ADMIN",
-        BRANCH_USERS_ADMIN_CAPTAIN:"BRANCH_USERS_ADMIN_CAPTAIN",
-
-        BRANCH_CAPTAIN:"BRANCH_CAPTAIN",
-        ADMIN_BRANCH:"ADMIN_BRANCH",
-        
 };
 
 
 var MODELS = {
     Admins:"Admins",
-    
-    Customer:"Customer",
-    
     User:"User",
-    
 };
 
 var DATABASE_CONSTANT ={
 
-    
     GENDER:{
         MALE:"male",
         FEMALE:"female",
         OTHER:"other"
-    },
-
-    ORDER_STATUS:{
-        PENDING:"pending",
-        CONFIRMED:"confirmed",
-        REJECT: "reject"
     },
     
     DEVICE_TYPES: {
@@ -65,46 +44,20 @@ var DATABASE_CONSTANT ={
         FACEBOOK: "Facebook",
         GOOGLE: "Google"
     },
-    WINE_TYPE: {
-        BOTTLE: 'BOTTLE',
-        GLASS: 'GLASS',
-        PEG: 'PEG'
-    },
-    ITEM_TYPE: {
 
-        WINE: 'WINE',
-        FOOD: 'FOOD'
-    },
-   
-    
     ACCOUNT_TYPE : {
         GMAIL:'gmail',
         FACEBOOK: 'facebook',
         EMAIL: 'email',
         APPLE_ID:'apple'
     },
+
     VERIFICATION_TYPE: {
         AADHAR_CARD:'aadhar_card',
         DRIVING_LISCENCE: 'driving_liscence',
         PANCARD: 'pancard',
         
     },
-    USERTYPE: {
-        GUEST:'guest',
-        HOST:'host',
-       
-    },
-    CATEGORY:{
-        POOL:'pool',
-        KARAOKE:'karaoke',
-        BIRTHDAY:'birthday',
-        MUSIC:'music',
-        DRINKING:'drinking'
-    },
-    EVENTHOSTTYPE:{
-        INDIVIDUAL:'individual',
-        ORGANISATION:'organisation'
-    }
     
 };
 

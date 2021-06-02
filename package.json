@@ -1,11 +1,16 @@
 {
-  "name": "dubaii",
+  "name": "ncpd",
   "version": "1.0.0",
   "description": "backend code",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
+  },
+  
+  "engines": {
+    "node": ">=v14.17.0",
+    "mongo": ">=3.6.8"
   },
   "author": "Parteek Gupta",
   "license": "ISC",

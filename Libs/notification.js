@@ -4,8 +4,6 @@ const fcm = new FCM(serverKey);
 
 
 function sendPushNotification(message1,deviceToken) {
-
-
    var message = {
         registration_ids: deviceToken,
         notification: {

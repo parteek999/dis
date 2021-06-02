@@ -21,12 +21,7 @@ var GenerateToken = (tokenData, userType) => {
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_ADMIN;
                     break;
 
-                case Config.APP_CONSTANTS.SCOPE.BRANCH:
-                    secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_BRANCH;
-                    break;
-                case Config.APP_CONSTANTS.SCOPE.CAPTAIN:
-                    secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_CAPTAIN;
-                    break;
+                
 
                 default:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_ADMIN;
@@ -43,24 +38,17 @@ var GenerateToken = (tokenData, userType) => {
 
 
 var verifyToken = async (tokenData) => {
-    //  console.log("hi")
-    //  console.log(tokenData)
-    //  console.log(tokenData.scope)
+   
     var user;
     if (tokenData.scope === Config.APP_CONSTANTS.SCOPE.ADMIN) {
         user = await DAO.getData(Models.Admin, { _id: tokenData._id }, { _id: 1 }, { lean: true });
     }
 
-    else if (tokenData.scope === Config.APP_CONSTANTS.SCOPE.BRANCH) {
-        user = await DAO.getData(Models.Branchs, { _id: tokenData._id, isBlocked: false }, { _id: 1 }, { lean: true });
-    }
-
+   
     else if (tokenData.scope === Config.APP_CONSTANTS.SCOPE.USER)
         user = await DAO.getData(Models.Users, { _id: tokenData._id }, { __v: 0 }, { lean: true });
 
-    else if (tokenData.scope === Config.APP_CONSTANTS.SCOPE.CAPTAIN)
-        user = await DAO.getData(Models.Captain, { _id: tokenData._id, isBlocked: false }, { __v: 0 }, { lean: true });
-
+  
     else {
         console.log("============No User Found==============");
         throw UniversalFunctions.sendError('en', ERROR.UNAUTHORIZED);

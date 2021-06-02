@@ -4,10 +4,14 @@ let mongoose = require('mongoose'),
     Models = require('../Models'),
     bcrypt = require('bcryptjs'),
     winston = require('winston');
+
+
 mongoose.Promise = Promise;
 const util = require('util');
 const fs = require('fs');
-mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useUnifiedTopology: true,useCreateIndex: true,useNewUrlParser: true, useFindAndModify: false }).then(success => {
+
+//Connect to MongoDB
+mongoose.connect(Config["development"].mongoDb.URI, { useUnifiedTopology: true,useCreateIndex: true,useNewUrlParser: true, useFindAndModify: false }).then(success => {
      console.log('MongoDB Connected')
     // Run();
 }).catch(err => {
@@ -19,29 +23,29 @@ mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useUnifiedTopology:
 // const Run = async () => {
 //     let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
 //     let adminDetails2 = {
-//         name : "Agent Jack Admin",
-//         email: "admin@agentjack.com",
+//         name : "NCPD ADMIN",
+//         email: "admin@NCPD.com",
 //         password: password,           //qwerty
 //     };
 //     CreateAdmin(adminDetails2);
 // }
 
 
-// const CreateAdmin = async (adminDetails) => {
-//     return new Promise((resolve, reject) => {
-//         try {
+const CreateAdmin = async (adminDetails) => {
+    return new Promise((resolve, reject) => {
+        try {
             
-//             let adminData = DAO.findAndUpdate(Models.Admin, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
-//             return resolve("Admin Added");
-//         } catch (err) {
-//             console.log("====================", err)
-//             return reject(err);
-//         }
-//     });
-// }
+            let adminData = DAO.findAndUpdate(Models.Admin, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
+            return resolve("Admin Added");
+        } catch (err) {
+            console.log("====================", err)
+            return reject(err);
+        }
+    });
+}
 
 
-function checkFolderAlreadyExist() {ss
+function checkFolderAlreadyExist() {
 
     let _dirPath = "./uploads";
     console.log(fs.existsSync(_dirPath));

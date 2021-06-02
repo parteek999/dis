@@ -19,7 +19,7 @@ exports.ERROR = {
         statusCode: 400,
         customMessage: {
             en : 'DB Error : ',
-           // ar : 'DB خطأ:'
+           
         },
         type: 'DB_ERROR'
     }, 
