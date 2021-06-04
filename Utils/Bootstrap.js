@@ -13,7 +13,7 @@ const fs = require('fs');
 //Connect to MongoDB
 mongoose.connect(Config["development"].mongoDb.URI, { useUnifiedTopology: true,useCreateIndex: true,useNewUrlParser: true, useFindAndModify: false }).then(success => {
      console.log('MongoDB Connected')
-    // Run();
+     Run();
 }).catch(err => {
     console.log( err)
     winston.info({ ERROR: err });
@@ -21,17 +21,19 @@ mongoose.connect(Config["development"].mongoDb.URI, { useUnifiedTopology: true,u
 });
 
 const Run = async () => {
-    let password = "$2b$11$.kZ8RVapQzn7vryresNia.l2NF3IKfQ8o7uCUnLWgWlfukykutJI6";
+    let password = "$2a$10$KwFpE1iWmcLXbLeZTSin4utRst5c3AEOSPMUlwMJhr4T5P6sePrUi";
     let adminDetails2 = {
         name : "NCPD ADMIN",
         email: "admin@NCPD.com",
-        password: password,           //qwerty
+        password: password,           //123456
     };
+    console.log("hiiiii")
     CreateAdmin(adminDetails2);
 }
 
 
 const CreateAdmin = async (adminDetails) => {
+   console.log("hello")
     return new Promise((resolve, reject) => {
         try {
             
@@ -44,22 +46,6 @@ const CreateAdmin = async (adminDetails) => {
     });
 }
 
-
-function checkFolderAlreadyExist() {
-
-    let _dirPath = "./uploads";
-    console.log(fs.existsSync(_dirPath));
-    if (!fs.existsSync(_dirPath)) {
-        const mkdir = util.promisify(fs.mkdir);
-        mkdir(_dirPath).then((stats) => {
-            console.log('folder created successfully ');
-        }).catch((error) => {
-            console.log(error);
-        });
-    } else {
-        console.log('folder already exist ');
-    }
-}
 module.exports = {
     Run: Run
 }

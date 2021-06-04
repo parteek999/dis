@@ -58,9 +58,7 @@ module.exports = [
         path: '/news/getNews',
         config: {
             description: "getNews",
-            auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
             tags: ['api'],
 
             handler: (request, reply) => {
@@ -91,9 +89,7 @@ module.exports = [
         path: '/news/singleNews',
         config: {
             description: "singleNews",
-            auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
             tags: ['api'],
 
             handler: (request, reply) => {

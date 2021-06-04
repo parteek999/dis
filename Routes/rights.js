@@ -49,9 +49,7 @@ module.exports = [
         path: '/rights/getRights',
         config: {
             description: "getRights",
-            auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
             tags: ['api'],
 
             handler: (request, reply) => {
@@ -83,9 +81,7 @@ module.exports = [
         config: {
             description: "singleRight",
             // auth:false,
-            auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
             tags: ['api'],
 
             handler: (request, reply) => {

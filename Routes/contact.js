@@ -58,9 +58,9 @@ module.exports = [
         path: '/contact/getContact',
         config: {
             description: "getContact",
-            auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
+            
+                auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
+                
             tags: ['api'],
 
             handler: (request, reply) => {

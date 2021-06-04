@@ -18,6 +18,7 @@ var swaggerDefaultResponseMessages = [
 var SCOPE = {
         ADMIN: 'ADMIN',
         USER: 'USER',
+        ADMIN_USER:'ADMIN_USER',
 
 };
 

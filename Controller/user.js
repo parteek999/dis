@@ -57,7 +57,7 @@ const login = async (payload) => {
     try {
         const { email, password, deviceToken, deviceType } = payload;
         const query = {
-            email
+            email:email
         };
         const result = await DAO.getDataOne(Models.Users, query, {});
         console.log("12121212", result)

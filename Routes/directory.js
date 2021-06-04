@@ -75,9 +75,7 @@ module.exports = [
         path: '/directory/getDirectory',
         config: {
             description: "getDirectory",
-            auth: {
-                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
             tags: ['api', "getDirectory"],
             handler: (request, reply) => {
                 return Controller.directory.getDirectory(request.query, request.auth.credentials)
