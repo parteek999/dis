@@ -4,6 +4,9 @@ const Joi = require('@hapi/joi');
 const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const winston = require('winston');
+const Models = require('../Models');
+const Bcrypt = require('bcryptjs');
+const DAO = require('../DAOManager').queries;
 
 
 module.exports = [
@@ -35,11 +38,11 @@ module.exports = [
                     phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
                     password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
                     // profilepic:Joi.array().items(Joi.string()),
-                    deviceType:Joi.string().valid(
+                    deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
                     ),
-                    deviceToken:Joi.string()
+                    deviceToken: Joi.string()
 
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
@@ -75,11 +78,11 @@ module.exports = [
                 query: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
                     password: Joi.string().trim().required(),
-                    deviceType:Joi.string().valid(
+                    deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
                     ),
-                    deviceToken:Joi.string()
+                    deviceToken: Joi.string()
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
                 failAction: UniversalFunctions.failActionFunction
@@ -95,7 +98,7 @@ module.exports = [
     {
         method: 'POST',
         path: '/user/socialLogin',
-        config: 
+        config:
         {
             description: 'socialLogin',
             auth: false,
@@ -118,11 +121,11 @@ module.exports = [
                     countryCode: Joi.string().required(),
                     phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
                     password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
-                    deviceType:Joi.string().valid(
+                    deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
                     ),
-                    deviceToken:Joi.string()
+                    deviceToken: Joi.string()
                 }),
                 failAction: UniversalFunctions.failActionFunction
             },
@@ -133,18 +136,18 @@ module.exports = [
             }
         }
     },
-    //...................RESETPASSWORD....................//    
+    //...................changePassword....................//  
     {
         method: 'POST',
-        path: '/user/resetPassword',
+        path: '/user/changePassword',
         config: {
-            description: 'resetPassword',
+            description: 'changePassword',
             auth: {
                 strategies: [Config.APP_CONSTANTS.SCOPE.USER]
             },
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.resetPassword(request,request.auth.credentials)
+                return Controller.user.changePassword(request, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -170,39 +173,8 @@ module.exports = [
             }
         }
     },
-    //..................FORGOTPASSWORD...................//    
-    {
-        method: 'POST',
-        path: '/user/forgetPassword',
-        config: {
-            description: 'forgetPassword',
-            auth: false,
 
-            tags: ['api', 'user'],
-            handler: (request, reply) => {
-                return Controller.user.forgetPassword(request.payload, request.auth.credentials)
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                payload: Joi.object({
-                    email: Joi.string(),
-                }),
-                failAction: UniversalFunctions.failActionFunction,
-            },
 
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form'
-                }
-            }
-        }
-    },
     //..................EDITPROFILE...................//    
     {
         method: 'POST',
@@ -244,45 +216,6 @@ module.exports = [
         }
     },
 
-
-
-
-    //..................CHANGEPASSWORD...................//        
-    {
-        method: 'POST',
-        path: '/user/changePassword',
-        config: {
-            description: 'changePassword',
-            auth:
-            {
-                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
-            },
-            tags: ['api', 'user'],
-
-            handler: (request, reply) => {
-                return Controller.user.changePassword(request.payload, request.auth.credentials)
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                payload: Joi.object({
-                    newpassword: Joi.string(),
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction,
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form'
-                }
-            }
-        }
-    },
     //..................SENDNOTIFICATION...................//        
     {
         method: 'POST',
@@ -317,50 +250,6 @@ module.exports = [
             }
         }
     },
-    //..................CERATE...................//    
-    {
-        method: 'GET',
-        path: '/create',
-        config: {
-            description: 'create',
-            auth: false,
-
-            tags: ['api', 'create'],
-            handler: (request, reply) => {
-
-                return Controller.user.create(request, reply)
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form'
-                }
-            }
-        }
-    },
-    //..................HELLO...................//    
-    {
-        method: 'GET',
-        path: '/hello',
-        config: {
-            description: 'hello',
-            auth: false,
-
-            tags: ['api', 'hello'],
-            handler: (request, reply) => {
-                return Controller.user.hello(request, reply)
-
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form'
-                }
-            }
-        }
-    },
-
-
-
-
     //..................BOOKMARKED...................//    
     {
         method: 'POST',
@@ -469,12 +358,114 @@ module.exports = [
         }
     },
 
+    //change password api
+    {
+        method: 'POST',
+        path: '/user/forgetPassword',
+        config: {
+            description: 'forgetPassword',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.forgetPassword(request.payload, request.query)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    email: Joi.string().required(),
 
+                }),
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
 
+    {
+        method: 'POST',
+        path: '/user/resetPassword',
+        config: {
+            description: 'resetPassword',
+            auth: false,
+            validate: {
+                payload: Joi.object({
+                    password: Joi.string().required(),
+                    confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({ 'any.only': 'Password does not match' })
+                }),
+            },
+            // { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            tags: ['api', 'user'],
+            handler: async (request, h) => {
+                let { password } = request.payload
+                let query = { _id: request.query.id }
+                // console.log(userId.id)
+                password = Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
+                const result = await DAO.findAndUpdate(Models.Users, query, { password: password })
+                // console.log("hi")
+                return h.redirect("/user/renderConfirmPage")
+                //          Controller.User.resetPassword(request.payload, request.query, h)
+                //             .then(response => {
+                //                 return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, h);
+                //             })
+                //             .catch(error => {
+                //                 winston.error("=====error=============", error);
+                //                 return UniversalFunctions.sendError("en", error, h);
+                //             });
+                //     },
+                   
+                //     plugins: {
+                //         'hapi-swagger': {
+                //             payloadType: 'form'
+                //         }
+            }
+        }
+    },
 
+    {
+        method: 'Get',
+        path: '/user/forgotPasswordPageRender',
+        config: {
+            description: 'forgotPasswordPageRender',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.forgotPasswordPageRender(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+                    // payloadType: 'form'
+                }
+            }
+        }
+    },
 
-
-    
+    {
+        method: 'Get',
+        path: '/user/renderConfirmPage',
+        config: {
+            description: 'forgotPasswordPageRender',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.renderConfirmPage(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+                    //    payloadType: 'form'
+                }
+            }
+        }
+    },
 ]
 
 

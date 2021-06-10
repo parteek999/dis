@@ -2,11 +2,14 @@ const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
     ERROR = Config.responseMessages.ERROR,
     Models = require('../Models');
+const { Model } = require('mongoose');
 var upload = require('../Libs/uploadManager');
 
 const directory = async (payload) => {
 
-    const { directoryName,
+    const { 
+        directoryType,
+        directoryName,
         aboutDirectory,
         phoneNO,
         address,
@@ -21,6 +24,7 @@ const directory = async (payload) => {
     let imgDetail = await upload.upload(payload)
 
     var Data = {
+        directoryType:directoryType,
         directoryName: directoryName,
         aboutDirectory: aboutDirectory,
         phoneNO: phoneNO,
@@ -33,8 +37,8 @@ const directory = async (payload) => {
         twitterLink: twitterLink,
         image: imgDetail
     }
-    let result = await DAO.saveData(Models.Directory, Data)
-    return result
+    let directory = await DAO.saveData(Models.Directory, Data)
+    return directory
 }
 
 const getDirectory = async (payload, userdetails) => {
@@ -48,6 +52,15 @@ const getDirectory = async (payload, userdetails) => {
 
 }
 
+const getUserDirectory=async (payload,userDetails)=>{
+    const {directoryType} = payload;
+    
+    const query={
+          directoryType:directoryType
+    };
+    var directory = await DAO.getDataOne(Models.Directory,query)
+    return dirctory
+}
 
 
 const singleDirectory = async (payload, userdetails) => {
@@ -57,8 +70,8 @@ const singleDirectory = async (payload, userdetails) => {
         isDeleted: false
     }
     console.log(query)
-    let result = await DAO.getDataOne(Models.Directory, query, {}, {});
-    return result
+    let directory = await DAO.getDataOne(Models.Directory, query, {}, {});
+    return directory
 }
 
 const deleteDirectory = async (payload, userdetails) => {
@@ -73,6 +86,7 @@ const deleteDirectory = async (payload, userdetails) => {
 module.exports = {
     directory,
     getDirectory,
-    // singleDirectory,
+     singleDirectory,
+    getUserDirectory,
     deleteDirectory
 }

@@ -1,40 +1,44 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
-
-async function sentmail(email) {
-    return new Promise((resolve, reject) => {
-        let transport = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: "testingpmai999@gmail.com",
-                pass: "Testingmail123"
-            }
-        });
-        // var value = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
-        let mailoptions = {
-            from: 'testingpmai999@gmail.com',
-            to: email,
-            subject: 'testing email',
-            html: `<p> <a href="http://15.206.146.120:8000/create?id=${email}">link</a>
-             your new password is = </p>`
-            // ${value}
-            //  </p>`
-        };
-        transport.sendMail(mailoptions, function (err, data) {
-            if (err) {
-                reject(err)
-            }
-            else {
-                resolve(data)
-            }
-        })
-    })
-}
+require('dotenv').config();
 
 
+// var transporter = nodemailer.createTransport({
+//             service: "gmail",
+//             auth: {
+//                 user: "testingpmai999@gmail.com",
+//                 pass: "Testingmail123"
+//             }
+//         });
+//        console.log("111",_id)
 
-async function upload(file) {
+//        function send(email,_id) {
+//             return new Promise((resolve, reject) => {        
+//                 var info = {
+//                     from:"testingpmai999@gmail.com",
+//                     to: email,
+//                     subject: "Reset Password",
+//                     html: ` <h2><p>Click on the <a href="http://localhost:8000/user/forgotPasswordPageRender?id=${_id}">link</a> to change your password</p></h2>`
+//                 };
+        
+//                 transporter.send(info, (error, accept) => {
+//                     if (error) { reject(error) }
+//                     else {
+//                         resolve(accept,console.log("Mail Sended"))
+//                     }
+//                 })
+//             })
+//         }
+//     catch(err){
+//         throw err
+    
+//     }
+
+
+
+
+function upload(file) {
     return new Promise((resolve, reject) => {
         try {
             if (file.length > 1) {
@@ -72,6 +76,6 @@ async function upload(file) {
     })
 }
 module.exports = {
-    sentmail: sentmail,
+    // sentmail: sentmail,
     Uplaod: upload
 };

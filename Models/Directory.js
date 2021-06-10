@@ -5,6 +5,7 @@ const mongoose = require('mongoose'),
 
 const Directory = new Schema({
     directoryName: { type: String },
+    directoryType: { type: String },
     aboutDirectory: { type: String },
     phoneNO: [{ type: Number }],
     image: [{ type: String }],

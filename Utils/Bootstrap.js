@@ -27,13 +27,11 @@ const Run = async () => {
         email: "admin@NCPD.com",
         password: password,           //123456
     };
-    console.log("hiiiii")
     CreateAdmin(adminDetails2);
 }
 
 
 const CreateAdmin = async (adminDetails) => {
-   console.log("hello")
     return new Promise((resolve, reject) => {
         try {
             

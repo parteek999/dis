@@ -44,6 +44,7 @@ module.exports = [
 
                 payload: Joi.object({
                     file: Joi.any().meta({ swaggerType: 'file' }).optional(),
+                    directoryType:Joi.string(),
                     directoryName: Joi.string(),
                     aboutDirectory: Joi.string(),
                     phoneNO: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number"),
@@ -75,7 +76,7 @@ module.exports = [
         path: '/directory/getDirectory',
         config: {
             description: "getDirectory",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN] },
             tags: ['api', "getDirectory"],
             handler: (request, reply) => {
                 return Controller.directory.getDirectory(request.query, request.auth.credentials)
@@ -89,6 +90,70 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
+
+
+    {
+        method: 'GET',
+        path: '/directory/getUserDirectory',
+        config: {
+            description: "getUserDirectory",
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            tags: ['api', "getUserDirectory"],
+            handler: (request, reply) => {
+                return Controller.directory.getUserDirectory(request.query, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                    directoryType:Joi.string()
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/directory/singleDirectory',
+        config: {
+            description: "singleDirectory",
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            tags: ['api', "singleDirectory"],
+            handler: (request, reply) => {
+                return Controller.directory.singleDirectory(request.query, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                   id:Joi.string(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction

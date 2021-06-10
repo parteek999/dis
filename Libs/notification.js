@@ -25,7 +25,27 @@ function sendPushNotification(message1,deviceToken) {
     });
 }
 
+// async function sendPushNotification(message1, deviceToken) {
+//   console.log(typeof(deviceToken))
 
+//   var message = {
+//     registration_ids: deviceToken,
+//     notification: {
+//       title: 'Testing',
+//       body: message1.message,
+//       badge: 1
+//     },
+//     data: message1,
+//     priority: 'high'
+//   };
+//   fcm.send(message, function (err, result) {
+//     if (err) {
+//       console.log("Something has gone wrong!", err);
+//     } else {
+//       console.log("Successfully sent with response: ", result);
+//     }
+//   });
+// }
 
 function OTP(phoneNo){
     console.log(phoneNo);
@@ -45,9 +65,6 @@ client.messages.create({
 .catch((err)=>console.log(err));
 return value
 }
-
-
-
 
 module.exports = {
     sendPushNotification,

@@ -13,6 +13,7 @@ process.env.NODE_CONFIG_DIR = __dirname + '/Config/';
 
 const init = async () => {
 
+
     const server = Hapi.Server({
         app: {
             name: Config.APP_CONSTANTS.SERVER.APP_NAME
@@ -52,7 +53,7 @@ const init = async () => {
         },
         {
             method: 'GET',
-            path: '/qwe/{file*}',
+            path: '/resetPassword/{file*}',
             handler: {
                 directory: {
                     path: './public'
