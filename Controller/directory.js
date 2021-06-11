@@ -86,7 +86,7 @@ const deleteDirectory = async (payload, userdetails) => {
 module.exports = {
     directory,
     getDirectory,
-     singleDirectory,
+    singleDirectory,
     getUserDirectory,
     deleteDirectory
 }

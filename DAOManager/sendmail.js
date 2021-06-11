@@ -17,7 +17,7 @@ try{
                 from:  'testingpmai999@gmail.com',
                 to: email,
                 subject: "Reset Password",
-                html: ` <h2><p>Click on the <a href="http://localhost:8000/user/forgotPasswordPageRender?id=${_id}">link</a> to change your password</p></h2>`
+                html: ` <h2><p>Click on the <a href="http://192.241.139.55:8000/user/forgotPasswordPageRender?id=${_id}">link</a> to change your password</p></h2>`
             };
     
             transporter.sendMail(info, (error, accept) => {

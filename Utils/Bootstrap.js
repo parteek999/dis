@@ -10,6 +10,7 @@ mongoose.Promise = Promise;
 const util = require('util');
 const fs = require('fs');
 
+
 //Connect to MongoDB
 mongoose.connect(Config["development"].mongoDb.URI, { useUnifiedTopology: true,useCreateIndex: true,useNewUrlParser: true, useFindAndModify: false }).then(success => {
      console.log('MongoDB Connected')
@@ -34,7 +35,6 @@ const Run = async () => {
 const CreateAdmin = async (adminDetails) => {
     return new Promise((resolve, reject) => {
         try {
-            
             let adminData = DAO.findAndUpdate(Models.Admin, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
             return resolve("Admin Added");
         } catch (err) {
@@ -43,6 +43,7 @@ const CreateAdmin = async (adminDetails) => {
         }
     });
 }
+
 
 module.exports = {
     Run: Run
