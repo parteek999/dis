@@ -75,21 +75,21 @@ const login = async (payload) => {
 
 
 const socialLogin = async (payload) => {
-    const { email, name, password, countryCode, phoneNo, deviceToken, deviceType, socialId } = payload
+    const { email, name, deviceToken, deviceType, socialId } = payload
     const query = {
         socialId: payload.socialId,
         email: payload.email,
         isBlocked: false
     };
     let pass = await Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
-    var number = await (countryCode + phoneNo);
+    // var number = await (countryCode + phoneNo);
     var Data = {
         password: pass,
         email: email,
-        name: name,
-        countryCode: countryCode,
-        phoneNo: phoneNo,
-        fullNo: number,
+        // name: name,
+        // countryCode: countryCode,
+        // phoneNo: phoneNo,
+        // fullNo: number,
         deviceType: deviceType,
         deviceToken: deviceToken,
         socialId: socialId

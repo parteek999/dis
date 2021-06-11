@@ -118,9 +118,9 @@ module.exports = [
                     socialId: Joi.string().trim().required(),
                     email: Joi.string().email().lowercase().trim().required(),
                     name: Joi.string().trim().required(),
-                    countryCode: Joi.string().required(),
-                    phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-                    password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
+                    // countryCode: Joi.string().required(),
+                    // phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
+                    // password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
                     deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
