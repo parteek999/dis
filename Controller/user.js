@@ -122,31 +122,35 @@ const editProfile = async (payload, userDetails) => {
     // console.log(payload.file)
     // console.log(payload['file'])
     if(payload['file']===undefined){
+        var number = await(payload.countrycode + payload.phoneNo)
         var Data = {
             email: payload.email,
             name: payload.fullName,
             countryCode: payload.countrycode,
             phoneNo: payload.phoneNo,
+            fullNo : number,
+
         }
-        const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
+        const user = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
        
-        var number = await (final.countryCode + final.phoneNo)
        
         return {
-           final
+           user
         }
     }
 else{   
         let imgDetail = await upload.upload(payload)
+        var number = await(payload.countrycode + payload.phoneNo)
         var Data = {
             email: payload.email,
             name: payload.fullName,
             countryCode: payload.countrycode,
             phoneNo: payload.phoneNo,
-            profilePic:imgDetail
+            profilePic:imgDetail,
+            fullNo : number
         }
         const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
-        var number = await (final.countryCode + final.phoneNo)
+       
         return {
           final
         }
