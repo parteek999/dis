@@ -154,9 +154,7 @@ else{
             phoneNo: payload.phoneNo,
             profilePic:imgDetail
         }
-
         const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
-       
         var number = await (final.countryCode + final.phoneNo)
         return {
             email: final.email,
