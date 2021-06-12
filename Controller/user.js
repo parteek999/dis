@@ -149,10 +149,10 @@ else{
             profilePic:imgDetail,
             fullNo : number
         }
-        const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
+        const user = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
        
         return {
-          final
+            user
         }
     }
 }
