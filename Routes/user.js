@@ -78,6 +78,7 @@ module.exports = [
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
                     password: Joi.string().trim().required(),
+                   
                     deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
@@ -113,14 +114,18 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
+            payload: {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 200000000 * 1000 * 1000
+            },
             validate: {
                 payload: Joi.object({
                     socialId: Joi.string().trim().required(),
                     email: Joi.string().email().lowercase().trim().required(),
                     name: Joi.string().trim().required(),
-                    // countryCode: Joi.string().required(),
-                    // phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-                    // password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
+                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
                     deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
@@ -136,6 +141,7 @@ module.exports = [
             }
         }
     },
+    
     //...................changePassword....................//  
     {
         method: 'POST',

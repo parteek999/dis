@@ -17,7 +17,12 @@ var Complaint = new Schema({
     recipientName:{type: String, trim: true},
     recipientAddress:{type: String, default:""},
     recipientTelephone:{type:Number,default:""},
-    description:{type:String,default:""},
+    description1:{type:String,default:""},
+    description2:{type:String,default:""},
+    description3:{type:String,default:""},
+    description4:{type:String,default:""},
+    description5:{type:String,default:""},
+    description6:{type:String,default:""},
     status:{type:String,default:"pending"},
     
     

@@ -125,19 +125,32 @@ const changePassword = async (request, userDetails) => {
 
 
 const editProfile = async (payload, userDetails) => {
-    // let query = {
-    //     email: payload.email,
-    // };
-    // let result = await DAO.getData(Models.Users, query, {}, {});
-    // console.log("sds", result)
-    // console.log(result[0]._id, userDetails._id);
-    
-    // if (result[0]._id == userDetails._id) {
+    // console.log(payload.file)
+    // console.log(payload['file'])
+    if(payload['file']===undefined){
+        var Data = {
+            email: payload.email,
+            name: payload.fullName,
+            countryCode: payload.countrycode,
+            phoneNo: payload.phoneNo,
+        }
+        const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
+       
+        var number = await (final.countryCode + final.phoneNo)
+        return {
+            email: final.email,
+            fullName: final.name,
+            countrycode: final.countryCode,
+            phoneNo: final.phoneNo,
+            fullNo: number,
+        }
+    }
+else{   
         let imgDetail = await upload.upload(payload)
         var Data = {
             email: payload.email,
             name: payload.fullName,
-            countryCode: payload.countryCode,
+            countryCode: payload.countrycode,
             phoneNo: payload.phoneNo,
             profilePic:imgDetail
         }
@@ -153,10 +166,7 @@ const editProfile = async (payload, userDetails) => {
             profilepic: final.profilePic,
             fullNo: number,
         }
-    // }
-    // else {
-    //     throw ERROR.EMAIL_ALREADY_EXIST;
-    // }
+    }
 }
 
 

@@ -58,7 +58,7 @@ const getUserDirectory=async (payload,userDetails)=>{
     const query={
           directoryType:directoryType
     };
-    var directory = await DAO.getDataOne(Models.Directory,query)
+    var directory = await DAO.getData(Models.Directory,query)
     console.log(directory)
     return directory
 }

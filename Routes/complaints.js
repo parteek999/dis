@@ -40,7 +40,12 @@ module.exports = [
                 recipientName:Joi.string().required(),
                 recipientAddress:Joi.string().required(),
                 recipientTelephone:Joi.number().required(),
-                description:Joi.string().required(),
+                description1:Joi.string(),
+                description2:Joi.string(),
+                description3:Joi.string(),
+                description4:Joi.string(),
+                description5:Joi.string(),
+                description6:Joi.string(),
             }),
             headers: UniversalFunctions.authorizationHeaderObjOptional,
             failAction: UniversalFunctions.failActionFunction
@@ -59,10 +64,10 @@ module.exports = [
     path: '/complaint/getComplaint',
     config: {
         description: 'getComplaint',
-        auth:false,
-        // auth: {
-        //     strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-        // },
+        // auth:false,
+        auth: {
+            strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+        },
         tags: ['api','admin'],
         handler: (request, reply)=> {
             return Controller.Complaint.getComplaint(request.query, request.auth.credentials)
@@ -76,7 +81,7 @@ module.exports = [
         },
         validate: {
             query: Joi.object({}),
-            // headers: UniversalFunctions.authorizationHeaderObj,
+             headers: UniversalFunctions.authorizationHeaderObj,
             failAction: UniversalFunctions.failActionFunction
         },
         plugins: {
