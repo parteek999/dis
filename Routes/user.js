@@ -29,7 +29,7 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
-
+          
             validate: {
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
@@ -197,13 +197,20 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
+            payload: {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 200000000 * 1000 * 1000
+            },
             validate: {
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required().allow(null).allow('').optional(),
                     fullName: Joi.string().trim().required().allow(null).allow('').optional(),
                     countrycode: Joi.string().required().allow(null).allow('').optional(),
                     phoneNo: Joi.string().trim().required().allow(null).allow('').optional(),
-                    profilePic: Joi.string().allow(null).allow('').optional(),
+                    // profilePic: Joi.string().allow(null).allow('').optional(),
+                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction,

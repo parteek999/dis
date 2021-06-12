@@ -5,8 +5,8 @@ const DAO = require('../DAOManager').queries,
     Models = require('../Models'),
     Bcrypt = require('bcryptjs');
 let mail = require('../DAOManager').mail;
+var upload = require('../Libs/uploadManager');
 var path = require('path');
-var upload = require('../DAOManager/mail');
 var email = require('../DAOManager/sendmail');
 let fs = require('fs');
 
@@ -125,15 +125,25 @@ const changePassword = async (request, userDetails) => {
 
 
 const editProfile = async (payload, userDetails) => {
-    let query = {
-        email: payload.email,
-    };
+    // let query = {
+    //     email: payload.email,
+    // };
     // let result = await DAO.getData(Models.Users, query, {}, {});
     // console.log("sds", result)
     // console.log(result[0]._id, userDetails._id);
     
     // if (result[0]._id == userDetails._id) {
-        const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, payload, { new: true });
+        let imgDetail = await upload.upload(payload)
+        var Data = {
+            email: payload.email,
+            name: payload.fullName,
+            countryCode: payload.countryCode,
+            phoneNo: payload.phoneNo,
+            profilePic:imgDetail
+        }
+
+        const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
+       
         var number = await (final.countryCode + final.phoneNo)
         return {
             email: final.email,

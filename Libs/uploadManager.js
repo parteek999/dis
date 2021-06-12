@@ -52,7 +52,7 @@ const upload = (payload) => {
     return new Promise((resolve, reject) => {
 
         try {
-            console.log("hji1")
+            console.log("sdsd",payload)
             var unique = uuidv4()
             var result = [];
 
