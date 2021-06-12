@@ -24,7 +24,23 @@ const getNews = async (payload, userdetails) => {
     const query = {
         isDeleted: false
     }
-    return DAO.getData(Models.news, query);
+    return DAO.getData(Models.news, query,{},{sort: { createdAt: -1 }});
+}
+
+const getUserNews = async (payload, userdetails) => {
+    console.log(userdetails);
+    const query = {
+        isDeleted: false
+    }
+    let result=await DAO.getData(Models.Users, { _id: userDetails._id },{article_Id:1,_id:0},{})
+    console.log(result[0].article_Id)
+
+    let news=DAO.getData(Models.news, query,{},{sort: { createdAt: -1 }});
+
+
+    
+
+    return 
 }
 
 const singleNews = async (payload, userdetails) => {
@@ -51,5 +67,6 @@ module.exports = {
     createNews, 
     getNews,
     singleNews,
-    deleteNews
+    deleteNews,
+    getUserNews
 }

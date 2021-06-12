@@ -41,6 +41,11 @@ var DATABASE_CONSTANT ={
         "ANDROID": "ANDROID",
         "WEB": "WEB"
     },
+    DIRECTORY_TYPE:{
+        "GOVERNMENT" : "GOVERNMENT ",
+        "NGO": "NGO ",
+        "SERVICEANDSUPPORT": "SERVICEANDSUPPORT"
+    },
     SOCIAL: {
         FACEBOOK: "Facebook",
         GOOGLE: "Google"

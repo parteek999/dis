@@ -44,7 +44,11 @@ module.exports = [
 
                 payload: Joi.object({
                     file: Joi.any().meta({ swaggerType: 'file' }).optional(),
-                    directoryType:Joi.string(),
+                    directoryType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.GOVERNMENT ,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.NGO ,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.SERVICEANDSUPPORT ,
+                    ),
                     directoryName: Joi.string(),
                     aboutDirectory: Joi.string(),
                     phoneNO: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number"),
@@ -122,7 +126,11 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
-                    directoryType:Joi.string()
+                    directoryType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.GOVERNMENT ,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.NGO ,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.SERVICEANDSUPPORT ,
+                    ),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction

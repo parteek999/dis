@@ -9,7 +9,7 @@ try{
             pass: "Testingmail123"
         }
     });
-   
+    
     function send(email,_id) {
         console.log(email,_id)
         return new Promise((resolve, reject) => {        

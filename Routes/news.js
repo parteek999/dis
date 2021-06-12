@@ -83,6 +83,36 @@ module.exports = [
             }
         }
     },
+    {
+        method: 'GET',
+        path: '/news/getUserNews',
+        config: {
+            description: "getUserNews",
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            tags: ['api'],
+
+            handler: (request, reply) => {
+                return Controller.news.getUserNews(request.query,request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
 
     {
         method: 'GET',

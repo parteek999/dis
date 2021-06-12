@@ -4,10 +4,10 @@ const DAO = require('../DAOManager').queries,
     TokenManager = require('../Libs/TokenManager'),
     Models = require('../Models'),
     Bcrypt = require('bcryptjs');
-let  mail = require('../DAOManager').mail;
+let mail = require('../DAOManager').mail;
 var path = require('path');
 var upload = require('../DAOManager/mail');
-var email=require('../DAOManager/sendmail');
+var email = require('../DAOManager/sendmail');
 let fs = require('fs');
 
 
@@ -33,7 +33,7 @@ const signUp = async (payload) => {
         deviceToken: deviceToken,
     }
     const User = await DAO.saveData(Models.Users, Data);
-    const user= await DAO.getData(Models.Users, query, {  password: 0 }, {});
+    const user = await DAO.getData(Models.Users, query, { password: 0 }, {});
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
         _id: User._id,
@@ -59,7 +59,7 @@ const login = async (payload) => {
         if (result.deviceToken) {
             Response = await DAO.findAndUpdate(Models.Users, { email: email }, { deviceToken: deviceToken, deviceType: deviceType }, { new: true });
         }
-        const user= await DAO.getData(Models.Users, query, {  password: 0 }, {});
+        const user = await DAO.getData(Models.Users, query, { password: 0 }, {});
         let tokenData = {
             scope: Config.APP_CONSTANTS.SCOPE.USER,
             _id: result._id,
@@ -118,7 +118,7 @@ const changePassword = async (request, userDetails) => {
     if (checkPassword === false) throw ERROR.INVALID_PASSWORDMATCH;
     const pass = await Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
     const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { password: pass }, { new: true });
-      const user= await DAO.getData(Models.Users, {_id: userDetails._id }, {  password: 0 }, {});
+    const user = await DAO.getData(Models.Users, { _id: userDetails._id }, { password: 0 }, {});
     console.log(final)
     return { user }
 }
@@ -128,22 +128,27 @@ const editProfile = async (payload, userDetails) => {
     let query = {
         email: payload.email,
     };
-    let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
-    if (result.length) {
-        throw ERROR.EMAIL_ALREADY_EXIST;
-    }
-    var number = await (final.countryCode + final.phoneNo)
-    const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, payload, { new: true });
-    return {
-        email: final.email,
-        fullName: final.fullName,
-        countrycode: final.countrycode,
-        phoneNo: final.phoneNo,
-        profilepic: final.profilepic,
-        fullNo: number,
-        imgurl: final.imgurl,
-    }
+    // let result = await DAO.getData(Models.Users, query, {}, {});
+    // console.log("sds", result)
+    // console.log(result[0]._id, userDetails._id);
+    
+    // if (result[0]._id == userDetails._id) {
+        const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, payload, { new: true });
+        var number = await (final.countryCode + final.phoneNo)
+        return {
+            email: final.email,
+            fullName: final.name,
+            countrycode: final.countryCode,
+            phoneNo: final.phoneNo,
+            profilepic: final.profilePic,
+            fullNo: number,
+        }
+    // }
+    // else {
+    //     throw ERROR.EMAIL_ALREADY_EXIST;
+    // }
 }
+
 
 
 const forgetPassword = async (payload, userdetail) => {
@@ -170,7 +175,7 @@ const resetPassword = async (payload, userId, h) => {
     return h.redirect("/user/renderConfirmPage")
 }
 
-    
+
 const forgotPasswordPageRender = async (request, reply) => {
     console.log(request.id)
     return reply.view('form', { name: request.id })
@@ -185,11 +190,11 @@ const renderConfirmPage = async (request, reply) => {
 const bookMarked = async (payload, userDetails) => {
     console.log("hello")
     const { article_Id, mark } = payload
-    if (mark == 0) {
+    if (mark == 1) {
         final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { $push: { article_Id: article_Id } }, { new: true });
         console.log("hi")
     }
-    else if (mark == 1) {
+    else if (mark == 0) {
         console.log("hi there");
         final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { $pull: { article_Id: article_Id } }, { new: true });
     }
@@ -200,13 +205,14 @@ const bookMarked = async (payload, userDetails) => {
 }
 
 
-const bookmarkedId = async (payload) => {
+const bookmarkedId = async (payload, userDetails) => {
     console.log(payload)
     let query = {
         _id: { '$in': payload.article_Id },
         isDeleted: false
     };
-    let final = await DAO.getData(Models.news, query, {}, {})
+    let final = await DAO.getData(Models.news, query, {}, {});
+
     return final
 }
 

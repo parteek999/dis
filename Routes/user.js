@@ -58,14 +58,14 @@ module.exports = [
     },
     //...................LOGIN..........................//
     {
-        method: 'GET',
+        method: 'POST',
         path: '/user/login',
         config: {
             description: 'login',
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.login(request.query, request.auth.credentials)
+                return Controller.user.login(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -75,7 +75,7 @@ module.exports = [
                     });
             },
             validate: {
-                query: Joi.object({
+                payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
                     password: Joi.string().trim().required(),
                     deviceType: Joi.string().valid(
@@ -89,7 +89,7 @@ module.exports = [
             },
             plugins: {
                 'hapi-swagger': {
-                    // payloadType: 'form'
+                     payloadType: 'form'
                 }
             }
         }
