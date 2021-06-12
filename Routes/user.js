@@ -114,18 +114,12 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
-            payload: {
-                output: "stream",
-                parse: true,
-                allow: "multipart/form-data",
-                maxBytes: 200000000 * 1000 * 1000
-            },
+         
             validate: {
                 payload: Joi.object({
                     socialId: Joi.string().trim().required(),
                     email: Joi.string().email().lowercase().trim().required(),
                     name: Joi.string().trim().required(),
-                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
                     deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
@@ -141,7 +135,7 @@ module.exports = [
             }
         }
     },
-    
+
     //...................changePassword....................//  
     {
         method: 'POST',
@@ -479,6 +473,41 @@ module.exports = [
             }
         }
     },
+    {
+        method: 'Get',
+        path: '/user/termsAndConditionPage',
+        config: {
+            description: 'termsAndConditionPage',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.termsAndConditionPage(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+                    //    payloadType: 'form'
+                }
+            }
+        }
+    },
+    {
+        method: 'Get',
+        path: '/user/faqPage',
+        config: {
+            description: 'faqPage',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.faqPage(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+                    //    payloadType: 'form'
+                }
+            }
+        }
+    },
+
 ]
 
 

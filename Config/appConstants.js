@@ -42,18 +42,18 @@ var DATABASE_CONSTANT ={
         "WEB": "WEB"
     },
     DIRECTORY_TYPE:{
-        "GOVERNMENT" : "GOVERNMENT ",
-        "NGO": "NGO ",
-        "SERVICEANDSUPPORT": "SERVICEANDSUPPORT"
+        "GOVERNMENT":"GOVERNMENT ",
+        "NGO":"NGO",
+        "SERVICEANDSUPPORT":"SERVICEANDSUPPORT"
     },
     SOCIAL: {
-        FACEBOOK: "Facebook",
+        FACEBOOK:"Facebook",
         GOOGLE: "Google"
     },
 
     ACCOUNT_TYPE : {
         GMAIL:'gmail',
-        FACEBOOK: 'facebook',
+        FACEBOOK:'facebook',
         EMAIL: 'email',
         APPLE_ID:'apple'
     },

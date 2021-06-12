@@ -33,7 +33,7 @@ const signUp = async (payload) => {
         deviceToken: deviceToken,
     }
     const User = await DAO.saveData(Models.Users, Data);
-    const user = await DAO.getData(Models.Users, query, { password: 0 }, {});
+    const user = await DAO.getDataOne(Models.Users, query, { password: 0 }, {});
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
         _id: User._id,
@@ -59,7 +59,7 @@ const login = async (payload) => {
         if (result.deviceToken) {
             Response = await DAO.findAndUpdate(Models.Users, { email: email }, { deviceToken: deviceToken, deviceType: deviceType }, { new: true });
         }
-        const user = await DAO.getData(Models.Users, query, { password: 0 }, {});
+        const user = await DAO.getDataOne(Models.Users, query, { password: 0 }, {});
         let tokenData = {
             scope: Config.APP_CONSTANTS.SCOPE.USER,
             _id: result._id,
@@ -81,32 +81,26 @@ const socialLogin = async (payload) => {
         email: payload.email,
         isBlocked: false
     };
-    let pass = await Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
-    // var number = await (countryCode + phoneNo);
     var Data = {
-        password: pass,
+        name:name,
         email: email,
-        // name: name,
-        // countryCode: countryCode,
-        // phoneNo: phoneNo,
-        // fullNo: number,
         deviceType: deviceType,
         deviceToken: deviceToken,
         socialId: socialId
     }
     let result = await DAO.getDataOne(Models.Users, query, {});
-    result !== null ? final = await DAO.findAndUpdate(Models.Users, { socialId: socialId }, { deviceToken: payload.deviceToken, deviceType: payload.deviceType }, { new: true }) : final = await DAO.saveData(Models.Users, Data);
+    result !== null ? user = await DAO.findAndUpdate(Models.Users, { socialId: socialId }, { deviceToken: payload.deviceToken, deviceType: payload.deviceType }, { new: true }) : user = await DAO.saveData(Models.Users, Data);
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
-        _id: final._id,
+        _id: user._id,
         time: new Date(),
         // exp:Math.floor(Date.now() / 1000) + 1800
     };
-    const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
+    const Token = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
     return {
-        accessToken,
-        final
-
+        user,
+        Token
+      
     }
 }
 
@@ -137,12 +131,9 @@ const editProfile = async (payload, userDetails) => {
         const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
        
         var number = await (final.countryCode + final.phoneNo)
+       
         return {
-            email: final.email,
-            fullName: final.name,
-            countrycode: final.countryCode,
-            phoneNo: final.phoneNo,
-            fullNo: number,
+           final
         }
     }
 else{   
@@ -157,12 +148,7 @@ else{
         const final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
         var number = await (final.countryCode + final.phoneNo)
         return {
-            email: final.email,
-            fullName: final.name,
-            countrycode: final.countryCode,
-            phoneNo: final.phoneNo,
-            profilepic: final.profilePic,
-            fullNo: number,
+          final
         }
     }
 }
@@ -182,6 +168,7 @@ const forgetPassword = async (payload, userdetail) => {
 }
 
 
+
 const resetPassword = async (payload, userId, h) => {
     let { password } = payload
     let query = { _id: userId.id }
@@ -194,14 +181,27 @@ const resetPassword = async (payload, userId, h) => {
 }
 
 
+
 const forgotPasswordPageRender = async (request, reply) => {
     console.log(request.id)
     return reply.view('form', { name: request.id })
 }
 
 
+
 const renderConfirmPage = async (request, reply) => {
     return reply.view('form1')
+}
+
+
+
+const termsAndConditionPage = async (request, reply) => {
+    return reply.view('terms')
+}
+
+
+const faqPage = async (request, reply) => {
+    return reply.view('faq')
 }
 
 
@@ -223,6 +223,7 @@ const bookMarked = async (payload, userDetails) => {
 }
 
 
+
 const bookmarkedId = async (payload, userDetails) => {
     console.log(payload)
     let query = {
@@ -233,6 +234,7 @@ const bookmarkedId = async (payload, userDetails) => {
 
     return final
 }
+
 
 
 const formSubmit = async (payload) => {
@@ -256,5 +258,7 @@ module.exports = {
     bookMarked,
     bookmarkedId,
     formSubmit,
-    forgotPasswordPageRender
+    forgotPasswordPageRender,
+    termsAndConditionPage,
+    faqPage
 }
