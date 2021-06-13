@@ -32,11 +32,11 @@ module.exports = [
                 name: Joi.string().trim().required(),
                 address:Joi.string().required(),
                 telephone:Joi.number().required(),
-                age:Joi.number().required(),
+                age:Joi.string().required(),
                 occupation:Joi.string().required(),
                 countryCode: Joi.string().required(),
-                phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-
+                phoneNo: Joi.number().required(),
+                work:Joi.number().required(),
                 recipientName:Joi.string().required(),
                 recipientAddress:Joi.string().required(),
                 recipientTelephone:Joi.number().required(),
@@ -45,7 +45,7 @@ module.exports = [
                 description3:Joi.string(),
                 description4:Joi.string(),
                 description5:Joi.string(),
-                description6:Joi.string(),
+                // description6:Joi.string(),
             }),
             headers: UniversalFunctions.authorizationHeaderObjOptional,
             failAction: UniversalFunctions.failActionFunction

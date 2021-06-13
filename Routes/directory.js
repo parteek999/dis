@@ -51,7 +51,7 @@ module.exports = [
                     ),
                     directoryName: Joi.string(),
                     aboutDirectory: Joi.string(),
-                    phoneNO: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number"),
+                    phoneNO: Joi.number().required(),
                     address: Joi.string(),
                     website: Joi.string(),
                     startTime: Joi.string().regex(/(0[1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|([1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|(1[0-2]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))/),

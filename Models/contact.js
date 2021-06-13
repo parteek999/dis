@@ -4,9 +4,9 @@ const mongoose = require('mongoose'),
 
 
 const contact = new Schema({
-    title: { type: String },
-    number: { type: Number },
-    image: { type: String },
+    title: { type: String,default:""},
+    number: { type: Number ,default:""},
+    image: { type: String ,default:""},
     isDeleted: { type: Boolean, default: false, },
 },
     {

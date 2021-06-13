@@ -32,7 +32,7 @@ module.exports = [
                             completingForm: Joi.number().required().valid(1, 2),  //...1=yes,2=no....//                                
                             fName: Joi.string().required(),
                             lName: Joi.string().required(),
-                            phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
+                            phoneNo: Joi.number().required(),
                             email: Joi.string().email().lowercase().trim(),
                         }).required(),
 
@@ -51,9 +51,9 @@ module.exports = [
                             city: Joi.string().required(),
                             postalZipCode: Joi.string().required(),
                             country: Joi.string().required(),
-                            homePhone: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-                            workPhone: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-                            cellPhone: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
+                            homePhone: Joi.number().required(),
+                            workPhone: Joi.number().required(),
+                            cellPhone: Joi.number().required(),
                             email: Joi.string().email().lowercase().trim().required(),
                             prefferedContact: Joi.string().required().valid("Landline", "Cell", "Email", "SMSText"),
 

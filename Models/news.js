@@ -4,10 +4,11 @@ const mongoose = require('mongoose'),
     Config = require('../Config');
 
 const news = new Schema({
-        title:{type:String},
-        description:{type:String},
-        image: [{ type: String }],
-    isDeleted:{type:Boolean,default: false,},
+    title: { type: String },
+    description: { type: String },
+    image: [{ type: String }],
+    isBookmarked: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false, },
 }, {
     timestamps: {
         createdAt: 'createdAt',

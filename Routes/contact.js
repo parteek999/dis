@@ -39,10 +39,10 @@ module.exports = [
                  payload: Joi.object({
                     file: Joi.any().meta({ swaggerType: 'file' }).optional(),
                     title:Joi.string(),
-                    number:Joi.string()
+                    number:Joi.number().required(),
 
                 }),
-                 headers: UniversalFunctions.authorizationHeaderObj,
+                headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
             },
             plugins: {

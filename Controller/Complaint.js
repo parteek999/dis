@@ -7,7 +7,7 @@ var upload = require('../Libs/uploadManager');
 
 
 const complaint = async (payload) => {
-    const { email, name, password, countryCode, phoneNo,
+    const { email, name, password, countryCode, phoneNo,work,
         telephoneNo, occupation, age, recipientName,
         recipientAddress, recipientTelephone,
         description1,
@@ -15,7 +15,7 @@ const complaint = async (payload) => {
         description3,
         description4,
         description5,
-        description6
+        // description6
     } = payload
     var number = await (countryCode + phoneNo)
     var Data = {
@@ -24,6 +24,7 @@ const complaint = async (payload) => {
         countryCode: countryCode,
         phoneNo: phoneNo,
         fullNo: number,
+        work:work,
         telephoneNo: telephoneNo,
         occupation: occupation,
         age: age,
@@ -35,7 +36,7 @@ const complaint = async (payload) => {
         description3:description3,
         description4:description4,
         description5:description5,
-        description6:description6,
+        // description6:description6,
     }
     const final = await DAO.saveData(Models.Complaint, Data);
     console.log(final)

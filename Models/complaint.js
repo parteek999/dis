@@ -12,8 +12,8 @@ var Complaint = new Schema({
     name: { type: String, trim: true },
     address:{type:String ,default:""},
     occupation:{type: String, trim: true},
-    age: {type:Number},
-    
+    age: {type:String,default:""},
+    work:{ type: String ,default:""},
     recipientName:{type: String, trim: true},
     recipientAddress:{type: String, default:""},
     recipientTelephone:{type:Number,default:""},
@@ -22,7 +22,7 @@ var Complaint = new Schema({
     description3:{type:String,default:""},
     description4:{type:String,default:""},
     description5:{type:String,default:""},
-    description6:{type:String,default:""},
+    // description6:{type:String,default:""},
     status:{type:String,default:"pending"},
     
     

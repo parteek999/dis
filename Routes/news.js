@@ -92,6 +92,7 @@ module.exports = [
             tags: ['api'],
 
             handler: (request, reply) => {
+                console.log(request.query,request.auth.credentials)
                 return Controller.news.getUserNews(request.query,request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);

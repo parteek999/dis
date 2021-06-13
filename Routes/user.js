@@ -35,8 +35,8 @@ module.exports = [
                     email: Joi.string().email().lowercase().trim().required(),
                     name: Joi.string().trim().required(),
                     countryCode: Joi.string().required(),
-                    phoneNo: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-                    password: Joi.string().min(6).message("Password length atleast 6 digits").required(),
+                    phoneNo: Joi.number().required(),
+                    password: Joi.string().required(),
                     // profilepic:Joi.array().items(Joi.string()),
                     deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
@@ -294,41 +294,41 @@ module.exports = [
         }
     },
     //..................BOOKMARKEDID...................//    
-    {
-        method: 'POST',
-        path: '/user/bokmarkedId',
-        config: {
-            description: 'bookmarkedId',
-            auth: {
-                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
-            },
-            tags: ['api'],
-            handler: (request, reply) => {
-                return Controller.user.bookmarkedId(request.payload, request.auth.credentials)
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
+    // {
+    //     method: 'POST',
+    //     path: '/user/bokmarkedId',
+    //     config: {
+    //         description: 'bookmarkedId',
+    //         auth: {
+    //             strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+    //         },
+    //         tags: ['api'],
+    //         handler: (request, reply) => {
+    //             return Controller.user.bookmarkedId(request.payload, request.auth.credentials)
+    //                 .then(response => {
+    //                     return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+    //                 })
+    //                 .catch(error => {
+    //                     winston.error("=====error=============", error);
+    //                     return UniversalFunctions.sendError("en", error, reply);
+    //                 });
+    //         },
 
-            validate: {
-                payload: Joi.object({
-                    article_Id: Joi.array().required(),
+    //         validate: {
+    //             payload: Joi.object({
+    //                 article_Id: Joi.array().required(),
 
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
-    },
+    //             }),
+    //             headers: UniversalFunctions.authorizationHeaderObj,
+    //             failAction: UniversalFunctions.failActionFunction
+    //         },
+    //         plugins: {
+    //             'hapi-swagger': {
+    //                 payloadType: 'form',
+    //             }
+    //         }
+    //     }
+    // },
     //..................FORMSUBMIT...................//    
     {
         method: 'POST',
@@ -365,7 +365,7 @@ module.exports = [
         }
     },
 
-    //change password api
+    //forget password api
     {
         method: 'POST',
         path: '/user/forgetPassword',

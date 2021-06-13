@@ -1,10 +1,10 @@
 const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
     Models = require('../Models');
-    var upload = require('../Libs/uploadManager');
-   
+var upload = require('../Libs/uploadManager');
 
-    
+
+
 const createNews = async (payload, userDetails) => {
     console.log(payload)
     const { title, description } = payload
@@ -20,11 +20,11 @@ const createNews = async (payload, userDetails) => {
 }
 
 const getNews = async (payload, userdetails) => {
-    console.log(userdetails);
+    console.log("qwq", userdetails);
     const query = {
         isDeleted: false
     }
-    return DAO.getData(Models.news, query,{},{sort: { createdAt: -1 }});
+    return DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
 }
 
 const getUserNews = async (payload, userdetails) => {
@@ -32,39 +32,53 @@ const getUserNews = async (payload, userdetails) => {
     const query = {
         isDeleted: false
     }
-    let result=await DAO.getData(Models.Users, { _id: userDetails._id },{article_Id:1,_id:0},{})
+    let result = await DAO.getData(Models.Users, { _id: userdetails._id }, { article_Id: 1, _id: 0 }, {})
+    console.log(result,"sjhsdsjd")
     console.log(result[0].article_Id)
 
-    let news=DAO.getData(Models.news, query,{},{sort: { createdAt: -1 }});
+    let news = await DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
+    console.log(news)
 
-
-    
-
-    return 
+    let b = {};
+    let bookmarkId=result[0].article_Id;
+    bookmarkId.forEach(like => {
+        b[like] = true
+    });
+    //  Your object becomes { 1: true, 5: true }
+     
+    news.forEach(article => {
+        // console.log(b[article.id])
+        if (b[article._id]) {//   If key is present in the object
+            article.isBookmarked = true;
+        } else {
+            article.isBookmarked = false;
+        }
+    });
+    return news
 }
 
 const singleNews = async (payload, userdetails) => {
-    let  id = payload.id
+    let id = payload.id
     const query = {
-        _id:id,
+        _id: id,
         isDeleted: false
     }
     console.log(query)
-    let result=await DAO.getDataOne(Models.news, query,{},{});
+    let result = await DAO.getDataOne(Models.news, query, {}, {});
     return result
 }
 
-const deleteNews = async (payload,userdetails)=>{
+const deleteNews = async (payload, userdetails) => {
     let id = payload.id
     const query = {
-        _id:id,
+        _id: id,
     }
-    let result=await DAO.findAndUpdate(Models.news, query,{ isDeleted:true},{new:true})
-    return result 
+    let result = await DAO.findAndUpdate(Models.news, query, { isDeleted: true }, { new: true })
+    return result
 }
 
 module.exports = {
-    createNews, 
+    createNews,
     getNews,
     singleNews,
     deleteNews,
