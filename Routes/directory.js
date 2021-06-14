@@ -8,8 +8,6 @@ const ERROR = Config.responseMessages.ERROR;
 
 const winston = require('winston');
 
-
-
 module.exports = [
 
     {
@@ -32,16 +30,13 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
-
-            payload: {
+            payload : {
                 output: "stream",
                 parse: true,
                 allow: "multipart/form-data",
                 maxBytes: 200000000 * 1000 * 1000
             },
-
             validate: {
-
                 payload: Joi.object({
                     file: Joi.any().meta({ swaggerType: 'file' }).optional(),
                     directoryType:Joi.string().valid(
@@ -51,22 +46,18 @@ module.exports = [
                     ),
                     directoryName: Joi.string(),
                     aboutDirectory: Joi.string(),
-                    phoneNO: Joi.number().required(),
+                    phoneNO: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
                     address: Joi.string(),
                     website: Joi.string(),
-                    startTime: Joi.string().regex(/(0[1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|([1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|(1[0-2]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))/),
-                    endTime: Joi.string().regex(/(0[1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|([1-9]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))|(1[0-2]:[0-5][0-9]((\ ){0,1})((AM)|(PM)|(am)|(pm)))/),
+                    startTime: Joi.string(),
+                    endTime: Joi.string(),
                     facebookLInk: Joi.string(),
                     instagramLInk: Joi.string(),
                     twitterLink: Joi.string(),
-
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
-
             },
-
-
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form'
@@ -74,7 +65,6 @@ module.exports = [
             }
         }
     },
-
     {
         method: 'GET',
         path: '/directory/getDirectory',
@@ -105,8 +95,6 @@ module.exports = [
             }
         }
     },
-
-
     {
         method: 'GET',
         path: '/directory/getUserDirectory',
@@ -127,9 +115,9 @@ module.exports = [
             validate: {
                 query: Joi.object({
                     directoryType:Joi.string().valid(
-                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.GOVERNMENT ,
-                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.NGO ,
-                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.SERVICEANDSUPPORT ,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.GOVERNMENT,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.NGO,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.SERVICEANDSUPPORT,
                     ),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
@@ -147,7 +135,7 @@ module.exports = [
         path: '/directory/singleDirectory',
         config: {
             description: "singleDirectory",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN] },
             tags: ['api', "singleDirectory"],
             handler: (request, reply) => {
                 return Controller.directory.singleDirectory(request.query, request.auth.credentials)
@@ -173,8 +161,6 @@ module.exports = [
             }
         }
     },
-
-
     {
         method: 'POST',
         path: '/directory/deleteDirectory',
@@ -185,6 +171,7 @@ module.exports = [
             },
             tags: ['api', 'directory'],
             handler: (request, reply) => {
+                console.log("qwertty",request.payload)
                 return Controller.directory.deleteDirectory(request.payload, request.auth.credentials)
 
                     .then(response => {
@@ -195,16 +182,13 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
-
             validate: {
                 payload: Joi.object({
                     id: Joi.string().required()
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
-
             },
-
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form'

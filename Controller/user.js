@@ -104,7 +104,6 @@ const socialLogin = async (payload) => {
     }
 }
 
-
 const changePassword = async (request, userDetails) => {
     const { newPassword, oldPassword } = request.payload
     const result = await DAO.getDataOne(Models.Users, { _id: userDetails._id })
@@ -116,7 +115,6 @@ const changePassword = async (request, userDetails) => {
     console.log(final)
     return { user }
 }
-
 
 const editProfile = async (payload, userDetails) => {
     // console.log(payload.file)

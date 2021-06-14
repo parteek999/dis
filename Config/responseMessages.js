@@ -3,7 +3,7 @@ exports.ERROR = {
     INVALID_PASSWORDMATCH: {
         statusCode: 400,
         customMessage: {
-            en : 'Invalid PASSWORD provided.'
+            en : 'Invalid_PASSWORD_MATCH'
            
         },
         type: 'PASSWORD_DIDNOT_MATCH'

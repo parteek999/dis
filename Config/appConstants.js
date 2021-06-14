@@ -42,7 +42,7 @@ var DATABASE_CONSTANT ={
         "WEB": "WEB"
     },
     DIRECTORY_TYPE:{
-        "GOVERNMENT":"GOVERNMENT ",
+        "GOVERNMENT":"GOVERNMENT",
         "NGO":"NGO",
         "SERVICEANDSUPPORT":"SERVICEANDSUPPORT"
     },

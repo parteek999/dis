@@ -25,13 +25,13 @@ let articles = [
         isBookmarked: false
     },
 ]
+
 console.log(articles)
-
 let likes = [1, 5];
-
 let b = {};
 likes.forEach(like => {
     b[like] = true
+
 });
 //  Your object becomes { 1: true, 5: true }
 
@@ -43,7 +43,11 @@ console.log(b[article.id])
         article.isBookmarked=false;
     }
 });
+
 return console.log(articles);
 
 
 
+// let a=[1,2,3];
+// let b={...a};
+// console.log(b)
