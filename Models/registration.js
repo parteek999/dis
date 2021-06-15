@@ -67,9 +67,9 @@ const sectionD =
         Iattended: [{ type: String }],
         Iattend: [{ type: String }],
         schoolName: { type: String },
-        highestGrade: { type: Number },
+        highestGrade: { type: String },
         completedEducation: { type: String, enum: ["Completed/Finished School", "Graduated from School", "Never Attended School"] },
-        tertiaryEducation: [{ type: String }]
+        tertiaryEducation: { type: String }
     });
 
 const sectionE =

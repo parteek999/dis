@@ -30,9 +30,9 @@ module.exports = [
                     sectionA:
                         Joi.object().keys({
                             completingForm: Joi.number().required().valid(1, 2),  //...1=yes,2=no....//                                
-                            fName: Joi.string().required(),
-                            lName: Joi.string().required(),
-                            phoneNo: Joi.number().required(),
+                            fName: Joi.string(),
+                            lName: Joi.string(),
+                            phoneNo: Joi.number(),
                             email: Joi.string().email().lowercase().trim(),
                         }).required(),
 
@@ -74,9 +74,9 @@ module.exports = [
                             Iattended:Joi.array().items(Joi.string()),
                             Iattend: Joi.array().items(Joi.string()),
                             schoolName: Joi.string().required(),
-                            highestGrade:Joi.number().required(),
+                            highestGrade:Joi.string().required(),
                             completedEducation:Joi.string().required().valid("Completed/Finished School", "Graduated from School", "Never Attended School"), 
-                            tertiaryEducation:Joi.array().items(Joi.string()),
+                            tertiaryEducation:Joi.string(),
                         }).required(),
                         sectionE:
                         Joi.object().keys({

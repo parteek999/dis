@@ -181,5 +181,54 @@ module.exports = [
                 }
             }
         }
+    },
+
+    {
+        method: 'POST',
+        path: '/news/editNews',
+        config: {
+            description: "editNews",
+            auth:false,
+            //  {
+            //     strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+            // },
+            tags: ['api'],
+
+            handler: (request, reply) => {
+                return Controller.news.editNews(request.payload,request.auth.credentials)
+                    
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+
+            payload: {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 200000000 * 1000 * 1000
+            },
+
+            validate: {
+                 payload: Joi.object({
+
+                    id:Joi.string(),
+                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
+                    title:Joi.string(),
+                    description:Joi.string()
+
+                }),
+                // headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
     }
 ]

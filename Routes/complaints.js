@@ -129,7 +129,7 @@ module.exports = [
     method: 'POST',
     path: '/complaint/editStatus',
     config: {
-        description: "editNews",
+        description: "editStatus",
         auth: {
             strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
         },

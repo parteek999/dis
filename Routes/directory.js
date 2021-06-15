@@ -44,7 +44,7 @@ module.exports = [
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.NGO ,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.SERVICEANDSUPPORT ,
                     ),
-                    directoryName: Joi.string(),
+                    directoryName: Joi.string().required(),
                     aboutDirectory: Joi.string(),
                     phoneNO: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
                     address: Joi.string(),

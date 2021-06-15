@@ -33,19 +33,19 @@ const getUserNews = async (payload, userdetails) => {
         isDeleted: false
     }
     let result = await DAO.getData(Models.Users, { _id: userdetails._id }, { article_Id: 1, _id: 0 }, {})
-    console.log(result,"sjhsdsjd")
+    console.log(result, "sjhsdsjd")
     console.log(result[0].article_Id)
 
     let news = await DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
     console.log(news)
 
     let b = {};
-    let bookmarkId=result[0].article_Id;
+    let bookmarkId = result[0].article_Id;
     bookmarkId.forEach(like => {
         b[like] = true
     });
     //  Your object becomes { 1: true, 5: true }
-     
+
     news.forEach(article => {
         // console.log(b[article.id])
         if (b[article._id]) {//   If key is present in the object
@@ -77,10 +77,33 @@ const deleteNews = async (payload, userdetails) => {
     return result
 }
 
+const editNews = async (payload, userDetails) => {
+    //let id = payload.id
+    let data = {}
+    //  console.log("wqwqw",payload)
+
+
+    if (payload.title) { data.title = payload.title }
+    if (payload.description) { data.description = payload.description }
+    if (payload['file']) {
+        let imgDetail = await upload.upload(payload);
+        data.image = imgDetail
+        }
+        
+    console.log(data)
+    let result = await DAO.findAndUpdate(Models.news, query, data, { new: true })
+         return result
+    }
+   
+
+
+
+
 module.exports = {
     createNews,
     getNews,
     singleNews,
     deleteNews,
-    getUserNews
+    getUserNews,
+    editNews
 }
