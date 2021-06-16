@@ -17,7 +17,7 @@ const sectionA =
         completingForm: { type: Number, enum: [1, 2] },//...1=yes,2=no....//
         fName: { type: String, trim: true },
         lName: { type: String, trim: true },
-        phoneNo: { type: Number },
+        phoneNo: { type: String },
         email: { type: String, trim: true },
     });
 

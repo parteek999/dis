@@ -32,7 +32,7 @@ module.exports = [
                             completingForm: Joi.number().required().valid(1, 2),  //...1=yes,2=no....//                                
                             fName: Joi.string(),
                             lName: Joi.string(),
-                            phoneNo: Joi.number(),
+                            phoneNo: Joi.string(),
                             email: Joi.string().email().lowercase().trim(),
                         }).required(),
 

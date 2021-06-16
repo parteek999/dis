@@ -50,7 +50,6 @@ const signUp = async (payload) => {
     return { user, Token }
 }
 
-
 const login = async (payload) => {
     try {
         const { email, password, deviceToken, deviceType } = payload;
@@ -81,7 +80,6 @@ const login = async (payload) => {
         throw err
     }
 }
-
 
 const socialLogin = async (payload) => {
     const { email, name, deviceToken, deviceType, socialId } = payload
