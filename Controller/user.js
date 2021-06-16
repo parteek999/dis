@@ -14,14 +14,19 @@ let fs = require('fs');
 const signUp = async (payload) => {
     const { email, name, password, countryCode, phoneNo, deviceToken, deviceType } = payload
     let query = {
-        email
+        email:email,
+        socialId:"",
     };
+
     let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
     if (result.length) {
         throw ERROR.EMAIL_ALREADY_EXIST;
     }
+
     pass = await Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
-    var number = await (countryCode + phoneNo)
+
+    var number = await (countryCode + phoneNo) ;
+
     var Data = {
         password: pass,
         email: email,
@@ -32,8 +37,10 @@ const signUp = async (payload) => {
         deviceType: deviceType,
         deviceToken: deviceToken,
     }
+
     const User = await DAO.saveData(Models.Users, Data);
     const user = await DAO.getDataOne(Models.Users, query, { password: 0 }, {});
+    
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
         _id: User._id,
@@ -48,8 +55,10 @@ const login = async (payload) => {
     try {
         const { email, password, deviceToken, deviceType } = payload;
         const query = {
-            email: email
+            email: email,
+            socialId:"",
         };
+
         const result = await DAO.getDataOne(Models.Users, query, {});
         console.log("12121212", result)
         console.log("90990909090909090", payload)
@@ -76,11 +85,13 @@ const login = async (payload) => {
 
 const socialLogin = async (payload) => {
     const { email, name, deviceToken, deviceType, socialId } = payload
+    
     const query = {
         socialId: payload.socialId,
         email: payload.email,
         isBlocked: false
     };
+
     var Data = {
         name:name,
         email: email,
@@ -88,6 +99,7 @@ const socialLogin = async (payload) => {
         deviceToken: deviceToken,
         socialId: socialId
     }
+
     let result = await DAO.getDataOne(Models.Users, query, {});
     result !== null ? user = await DAO.findAndUpdate(Models.Users, { socialId: socialId }, { deviceToken: payload.deviceToken, deviceType: payload.deviceType }, { new: true }) : user = await DAO.saveData(Models.Users, Data);
     let tokenData = {

@@ -6,7 +6,7 @@ var Users = new Schema({
     isBlocked: { type: Boolean, default: false, required: true },
     isVerified: { type: Boolean, default: false, required: true },
     countryCode: { type: String,default:"" },
-    email: { type: String, trim: true , unique: true,},
+    email: { type: String, trim: true ,},
     password: { type: String },
     phoneNo: { type: String,default:"" },
     fullNo:{type:String,default:""},
