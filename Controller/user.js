@@ -104,6 +104,7 @@ const socialLogin = async (payload) => {
     }
 }
 
+
 const changePassword = async (request, userDetails) => {
     const { newPassword, oldPassword } = request.payload
     const result = await DAO.getDataOne(Models.Users, { _id: userDetails._id })
@@ -115,6 +116,7 @@ const changePassword = async (request, userDetails) => {
     console.log(final)
     return { user }
 }
+
 
 const editProfile = async (payload, userDetails) => {
     // console.log(payload.file)
@@ -156,7 +158,6 @@ else{
 }
 
 
-
 const forgetPassword = async (payload, userdetail) => {
     let query = {
         email: payload.email
@@ -170,7 +171,6 @@ const forgetPassword = async (payload, userdetail) => {
 }
 
 
-
 const resetPassword = async (payload, userId, h) => {
     let { password } = payload
     let query = { _id: userId.id }
@@ -181,7 +181,6 @@ const resetPassword = async (payload, userId, h) => {
     // return reply.view('passwordChanged')
     return h.redirect("/user/renderConfirmPage")
 }
-
 
 
 const forgotPasswordPageRender = async (request, reply) => {
@@ -248,6 +247,21 @@ const formSubmit = async (payload) => {
 }
 
 
+const aboutCommission = async (request, reply) => {
+    return reply.view('aboutCommission')
+}
+
+
+const yourRights = async (request, reply) => {
+    return reply.view('yourRights')
+}
+
+
+const disabilityAct = async (request, reply) => {
+    return reply.view('disabilityAct')
+}
+
+
 module.exports = {
     signUp,
     login,
@@ -262,5 +276,8 @@ module.exports = {
     formSubmit,
     forgotPasswordPageRender,
     termsAndConditionPage,
-    faqPage
+    faqPage,
+    aboutCommission,
+    yourRights,
+    disabilityAct
 }

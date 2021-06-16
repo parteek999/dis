@@ -51,9 +51,9 @@ module.exports = [
                             city: Joi.string().required(),
                             postalZipCode: Joi.string().required(),
                             country: Joi.string().required(),
-                            homePhone: Joi.number().required(),
-                            workPhone: Joi.number().required(),
-                            cellPhone: Joi.number().required(),
+                            homePhone: Joi.string(),
+                            workPhone: Joi.string(),
+                            cellPhone: Joi.string(),
                             email: Joi.string().email().lowercase().trim().required(),
                             prefferedContact: Joi.string().required().valid("Landline", "Cell", "Email", "SMSText"),
 

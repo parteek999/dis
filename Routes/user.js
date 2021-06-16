@@ -507,6 +507,58 @@ module.exports = [
             }
         }
     },
+    {
+        method: 'Get',
+        path: '/user/aboutCommission',
+        config: {
+            description: 'aboutCommission',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.aboutCommission(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+                    //    payloadType: 'form'
+                }
+            }
+        }
+    },
+    {
+        method: 'Get',
+        path: '/user/yourRights',
+        config: {
+            description: 'yourRights',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.yourRights(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+                    //    payloadType: 'form'
+                }
+            }
+        }
+    },
+    {
+        method: 'Get',
+        path: '/user/disabilityAct',
+        config: {
+            description: 'disabilityAct',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.disabilityAct(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+                    //    payloadType: 'form'
+                }
+            }
+        }
+    },
+
 
 ]
 
