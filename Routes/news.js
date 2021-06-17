@@ -230,5 +230,44 @@ module.exports = [
                 }
             }
         }
+    },
+
+    {
+        method: 'POST',
+        path: '/news/toggleNotification',
+        config: {
+            description: "editNews",
+            auth:
+             {
+                strategies:[Config.APP_CONSTANTS.SCOPE.USER]
+            },
+            tags: ['api'],
+
+            handler: (request, reply) => {
+                return Controller.news.toggleNotification(request.payload,request.auth.credentials)
+                    
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+
+            validate: {
+                 payload: Joi.object({
+                    id:Joi.string(),
+                    mark:Joi.number(),
+                }),
+                 headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
     }
+
 ]

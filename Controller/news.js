@@ -2,22 +2,53 @@ const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
     Models = require('../Models');
 var upload = require('../Libs/uploadManager');
+const { sendPushNotification } = require('../Libs/FCMnotification');
 
 
 
 const createNews = async (payload, userDetails) => {
-    console.log(payload)
+    // console.log(payload)
     const { title, description } = payload
     let imgDetail = await upload.upload(payload)
-    console.log("3434343", imgDetail)
+    // console.log("3434343", imgDetail)
+
     var Data = {
         title: title,
         description: description,
         image: imgDetail,
     }
-    let result = await DAO.saveData(Models.news, Data)
+
+    let data = await DAO.saveData(Models.news, Data);
+    console.log(result)
+    const message = {
+        message: data,
+        type: 2
+    }
+
+    const deviceToken = await DAO.getUniqueData(Models.Users, { notificationToggle: false }, {}, {}, 'deviceToken');
+    console.log("deviceToken",deviceToken)
+
+    let push = await sendPushNotification(message, deviceToken);
+
+    let query = {
+        deviceToken: { '$in': deviceToken },
+    };
+    let final_id = await DAO.getUniqueData(Models.Users, query, {}, {}, '_id');
+    console.log("final_id",final_id)
+    var data1 = {
+        message: result.title,
+        article_id: result._id,
+        userId: final_id,
+    }
+    let notification = await DAO.saveData(Models.Notification, data1);
+
     return result
 }
+
+
+
+
+
 
 const getNews = async (payload, userdetails) => {
     console.log("qwq", userdetails);
@@ -88,14 +119,23 @@ const editNews = async (payload, userDetails) => {
     if (payload['file']) {
         let imgDetail = await upload.upload(payload);
         data.image = imgDetail
-        }
-        
+    }
+
     console.log(data)
     let result = await DAO.findAndUpdate(Models.news, query, data, { new: true })
-         return result
-    }
-   
+    return result
+}
 
+const toggleNotification = async (payload, UserDetails) => {
+    const { mark, id } = payload;
+    if (mark == 1) {
+        var toggler = await DAO.findAndUpdate(Models.Users, { _id: id }, { notificationToggle: true })
+    }
+    if (mark == 0) {
+        var toggler = await DAO.findAndUpdate(Models.Users, { _id: id }, { notificationToggle: false })
+    }
+    return (toggler.notificationToggle)
+}
 
 
 
@@ -105,5 +145,6 @@ module.exports = {
     singleNews,
     deleteNews,
     getUserNews,
-    editNews
+    editNews,
+    toggleNotification
 }

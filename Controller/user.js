@@ -227,10 +227,19 @@ const bookMarked = async (payload, userDetails) => {
         console.log("hi there");
         final = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, { $pull: { article_Id: article_Id } }, { new: true });
     }
+
     else {
         throw "invalid mark";
     }
-    return final
+     
+    const result=await DAO.getDataOne(Models.news,{_id:article_Id})
+    if(mark==1){
+        result.isBookmarked=true
+    }
+    else { result.isBookmarked=false }
+    console.log(result)
+    
+    return result
 }
 
 

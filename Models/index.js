@@ -7,5 +7,6 @@ module.exports = {
     registration: require('./registration'),
     Directory: require('./Directory'),
     Complaint:require('./complaint'),
-    Contact:require('./contact')
+    Contact:require('./contact'),
+    Notification:require('./notification')
 };

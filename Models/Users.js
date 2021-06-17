@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 var Config = require('../Config');
 
 var Users = new Schema({
-    isBlocked: { type: Boolean, default: false, required: true },
-    isVerified: { type: Boolean, default: false, required: true },
+    isBlocked: { type: Boolean, default: false },
+    isVerified: { type: Boolean, default: false },
     countryCode: { type: String,default:"" },
     email: { type: String, trim: true ,},
     password: { type: String },
@@ -16,6 +16,7 @@ var Users = new Schema({
     profilePic: { type: String, default: "" },
     deviceToken: { type: String, default: "", trim: true },
     article_Id:[{type: String, default: ""}],
+    notificationToggle:{type:Boolean,default:false},
     loginType:{
         type: String, enum: [
             Config.APP_CONSTANTS.DATABASE_CONSTANT.ACCOUNT_TYPE.GMAIL
