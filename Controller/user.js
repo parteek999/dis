@@ -14,8 +14,8 @@ let fs = require('fs');
 const signUp = async (payload) => {
     const { email, name, password, countryCode, phoneNo, deviceToken, deviceType } = payload
     let query = {
-        email:email,
-        socialId:"",
+        email: email,
+        socialId: "",
     };
 
     let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
@@ -25,7 +25,7 @@ const signUp = async (payload) => {
 
     pass = await Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
 
-    var number = await (countryCode + phoneNo) ;
+    var number = await (countryCode + phoneNo);
 
     var Data = {
         password: pass,
@@ -40,7 +40,7 @@ const signUp = async (payload) => {
 
     const User = await DAO.saveData(Models.Users, Data);
     const user = await DAO.getDataOne(Models.Users, query, { password: 0 }, {});
-    
+
     let tokenData = {
         scope: Config.APP_CONSTANTS.SCOPE.USER,
         _id: User._id,
@@ -55,7 +55,7 @@ const login = async (payload) => {
         const { email, password, deviceToken, deviceType } = payload;
         const query = {
             email: email,
-            socialId:"",
+            socialId: "",
         };
 
         const result = await DAO.getDataOne(Models.Users, query, {});
@@ -83,7 +83,7 @@ const login = async (payload) => {
 
 const socialLogin = async (payload) => {
     const { email, name, deviceToken, deviceType, socialId } = payload
-    
+
     const query = {
         socialId: payload.socialId,
         email: payload.email,
@@ -91,7 +91,7 @@ const socialLogin = async (payload) => {
     };
 
     var Data = {
-        name:name,
+        name: name,
         email: email,
         deviceType: deviceType,
         deviceToken: deviceToken,
@@ -110,7 +110,7 @@ const socialLogin = async (payload) => {
     return {
         user,
         Token
-      
+
     }
 }
 
@@ -131,36 +131,36 @@ const changePassword = async (request, userDetails) => {
 const editProfile = async (payload, userDetails) => {
     // console.log(payload.file)
     // console.log(payload['file'])
-    if(payload['file']===undefined){
-        var number = await(payload.countrycode + payload.phoneNo)
+    if (payload['file'] === undefined) {
+        var number = await (payload.countrycode + payload.phoneNo)
         var Data = {
             email: payload.email,
             name: payload.fullName,
             countryCode: payload.countrycode,
             phoneNo: payload.phoneNo,
-            fullNo : number,
+            fullNo: number,
 
         }
         const user = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
-       
-       
+
+
         return {
-           user
+            user
         }
     }
-else{   
+    else {
         let imgDetail = await upload.upload(payload)
-        var number = await(payload.countrycode + payload.phoneNo)
+        var number = await (payload.countrycode + payload.phoneNo)
         var Data = {
             email: payload.email,
             name: payload.fullName,
             countryCode: payload.countrycode,
             phoneNo: payload.phoneNo,
-            profilePic:imgDetail,
-            fullNo : number
+            profilePic: imgDetail,
+            fullNo: number
         }
         const user = await DAO.findAndUpdate(Models.Users, { _id: userDetails._id }, Data, { new: true });
-       
+
         return {
             user
         }
@@ -231,14 +231,13 @@ const bookMarked = async (payload, userDetails) => {
     else {
         throw "invalid mark";
     }
-     
-    const result=await DAO.getDataOne(Models.news,{_id:article_Id})
-    if(mark==1){
-        result.isBookmarked=true
+
+    const result = await DAO.getDataOne(Models.news, { _id: article_Id })
+    if (mark == 1) {
+        result.isBookmarked = true
     }
-    else { result.isBookmarked=false }
+    else { result.isBookmarked = false }
     console.log(result)
-    
     return result
 }
 

@@ -236,7 +236,7 @@ module.exports = [
         method: 'POST',
         path: '/news/toggleNotification',
         config: {
-            description: "editNews",
+            description: "toggleNotification",
             auth:
              {
                 strategies:[Config.APP_CONSTANTS.SCOPE.USER]

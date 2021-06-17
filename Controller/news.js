@@ -18,37 +18,49 @@ const createNews = async (payload, userDetails) => {
         image: imgDetail,
     }
 
-    let data = await DAO.saveData(Models.news, Data);
+    let result = await DAO.saveData(Models.news, Data);
     console.log(result)
     const message = {
-        message: data,
+        message: result,
         type: 2
     }
 
     const deviceToken = await DAO.getUniqueData(Models.Users, { notificationToggle: false }, {}, {}, 'deviceToken');
-    console.log("deviceToken",deviceToken)
+    console.log("deviceToken", deviceToken);
 
-    let push = await sendPushNotification(message, deviceToken);
+
+    const array = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+    const chunk = 2;
+
+    while (array.length > 0) {
+
+        let tempArray;
+        tempArray = arr.splice(0, chunk);
+        console.log(tempArray, "helllo");
+
+        // await sendPushNotification(message, deviceToken);
+
+    }
+
+
+
+
+    //  let push = await sendPushNotification(message);
 
     let query = {
         deviceToken: { '$in': deviceToken },
+        notificationToggle: false
     };
     let final_id = await DAO.getUniqueData(Models.Users, query, {}, {}, '_id');
-    console.log("final_id",final_id)
+    console.log("final_id", final_id)
     var data1 = {
         message: result.title,
         article_id: result._id,
         userId: final_id,
     }
     let notification = await DAO.saveData(Models.Notification, data1);
-
     return result
 }
-
-
-
-
-
 
 const getNews = async (payload, userdetails) => {
     console.log("qwq", userdetails);
