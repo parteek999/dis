@@ -45,6 +45,7 @@ var DATABASE_CONSTANT ={
         "GOVERNMENT":"GOVERNMENT",
         "NGO":"NGO",
         "SERVICEANDSUPPORT":"SERVICEANDSUPPORT"
+        
     },
     SOCIAL: {
         FACEBOOK:"Facebook",

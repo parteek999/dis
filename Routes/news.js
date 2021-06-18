@@ -12,9 +12,9 @@ module.exports = [
         path: '/news/createNews',
         config: {
             description: 'createNews',
-             auth:   {
-                     strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-                },
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
             tags: ['api', 'createNews'],
             handler: (request, reply) => {
                 console.log(request.payload)
@@ -36,13 +36,13 @@ module.exports = [
             },
             validate: {
 
-                 payload: Joi.object({
+                payload: Joi.object({
                     file: Joi.any().meta({ swaggerType: 'file' }).optional(),
-                    title:Joi.string(),
-                    description:Joi.string()
+                    title: Joi.string(),
+                    description: Joi.string()
 
                 }),
-                 headers: UniversalFunctions.authorizationHeaderObj,
+                headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
             },
             plugins: {
@@ -62,7 +62,7 @@ module.exports = [
             tags: ['api'],
 
             handler: (request, reply) => {
-                return Controller.news.getNews(request.query,request.auth.credentials)
+                return Controller.news.getNews(request.query, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -75,7 +75,8 @@ module.exports = [
                 query: Joi.object({
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                failAction: UniversalFunctions.failActionFunction
+            },
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form',
@@ -92,8 +93,8 @@ module.exports = [
             tags: ['api'],
 
             handler: (request, reply) => {
-                console.log(request.query,request.auth.credentials)
-                return Controller.news.getUserNews(request.query,request.auth.credentials)
+                console.log(request.query, request.auth.credentials)
+                return Controller.news.getUserNews(request.query, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -106,7 +107,8 @@ module.exports = [
                 query: Joi.object({
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                failAction: UniversalFunctions.failActionFunction
+            },
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form',
@@ -124,8 +126,8 @@ module.exports = [
             tags: ['api'],
 
             handler: (request, reply) => {
-                return Controller.news.singleNews(request.query,request.auth.credentials)
-                    
+                return Controller.news.singleNews(request.query, request.auth.credentials)
+
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -136,10 +138,11 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
-                    id:Joi.string(),
+                    id: Joi.string(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                failAction: UniversalFunctions.failActionFunction
+            },
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form',
@@ -154,13 +157,13 @@ module.exports = [
         config: {
             description: "deleteNews",
             auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
             },
             tags: ['api'],
 
             handler: (request, reply) => {
-                return Controller.news.deleteNews(request.payload,request.auth.credentials)
-                    
+                return Controller.news.deleteNews(request.payload, request.auth.credentials)
+
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -171,59 +174,11 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    id:Joi.string(),
+                    id: Joi.string(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
-    },
-
-    {
-        method: 'POST',
-        path: '/news/editNews',
-        config: {
-            description: "editNews",
-            auth:false,
-            //  {
-            //     strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
-            // },
-            tags: ['api'],
-
-            handler: (request, reply) => {
-                return Controller.news.editNews(request.payload,request.auth.credentials)
-                    
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
+                failAction: UniversalFunctions.failActionFunction
             },
-
-            payload: {
-                output: "stream",
-                parse: true,
-                allow: "multipart/form-data",
-                maxBytes: 200000000 * 1000 * 1000
-            },
-
-            validate: {
-                 payload: Joi.object({
-
-                    id:Joi.string(),
-                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
-                    title:Joi.string(),
-                    description:Joi.string()
-
-                }),
-                // headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form',
@@ -238,14 +193,14 @@ module.exports = [
         config: {
             description: "toggleNotification",
             auth:
-             {
-                strategies:[Config.APP_CONSTANTS.SCOPE.USER]
+            {
+                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
             },
             tags: ['api'],
 
             handler: (request, reply) => {
-                return Controller.news.toggleNotification(request.payload,request.auth.credentials)
-                    
+                return Controller.news.toggleNotification(request.payload, request.auth.credentials)
+
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -256,18 +211,68 @@ module.exports = [
             },
 
             validate: {
-                 payload: Joi.object({
-                    id:Joi.string(),
-                    mark:Joi.number(),
+                payload: Joi.object({
+                    id: Joi.string(),
+                    mark: Joi.number(),
                 }),
-                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form',
                 }
             }
         }
-    }
+    },
+
+
+    {
+        method: 'POST',
+        path: '/news/editNews',
+        config: {
+            description: 'editNews',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api', 'editNews'],
+            handler: (request, reply) => {
+                console.log(request.payload)
+                return Controller.news.editNews(request.payload, request.auth.credentials)
+
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            payload: {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 200000000 * 1000 * 1000
+            },
+            validate: {
+
+                payload: Joi.object({
+                    id:Joi.string(),
+                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
+                    title: Joi.string().allow(''),
+                    description: Joi.string().allow('')
+
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+
 
 ]

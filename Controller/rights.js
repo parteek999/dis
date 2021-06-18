@@ -1,4 +1,3 @@
-const { Model } = require('mongoose');
 
 const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
@@ -24,10 +23,10 @@ const getRights = async (payload, userdetails) => {
     const query = {
         isDeleted: false
     };
-    const options={
-        sort:{createdAt:-1}
+    const options = {
+        sort: { createdAt: -1 }
     }
-    return DAO.getData(Models.rights, query,{},options);
+    return DAO.getData(Models.rights, query, {}, options);
 }
 
 const singleRights = async (payload, userdetails) => {
@@ -53,6 +52,23 @@ const deleteRights = async (payload, userdetails) => {
     return result
 }
 
+const editRights = async (payload, userDetails) => {
+    
+    const query = {
+        _id: payload.id,
+    }
+    
+    let data = {}
+    if (payload.title) { data.title = payload.title }
+    if (payload.description) { data.description = payload.description }
+    console.log(data)
+    let result = await DAO.findAndUpdate(Models.rights, query, data, { new: true })
+    return result
+
+
+}
+
+
 // const deleteRights = async (payload) => {
 //     console.log("121121212121", payload.id)
 //     let query = { _id: payload.id }
@@ -73,5 +89,6 @@ module.exports = {
     addRights,
     getRights,
     singleRights,
-    deleteRights
+    deleteRights,
+    editRights
 }

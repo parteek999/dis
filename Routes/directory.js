@@ -196,5 +196,64 @@ module.exports = [
             }
         }
     },
+
+    {
+        method: 'POST',
+        path: '/directory/editDirectory',
+        config: {
+            description: 'editDirectory',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api', 'directory'],
+            handler: (request, reply) => {
+                return Controller.directory.editDirectory(request.payload, request.auth.credentials)
+
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            payload : {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 200000000 * 1000 * 1000
+            },
+            validate: {
+                payload: Joi.object({
+                    id:Joi.string(),
+                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
+                    directoryType:Joi.string()
+                    .valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.GOVERNMENT,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.NGO,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.SERVICEANDSUPPORT,
+                        ).allow('')
+                    ,
+                    directoryName: Joi.string().allow(''),
+                    aboutDirectory: Joi.string().allow(''),
+                    phoneNO: Joi.number().allow(''),
+                    address: Joi.string().allow(''),
+                    website: Joi.string().allow(''),
+                    startTime: Joi.string().allow(''),
+                    endTime: Joi.string().allow(''),
+                    facebookLInk: Joi.string().allow(''),
+                    instagramLInk: Joi.string().allow(''),
+                    twitterLink: Joi.string().allow(''),
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    }
 ]
 

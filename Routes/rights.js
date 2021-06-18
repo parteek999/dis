@@ -15,7 +15,7 @@ module.exports = [
         config: {
             description: 'addRights',
             auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
             },
             tags: ['api'],
             handler: (request, reply) => {
@@ -27,12 +27,12 @@ module.exports = [
                         winston.error("=====error=============", error);
                         return UniversalFunctions.sendError("en", error, reply);
                     });
-                },
+            },
 
             validate: {
                 payload: Joi.object({
-                    title:Joi.string(),
-                    description:Joi.string()
+                    title: Joi.string(),
+                    description: Joi.string()
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
@@ -53,7 +53,7 @@ module.exports = [
             tags: ['api'],
 
             handler: (request, reply) => {
-                return Controller.rights.getRights(request.query,request.auth.credentials)
+                return Controller.rights.getRights(request.query, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -66,7 +66,8 @@ module.exports = [
                 query: Joi.object({
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                failAction: UniversalFunctions.failActionFunction
+            },
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form',
@@ -74,7 +75,7 @@ module.exports = [
             }
         }
     },
-    
+
     {
         method: 'GET',
         path: '/rights/singleRight',
@@ -86,10 +87,10 @@ module.exports = [
 
             handler: (request, reply) => {
                 //  console.log("1111111111111",request)
-                 console.log("222222222222",request.query)
+                console.log("222222222222", request.query)
 
-                return Controller.rights.singleRights(request.query,request.auth.credentials)
-                    
+                return Controller.rights.singleRights(request.query, request.auth.credentials)
+
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -100,10 +101,11 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
-                    id:Joi.string(),
+                    id: Joi.string(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                failAction: UniversalFunctions.failActionFunction
+            },
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form',
@@ -119,16 +121,16 @@ module.exports = [
             description: "deleteRights",
             // auth:false,
             auth: {
-                strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
             },
             tags: ['api'],
 
             handler: (request, reply) => {
                 //  console.log("1111111111111",request)
-                 console.log("222222222222",request.payload)
+                console.log("222222222222", request.payload)
 
-                return Controller.rights.deleteRights(request.payload,request.auth.credentials)
-                    
+                return Controller.rights.deleteRights(request.payload, request.auth.credentials)
+
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -140,10 +142,11 @@ module.exports = [
 
             validate: {
                 payload: Joi.object({
-                    id:Joi.string(),
+                    id: Joi.string(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction },
+                failAction: UniversalFunctions.failActionFunction
+            },
 
             plugins: {
                 'hapi-swagger': {
@@ -151,5 +154,49 @@ module.exports = [
                 }
             }
         }
-    }
+    },
+
+    {
+        method: 'POST',
+        path: '/rights/editRights',
+        config: {
+            description: "editRights",
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+
+            handler: (request, reply) => {
+                return Controller.rights.editRights(request.payload, request.auth.credentials)
+
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+
+
+
+            validate: {
+                payload: Joi.object({
+
+                    id: Joi.string(),
+                    title: Joi.string(),
+                    description: Joi.string()
+
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
+
 ]

@@ -29,67 +29,67 @@ module.exports = [
                 payload: Joi.object({
                     sectionA:
                         Joi.object().keys({
-                            completingForm: Joi.number().required().valid(1, 2),  //...1=yes,2=no....//                                
+                            completingForm: Joi.number().valid(1, 2),  //...1=yes,2=no....//                                
                             fName: Joi.string(),
                             lName: Joi.string(),
                             phoneNo: Joi.string(),
                             email: Joi.string().email().lowercase().trim(),
-                        }).required(),
+                        }),
 
                     sectionB:                      
                         Joi.object().keys({
-                            fName: Joi.string().required(),
-                            mName: Joi.string().required(),
-                            lName: Joi.string().required(),
-                            sex: Joi.number().required().valid(1, 2), //...1=male,2=female....//
-                            insuranceNumber: Joi.string().required(),
+                            fName: Joi.string(),
+                            mName: Joi.string(),
+                            lName: Joi.string(),
+                            sex: Joi.number().valid(1, 2), //...1=male,2=female....//
+                            insuranceNumber: Joi.string(),
                             DOB: Joi.date().iso(),
-                            nationality: Joi.string().required(),
-                            placeOfBirth: Joi.string().required(),
-                            maritialStatus: Joi.string().required().valid("Single", "Married", "Divorced", "Widowed", "Seperated"),
-                            address: Joi.string().required(),
-                            city: Joi.string().required(),
-                            postalZipCode: Joi.string().required(),
-                            country: Joi.string().required(),
+                            nationality: Joi.string(),
+                            placeOfBirth: Joi.string(),
+                            maritialStatus: Joi.string().valid("Single", "Married", "Divorced", "Widowed", "Seperated"),
+                            address: Joi.string(),
+                            city: Joi.string(),
+                            postalZipCode: Joi.string(),
+                            country: Joi.string(),
                             homePhone: Joi.string(),
                             workPhone: Joi.string(),
                             cellPhone: Joi.string(),
-                            email: Joi.string().email().lowercase().trim().required(),
-                            prefferedContact: Joi.string().required().valid("Landline", "Cell", "Email", "SMSText"),
+                            email: Joi.string().email().lowercase().trim(),
+                            prefferedContact: Joi.string().valid("Landline", "Cell", "Email", "SMSText"),
 
-                            EmergencyContact:  Joi.string().required(),
-                            reloaceteNeed:Joi.string().required().valid("Yes", "No"),
-                            medicalAttention: Joi.string().required().valid("Yes", "No"),
+                            EmergencyContact:  Joi.string(),
+                            reloaceteNeed:Joi.string().valid("Yes", "No"),
+                            medicalAttention: Joi.string().valid("Yes", "No"),
                             description1: Joi.string(),
-                            serviceAnimal:Joi.string().required().valid("Yes", "No"),
+                            serviceAnimal:Joi.string().valid("Yes", "No"),
                             description2: Joi.string(),
                         }),
                         sectionC:
                             Joi.object().keys({
                             diability:Joi.array().items(Joi.string()),
                             detail: Joi.string(),
-                        }).required(),
+                        }),
                         sectionD:
                         Joi.object().keys({
                             Iattended:Joi.array().items(Joi.string()),
                             Iattend: Joi.array().items(Joi.string()),
-                            schoolName: Joi.string().required(),
-                            highestGrade:Joi.string().required(),
-                            completedEducation:Joi.string().required().valid("Completed/Finished School", "Graduated from School", "Never Attended School"), 
+                            schoolName: Joi.string(),
+                            highestGrade:Joi.string(),
+                            completedEducation:Joi.string().valid("Completed/Finished School", "Graduated from School", "Never Attended School"), 
                             tertiaryEducation:Joi.string(),
-                        }).required(),
+                        }),
                         sectionE:
                         Joi.object().keys({
-                            currentlyEmployed:Joi.string().required().valid("Yes", "No", "N/A"),
-                            occupationDescription:Joi.string().required(),
-                            seeingEmployement: Joi.string().required().valid("Yes", "No"),
-                            skills:Joi.string().required(),
-                        }).required(),
+                            currentlyEmployed:Joi.string().valid("Yes", "No", "N/A"),
+                            occupationDescription:Joi.string(),
+                            seeingEmployement: Joi.string().valid("Yes", "No"),
+                            skills:Joi.string(),
+                        }),
                         sectionF:
                         Joi.object().keys({
                             topConcerns:Joi.array().items(Joi.string()),
-                            additionalConcerns:Joi.string().required()
-                        }).required()
+                            additionalConcerns:Joi.string(),
+                        })
                 }),
                 failAction: UniversalFunctions.failActionFunction
             },

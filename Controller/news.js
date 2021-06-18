@@ -29,18 +29,18 @@ const createNews = async (payload, userDetails) => {
     console.log("deviceToken", deviceToken);
 
 
-    const array = [1, 2, 3, 4, 5, 6, 7, 8, 0];
-    const chunk = 2;
+    // const array = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+    // const chunk = 2;
 
-    while (array.length > 0) {
+    // while (array.length > 0) {
 
-        let tempArray;
-        tempArray = arr.splice(0, chunk);
-        console.log(tempArray, "helllo");
+    //     let tempArray;
+    //     tempArray = arr.splice(0, chunk);
+    //     console.log(tempArray, "helllo");
 
-        // await sendPushNotification(message, deviceToken);
+    //     // await sendPushNotification(message, deviceToken);
 
-    }
+    // }
 
 
 
@@ -121,19 +121,20 @@ const deleteNews = async (payload, userdetails) => {
 }
 
 const editNews = async (payload, userDetails) => {
-    //let id = payload.id
+    let query={ _id : payload.id};
     let data = {}
-    //  console.log("wqwqw",payload)
+
+    console.log('edit paylod',payload)
 
 
-    if (payload.title) { data.title = payload.title }
-    if (payload.description) { data.description = payload.description }
-    if (payload['file']) {
+    if (payload.title !== null && payload.title !== ""){ data.title = payload.title }
+    if (payload.description !== null && payload.description!== ""){ data.description = payload.description }
+    if (payload['file']){
         let imgDetail = await upload.upload(payload);
         data.image = imgDetail
     }
 
-    console.log(data)
+    console.log("edit data",data)
     let result = await DAO.findAndUpdate(Models.news, query, data, { new: true })
     return result
 }
