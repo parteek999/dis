@@ -32,7 +32,9 @@ var DATABASE_CONSTANT ={
 
     PAGE_TYPE:{
         FAQ:"faq",
-        ABOUT:"aboutCommission"
+        ABOUT:"aboutCommission",
+        YOUR_RIGHTS:"yourRights",
+        DISABILITYACT:"disabilityAct",
     },
     GENDER:{
         MALE:"male",

@@ -28,25 +28,8 @@ const createNews = async (payload, userDetails) => {
     const deviceToken = await DAO.getUniqueData(Models.Users, { notificationToggle: false }, {}, {}, 'deviceToken');
     console.log("deviceToken", deviceToken);
 
-
-    // const array = [1, 2, 3, 4, 5, 6, 7, 8, 0];
-    // const chunk = 2;
-
-    // while (array.length > 0) {
-
-    //     let tempArray;
-    //     tempArray = arr.splice(0, chunk);
-    //     console.log(tempArray, "helllo");
-
-    //     // await sendPushNotification(message, deviceToken);
-
-    // }
-
-
-
-
-    //  let push = await sendPushNotification(message);
-
+try {
+    await sendPushNotification(message, deviceToken);
     let query = {
         deviceToken: { '$in': deviceToken },
         notificationToggle: false
@@ -59,8 +42,13 @@ const createNews = async (payload, userDetails) => {
         userId: final_id,
     }
     let notification = await DAO.saveData(Models.Notification, data1);
+    
+} catch (error) {
+    console.log(error)
+}
     return result
 }
+
 
 const getNews = async (payload, userdetails) => {
     console.log("qwq", userdetails);
