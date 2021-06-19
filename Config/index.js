@@ -1,6 +1,3 @@
-/**
- * Created by Shumi on 13/01/18.
- */
 
 module.exports = {
 

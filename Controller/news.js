@@ -87,11 +87,9 @@ const getUserNews = async (payload, userdetails) => {
     bookmarkId.forEach(like => {
         b[like] = true
     });
-    //  Your object becomes { 1: true, 5: true }
 
     news.forEach(article => {
-        // console.log(b[article.id])
-        if (b[article._id]) {//   If key is present in the object
+        if (b[article._id]) {
             article.isBookmarked = true;
         } else {
             article.isBookmarked = false;
@@ -111,6 +109,30 @@ const singleNews = async (payload, userdetails) => {
     return result
 }
 
+const userSingleNews = async (payload, userdetails) => {
+    let id = payload.id
+    const query = {
+        _id: id,
+        isDeleted: false
+    }
+    console.log(query)
+    var arr = [];
+    arr.push(id)
+    console.log(arr)
+    let data = {
+        _id:userdetails._id,
+        article_Id: { '$in': arr }
+    }
+    let final = await DAO.getDataOne(Models.Users, data);
+    console.log(final!==null)
+    
+    if (final && final!=null) {
+        result = await DAO.getDataOne(Models.news, query, {}, {});
+        result.isBookmarked = true
+    }
+    return result
+}
+
 const deleteNews = async (payload, userdetails) => {
     let id = payload.id
     const query = {
@@ -121,20 +143,20 @@ const deleteNews = async (payload, userdetails) => {
 }
 
 const editNews = async (payload, userDetails) => {
-    let query={ _id : payload.id};
+    let query = { _id: payload.id };
     let data = {}
 
-    console.log('edit paylod',payload)
+    console.log('edit paylod', payload)
 
 
-    if (payload.title !== null && payload.title !== ""){ data.title = payload.title }
-    if (payload.description !== null && payload.description!== ""){ data.description = payload.description }
-    if (payload['file']){
+    if (payload.title !== null && payload.title !== "") { data.title = payload.title }
+    if (payload.description !== null && payload.description !== "") { data.description = payload.description }
+    if (payload['file']) {
         let imgDetail = await upload.upload(payload);
         data.image = imgDetail
     }
 
-    console.log("edit data",data)
+    console.log("edit data", data)
     let result = await DAO.findAndUpdate(Models.news, query, data, { new: true })
     return result
 }
@@ -159,5 +181,6 @@ module.exports = {
     deleteNews,
     getUserNews,
     editNews,
-    toggleNotification
+    toggleNotification,
+    userSingleNews
 }

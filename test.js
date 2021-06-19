@@ -26,6 +26,8 @@
 //     },
 // ]
 
+// const { array } = require("@hapi/joi");
+
 // console.log(articles)
 // let likes = [1, 5];
 // let b = {};
@@ -78,16 +80,31 @@
 // splitIntoChunk(array,chunk);
 
 
-const array = [1, 2, 3, 4, 5, 6, 7, 8, 0];
-    const chunk = 2;
+// const array = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+//     const chunk = 2;
 
-    while (array.length > 0) {
+//     while (array.length > 0) {
 
-        let tempArray;
-        tempArray = array.splice(0, chunk);
-        console.log(tempArray, "helllo");
+//         let tempArray;
+//         tempArray = array.splice(0, chunk);
+//         console.log(tempArray, "helllo");
 
-        // await sendPushNotification(message, deviceToken);
+//         // await sendPushNotification(message, deviceToken);
 
-    }
+//     }
+
+
+// var colors = ["red","blue","green","yellow","asas","rtasas","reere"];
+
+// let value=10;
+
+
+
+// var arsray=[];
+// var randColor = colors[Math.floor(Math.random() * colors.length)];
+// arsray.push(randColor); 
+
+// }
+
+// console.log(arsray,"hello")
 

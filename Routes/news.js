@@ -122,11 +122,45 @@ module.exports = [
         path: '/news/singleNews',
         config: {
             description: "singleNews",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN] },
             tags: ['api'],
 
             handler: (request, reply) => {
                 return Controller.news.singleNews(request.query, request.auth.credentials)
+
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                    id: Joi.string(),
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form',
+                }
+            }
+        }
+    },
+
+    {
+        method: 'GET',
+        path: '/news/userSingleNews',
+        config: {
+            description: "userSingleNews",
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            tags: ['api'],
+
+            handler: (request, reply) => {
+                return Controller.news.userSingleNews(request.query, request.auth.credentials)
 
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
