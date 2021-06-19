@@ -6,7 +6,7 @@ const mongoose = require('mongoose'),
 const Directory = new Schema({
     directoryName: { type: String ,default:""},
     directoryType: {
-        type: String, default: "", enum: [
+        type: String,enum: [
             Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.GOVERNMENT,
             Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.NGO,
             Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.SERVICEANDSUPPORT,

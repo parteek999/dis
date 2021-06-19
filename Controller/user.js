@@ -168,13 +168,11 @@ const editProfile = async (payload, userDetails) => {
 }
 
 
-const forgetPassword = async (payload, userdetail) => {
+const forgetPassword = async (payload) => {
     let query = {
         email: payload.email
     }
-    // console.log(payload.email)
     const result = await DAO.getDataOne(Models.Users, query)
-    console.log(result, query)
     if (result == null) throw ERROR.EMAIL_NOT_FOUND
     await email(payload.email, result._id)
     return { message: "A reset password link is sent to your registered email address" }
@@ -278,6 +276,13 @@ const yourRights = async (request, reply) => {
 const disabilityAct = async (request, reply) => {
     return reply.view('disabilityAct')
 }
+const getHtml = async (query) => {
+    let data={
+     Type:query.type
+    }
+    let final = await DAO.getDataOne(Models.pages, data, {}, {});
+    return final
+}
 
 
 module.exports = {
@@ -297,5 +302,6 @@ module.exports = {
     faqPage,
     aboutCommission,
     yourRights,
-    disabilityAct
+    disabilityAct,
+    getHtml
 }

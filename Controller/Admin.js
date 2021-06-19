@@ -164,6 +164,26 @@ const uploadImages = async (payload, userDetail) => {
 }
 
 
+const addContent = async (payload, ) => {
+    const {Type,Content} = payload;
+    let result = await DAO.saveData(Models.pages,payload)
+    return result
+}
+
+
+const editContent = async (payload) => {
+    const {Type,Content,id} = payload;
+    let result = await DAO.findAndUpdate(Models.pages,{_id:id},payload,{});
+    return result
+}
+
+
+const getPages = async (payload) => {
+    // const {Type,Content,id} = payload;
+    let result = await DAO.getData(Models.pages);
+    return result
+}
+
 
 module.exports = {
 
@@ -175,7 +195,10 @@ module.exports = {
     singleUser,
     blockunblockUser,
     paginateUser,
-    uploadImages
+    uploadImages,
+    addContent,
+    getPages,
+    editContent,
 
 
 }

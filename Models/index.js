@@ -8,5 +8,6 @@ module.exports = {
     Directory: require('./Directory'),
     Complaint:require('./complaint'),
     Contact:require('./contact'),
-    Notification:require('./notification')
+    Notification:require('./notification'),
+    pages:require('./pages')
 };

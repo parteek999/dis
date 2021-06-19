@@ -351,7 +351,7 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     fname: Joi.string(),
-                    email: Joi.string(),
+                    email: Joi.string().email(),
                     phoneNumber: Joi.string(),
                     about: Joi.string(),
                 }),
@@ -374,7 +374,7 @@ module.exports = [
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.forgetPassword(request.payload, request.query)
+                return Controller.user.forgetPassword(request.payload)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -385,7 +385,7 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    email: Joi.string().required(),
+                    email: Joi.string().email().required(),
 
                 }),
                 failAction: UniversalFunctions.failActionFunction
@@ -473,6 +473,8 @@ module.exports = [
             }
         }
     },
+
+
     {
         method: 'Get',
         path: '/user/termsAndConditionPage',
@@ -554,6 +556,40 @@ module.exports = [
             plugins: {
                 'hapi-swagger': {
                     //    payloadType: 'form'
+                }
+            }
+        }
+    },
+
+    {
+        method: 'GET',
+        path: '/user/getHtml',
+        config: {
+            description: 'getHtml',
+            auth:false, 
+            // {
+            //     strategies: [Config.APP_CONSTANTS.SCOPE.USER]
+            // },
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.getHtml( request.query)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                    type:Joi.string(),
+                }),
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    // payloadType: 'form'
                 }
             }
         }

@@ -262,5 +262,110 @@ module.exports = [
                 }
             }
         }
+    },
+
+    {
+        method: 'POST',
+        path: '/admin/addContent',
+        config: {
+            description: 'addContent',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+            handler: (request, reply) => {
+                return Controller.Admin.addContent(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    Type:Joi.string().required(),
+                    Content: Joi.string().required()
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+
+    {
+        method: 'POST',
+        path: '/admin/editContent',
+        config: {
+            description: 'editContent',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+            handler: (request, reply) => {
+                return Controller.Admin.editContent(request.payload, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    id:Joi.string().required(),
+                    // Type:Joi.string().required(),
+                    Content: Joi.string().required()
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+
+    {
+        method: 'Get',
+        path: '/admin/getPages',
+        config: {
+            description: 'getPages',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+            handler: (request, reply) => {
+                return Controller.Admin.getPages(request.query)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    // payloadType: 'form'
+                }
+            }
+        }
     }
+
 ]

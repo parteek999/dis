@@ -30,12 +30,15 @@ var MODELS = {
 
 var DATABASE_CONSTANT ={
 
+    PAGE_TYPE:{
+        FAQ:"faq",
+        ABOUT:"aboutCommission"
+    },
     GENDER:{
         MALE:"male",
         FEMALE:"female",
         OTHER:"other"
     },
-    
     DEVICE_TYPES: {
         "IOS": "IOS",
         "ANDROID": "ANDROID",
@@ -45,25 +48,21 @@ var DATABASE_CONSTANT ={
         "GOVERNMENT":"GOVERNMENT",
         "NGO":"NGO",
         "SERVICEANDSUPPORT":"SERVICEANDSUPPORT"
-        
     },
     SOCIAL: {
         FACEBOOK:"Facebook",
         GOOGLE: "Google"
     },
-
     ACCOUNT_TYPE : {
         GMAIL:'gmail',
         FACEBOOK:'facebook',
         EMAIL: 'email',
         APPLE_ID:'apple'
     },
-
     VERIFICATION_TYPE: {
         AADHAR_CARD:'aadhar_card',
         DRIVING_LISCENCE: 'driving_liscence',
         PANCARD: 'pancard',
-        
     },
     
 };
