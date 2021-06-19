@@ -113,7 +113,6 @@ const userSingleNews = async (payload, userdetails) => {
     let id = payload.id
     const query = {
         _id: id,
-        isDeleted: false
     }
     console.log(query)
     var arr = [];
@@ -125,12 +124,20 @@ const userSingleNews = async (payload, userdetails) => {
     }
     let final = await DAO.getDataOne(Models.Users, data);
     console.log(final!==null)
+    console.log(final)
     
     if (final && final!=null) {
         result = await DAO.getDataOne(Models.news, query, {}, {});
-        result.isBookmarked = true
+        result.isBookmarked = true;
+        return result
     }
-    return result
+    
+    else {
+        result = await DAO.getDataOne(Models.news, query, {}, {});
+        result.isBookmarked = false;
+        return result
+    }
+    
 }
 
 const deleteNews = async (payload, userdetails) => {
