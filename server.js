@@ -4,7 +4,7 @@ const Hapi = require('@hapi/hapi'),
     Config = require('./Config'),
     winston = require('winston');
 
-const hbs = require('hbs')   
+// const hbs = require('hbs')   
 
 Routes = require('./Routes');
 Plugins = require('./Plugins');
