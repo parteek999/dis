@@ -8,6 +8,7 @@ let mail = require('../DAOManager').mail;
 var upload = require('../Libs/uploadManager');
 var path = require('path');
 var email = require('../DAOManager/sendmail');
+const Jwt = require('jsonwebtoken');
 let fs = require('fs');
 
 
@@ -169,31 +170,57 @@ const editProfile = async (payload, userDetails) => {
 
 
 const forgetPassword = async (payload) => {
+
     let query = {
-        email: payload.email
+        email: payload.email,
+        socialId: ""
     }
+
     const result = await DAO.getDataOne(Models.Users, query)
     if (result == null) throw ERROR.EMAIL_NOT_FOUND
-    await email(payload.email, result._id)
+
+    let tokenData = {
+        scope: Config.APP_CONSTANTS.SCOPE.USER,
+        _id: result._id,
+        time: new Date(),
+    };
+    const Token = Jwt.sign(tokenData, Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER, {
+        expiresIn: '15m'
+    })
+    await email(payload.email, Token)
     return { message: "A reset password link is sent to your registered email address" }
 }
 
 
-const resetPassword = async (payload, userId, h) => {
-    let { password } = payload
-    let query = { _id: userId.id }
-    console.log(userId.id)
-    password = Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
-    const result = await DAO.findAndUpdate(Models.User, query, { password: password })
-    console.log("hi")
-    // return reply.view('passwordChanged')
-    return h.redirect("/user/renderConfirmPage")
+const resetPassword = async (request, reply) => {
+
+    console.log(request.query)
+    console.log(request.payload)
+    return tokenVerification = Jwt.verify(request.query.id, Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER, async function (err, decoded) {
+        if (err) {
+            return reply.view('Error', { name: "Your link is expired" })
+        }
+        else {
+            let query = { _id: decoded._id }
+            Password = Bcrypt.hashSync(request.payload.newPassword, Config.APP_CONSTANTS.SERVER.SALT);
+            result = await DAO.findAndUpdate(Models.Users, query, { password: Password })
+            return reply.redirect("/user/renderConfirmPage")
+        }
+    });
 }
 
 
 const forgotPasswordPageRender = async (request, reply) => {
-    console.log(request.id)
-    return reply.view('form', { name: request.id })
+    console.log("request", request)
+    return tokenVerification = Jwt.verify(request.id, Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER, function (err, decoded) {
+        if (err) {
+            return reply.view('Error', { name: "Your link is expired" })
+        }
+        else {
+            return reply.view('form',{Token:request.id})
+        }
+    });
+
 }
 
 
@@ -277,8 +304,8 @@ const disabilityAct = async (request, reply) => {
     return reply.view('disabilityAct')
 }
 const getHtml = async (query) => {
-    let data={
-     Type:query.type
+    let data = {
+        Type: query.type
     }
     let final = await DAO.getDataOne(Models.pages, data, {}, {});
     return final

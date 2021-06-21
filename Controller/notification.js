@@ -17,8 +17,7 @@ const getUserNotification = async (payload, userdetails) => {
     const options = {
         sort: { createdAt: -1 }
     }
-
-     
+    
 var result =  await DAO.getData(Models.Notification, { userId: { $in: [userdetails] } }, {}, options);
 console.log(result)
 

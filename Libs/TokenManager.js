@@ -16,13 +16,9 @@ var GenerateToken = (tokenData, userType) => {
                 case Config.APP_CONSTANTS.SCOPE.USER:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER;
                     break;
-
                 case Config.APP_CONSTANTS.SCOPE.ADMIN:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_ADMIN;
                     break;
-
-                
-
                 default:
                     secretKey = Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_ADMIN;
             }
@@ -38,7 +34,7 @@ var GenerateToken = (tokenData, userType) => {
 
 
 var verifyToken = async (tokenData) => {
-   
+    // console.log("token data",tokenData)
     var user;
     if (tokenData.scope === Config.APP_CONSTANTS.SCOPE.ADMIN) {
         user = await DAO.getData(Models.Admin, { _id: tokenData._id }, { _id: 1 }, { lean: true });

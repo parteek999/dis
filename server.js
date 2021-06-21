@@ -4,6 +4,8 @@ const Hapi = require('@hapi/hapi'),
     Config = require('./Config'),
     winston = require('winston');
 
+const hbs = require('hbs')   
+
 Routes = require('./Routes');
 Plugins = require('./Plugins');
 Bootstrap = require('./Utils/Bootstrap')
@@ -37,6 +39,16 @@ const init = async () => {
         path: './public',
 
     })
+
+    // server.views({
+    //     engines: {
+    //         hbs: require('hbs')  
+    //     },
+    //     relativeTo: __dirname,
+    //     path: 'templates'
+    // });
+
+
 
     server.route(
         [{
