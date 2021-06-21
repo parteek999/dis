@@ -1,3 +1,4 @@
+<!-- 
 <html>
 
 <head>
@@ -21,4 +22,61 @@
 
 </body>
 
+</html> -->
+
+<html>
+<head>
+<title> Verification of valid Password </title>
+</head>
+<script>
+function verifyPassword() {
+  var Npw = document.getElementById("Npswd").value;
+  var Cpw = document.getElementById("Cpswd").value;
+
+  //check empty password field
+  if(Npw==""||Cpw=="") {
+     document.getElementById("message").innerHTML = "**Fill the password in both fields please!";
+     return false;
+  }
+ 
+ //minimum password length validation
+  if(Npw.length < 6) {
+     document.getElementById("message").innerHTML = "**Password length must be atleast 6 characters";
+     return false;
+  }
+
+//maximum length of password validation
+  if(Npw!==Cpw) {
+     document.getElementById("message").innerHTML = "**Password and confirm password does matched";
+     return false;
+  }
+}
+</script>
+
+<body>
+<center>
+<h1 style="color:green">NCPD</h1>
+<h3> ENTER YOR NEW PASSWORD </h3>
+
+<form onsubmit ="return verifyPassword()"  action="/user/resetPassword?id={{Token}}" method="POST">
+<!-- Enter Password -->
+<td> New Password </td>
+
+<input id = "Npswd" name="newPassword" type='password' value = ""  required />
+<!-- <input type = "password" id = "Npswd" value = ""  name="password">  -->
+<span id = "message" style="color:red"> </span> <br><br>
+
+<td> Confirm Password </td>
+<input  id = "Cpswd" name="confirmPassword" type='password'   value = "" required />
+<!-- <input type = "password" id = "Cpswd" value = "">  -->
+<span id = "message" style="color:red"> </span> <br><br>
+
+<!-- Click to verify valid password -->
+<input type = "submit" value = "Submit">
+
+<!-- Click to reset fields -->
+<button type = "reset" value = "Reset" >Reset</button>
+</form>
+</center>
+</body>
 </html>

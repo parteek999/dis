@@ -185,6 +185,14 @@ const getPages = async (payload) => {
 }
 
 
+const getSinglePage = async (payload) => {
+    // const {Type,Content,id} = payload;
+    let result = await DAO.getDataOne(Models.pages,{_id:payload.id});
+    return result
+}
+
+
+
 module.exports = {
 
     Login,
@@ -199,6 +207,7 @@ module.exports = {
     addContent,
     getPages,
     editContent,
+    getSinglePage
 
 
 }

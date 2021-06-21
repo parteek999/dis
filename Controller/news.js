@@ -49,7 +49,6 @@ try {
     return result
 }
 
-
 const getNews = async (payload, userdetails) => {
     console.log("qwq", userdetails);
     const query = {

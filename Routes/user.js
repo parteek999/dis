@@ -29,7 +29,7 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
-          
+
             validate: {
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
@@ -78,7 +78,7 @@ module.exports = [
                 payload: Joi.object({
                     email: Joi.string().email().lowercase().trim().required(),
                     password: Joi.string().trim().required(),
-                   
+
                     deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.ANDROID
@@ -90,7 +90,7 @@ module.exports = [
             },
             plugins: {
                 'hapi-swagger': {
-                     payloadType: 'form'
+                    payloadType: 'form'
                 }
             }
         }
@@ -114,7 +114,7 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
-         
+
             validate: {
                 payload: Joi.object({
                     socialId: Joi.string().trim().required(),
@@ -406,36 +406,16 @@ module.exports = [
             auth: false,
             validate: {
                 payload: Joi.object({
-                    password: Joi.string().required(),
-                    confirmPassword: Joi.any().valid(Joi.ref('password')).required().messages({ 'any.only': 'Password does not match' })
+                    newPassword: Joi.string().required(),
+                    confirmPassword: Joi.any().valid(Joi.ref('newPassword')).required().messages({ 'any.only': 'Password does not match' })
                 }),
             },
-            // { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
             tags: ['api', 'user'],
-            handler: async (request, h) => {
-                let { password } = request.payload
-                let query = { _id: request.query.id }
-                // console.log(userId.id)
-                password = Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
-                const result = await DAO.findAndUpdate(Models.Users, query, { password: password })
-                // console.log("hi")
-                return h.redirect("/user/renderConfirmPage")
-                //          Controller.User.resetPassword(request.payload, request.query, h)
-                //             .then(response => {
-                //                 return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, h);
-                //             })
-                //             .catch(error => {
-                //                 winston.error("=====error=============", error);
-                //                 return UniversalFunctions.sendError("en", error, h);
-                //             });
-                //     },
-                   
-                //     plugins: {
-                //         'hapi-swagger': {
-                //             payloadType: 'form'
-                //         }
-            }
+            handler: (request, reply) => {
+                return Controller.user.resetPassword(request, reply)
+            },
         }
+
     },
 
     {
@@ -566,13 +546,13 @@ module.exports = [
         path: '/user/getHtml',
         config: {
             description: 'getHtml',
-            auth:false, 
+            auth: false,
             // {
             //     strategies: [Config.APP_CONSTANTS.SCOPE.USER]
             // },
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.getHtml( request.query)
+                return Controller.user.getHtml(request.query)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -583,7 +563,7 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
-                    type:Joi.string(),
+                    type: Joi.string(),
                 }),
                 failAction: UniversalFunctions.failActionFunction
             },

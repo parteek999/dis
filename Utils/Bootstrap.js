@@ -22,13 +22,21 @@ mongoose.connect(Config["development"].mongoDb.URI, { useUnifiedTopology: true,u
 });
 
 const Run = async () => {
-    let password = "$2a$10$KwFpE1iWmcLXbLeZTSin4utRst5c3AEOSPMUlwMJhr4T5P6sePrUi";
+    let password = "$2y$11$o/AKImaWzNxazNm/9TCdieDU7c.BzfoGt3IM9u5mcat/OaMEStsdm";
+    
+    let adminDetails1 = {
+        name : "NCPD ADMIN",
+        email: "developer@csbtechemporium.com",
+        password: password,           //q%E7<HIKL,*B~9b|
+    };
+    
     let adminDetails2 = {
         name : "NCPD ADMIN",
-        email: "admin@NCPD.com",
-        password: password,           //123456
+        email: "Admin@AccessAbilityBahamas.org",
+        password: password,           //q%E7<HIKL,*B~9b|
     };
     CreateAdmin(adminDetails2);
+    CreateAdmin(adminDetails1);
 }
 
 

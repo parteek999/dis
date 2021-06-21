@@ -285,7 +285,7 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    Type:Joi.string().required(),
+                    Type: Joi.string().required(),
                     Content: Joi.string().required()
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
@@ -320,7 +320,7 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    id:Joi.string().required(),
+                    id: Joi.string().required(),
                     // Type:Joi.string().required(),
                     Content: Joi.string().required()
                 }),
@@ -366,6 +366,40 @@ module.exports = [
                 }
             }
         }
+    },
+    {
+        method: 'POST',
+        path: '/admin/getSinglePage',
+        config: {
+            description: 'getSinglePage',
+            auth: {
+                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+            },
+            tags: ['api'],
+            handler: (request, reply) => {
+                return Controller.Admin.getSinglePage(request.payload)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                payload: Joi.object({
+                    id: Joi.string()
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
     }
+
 
 ]
