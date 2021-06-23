@@ -20,6 +20,7 @@ module.exports = [
             },
             tags: ['api', 'directory'],
             handler: (request, reply) => {
+                console.log("sdsdsdsdsdsd",request.payload)
                 return Controller.directory.directory(request.payload, request.auth.credentials)
 
                     .then(response => {
@@ -38,22 +39,22 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
+                    file: Joi.any().meta({ swaggerType: 'file' }).required(),
                     directoryType:Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.GOVERNMENT ,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.NGO ,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DIRECTORY_TYPE.SERVICEANDSUPPORT ,
-                    ),
+                    ).required(),
                     directoryName: Joi.string().required(),
-                    aboutDirectory: Joi.string(),
-                    phoneNO: Joi.number().integer().min(1000000000).message("Invalid phone number").max(9999999999).message("Invalid phone number").required(),
-                    address: Joi.string(),
-                    website: Joi.string(),
-                    startTime: Joi.string(),
-                    endTime: Joi.string(),
-                    facebookLInk: Joi.string(),
-                    instagramLInk: Joi.string(),
-                    twitterLink: Joi.string(),
+                    aboutDirectory: Joi.string().allow(""),
+                    phoneNO: Joi.number().required(),
+                    address: Joi.string().required(),
+                    website: Joi.string().allow(""),
+                    startTime: Joi.string().required(),
+                    endTime: Joi.string().required(),
+                    facebookLInk: Joi.string().allow(""),
+                    instagramLInk: Joi.string().allow(""),
+                    twitterLink: Joi.string().allow(""),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
