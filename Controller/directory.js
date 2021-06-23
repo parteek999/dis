@@ -63,7 +63,7 @@ const getUserDirectory = async (payload, userDetails) => {
         isDeleted:false
     };
     var options = {
-        sort: { createdAt: -1 },
+        sort: { directoryName: -1 },
     }
     var directory = await DAO.getData(Models.Directory, query, {}, options)
     console.log(directory)
