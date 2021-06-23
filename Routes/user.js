@@ -4,9 +4,6 @@ const Joi = require('@hapi/joi');
 const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const winston = require('winston');
-const Models = require('../Models');
-const Bcrypt = require('bcryptjs');
-const DAO = require('../DAOManager').queries;
 
 
 module.exports = [
@@ -20,6 +17,7 @@ module.exports = [
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
+                 console.log("sasasa",request.payload)
                 return Controller.user.signUp(request.payload)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
@@ -65,6 +63,7 @@ module.exports = [
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
+                
                 return Controller.user.login(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
