@@ -59,7 +59,8 @@ const getUserDirectory = async (payload, userDetails) => {
     const { directoryType } = payload;
 
     const query = {
-        directoryType: directoryType
+        directoryType: directoryType,
+        isDeleted:false
     };
     var options = {
         sort: { createdAt: -1 },
