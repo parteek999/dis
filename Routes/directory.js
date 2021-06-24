@@ -101,7 +101,7 @@ module.exports = [
         path: '/directory/getUserDirectory',
         config: {
             description: "getUserDirectory",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER], mode: 'optional' },
             tags: ['api', "getUserDirectory"],
             handler: (request, reply) => {
                 return Controller.directory.getUserDirectory(request.query, request.auth.credentials)
@@ -121,7 +121,7 @@ module.exports = [
                         Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.SERVICEANDSUPPORT,
                     ),
                 }),
-                headers: UniversalFunctions.authorizationHeaderObj,
+                // headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
             },
             plugins: {

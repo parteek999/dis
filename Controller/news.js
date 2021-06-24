@@ -59,30 +59,39 @@ const getNews = async (payload, userdetails) => {
 
 const getUserNews = async (payload, userdetails) => {
     console.log(userdetails);
-    const query = {
-        isDeleted: false
-    }
-    let result = await DAO.getData(Models.Users, { _id: userdetails._id }, { article_Id: 1, _id: 0 }, {})
-    console.log(result, "sjhsdsjd")
-    console.log(result[0].article_Id)
-
-    let news = await DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
-    console.log(news)
-
-    let b = {};
-    let bookmarkId = result[0].article_Id;
-    bookmarkId.forEach(like => {
-        b[like] = true
-    });
-
-    news.forEach(article => {
-        if (b[article._id]) {
-            article.isBookmarked = true;
-        } else {
-            article.isBookmarked = false;
+    if(userdetails&&userdetails!==null){
+        const query = {
+            isDeleted: false
         }
-    });
-    return news
+        let result = await DAO.getData(Models.Users, { _id: userdetails._id }, { article_Id: 1, _id: 0 }, {})
+        // console.log(result, "sjhsdsjd")
+        // console.log(result[0].article_Id)
+    
+        let news = await DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
+        console.log(news)
+    
+        let b = {};
+        let bookmarkId = result[0].article_Id;
+        bookmarkId.forEach(like => {
+            b[like] = true
+        });
+    
+        news.forEach(article => {
+            if (b[article._id]) {
+                article.isBookmarked = true;
+            } else {
+                article.isBookmarked = false;
+            }
+        });
+        return news
+    }
+    else{
+        const query = {
+            isDeleted: false
+        }
+        return DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
+    }
+    
 }
 
 const singleNews = async (payload, userdetails) => {
@@ -97,33 +106,46 @@ const singleNews = async (payload, userdetails) => {
 }
 
 const userSingleNews = async (payload, userdetails) => {
-    let id = payload.id
-    const query = {
-        _id: id,
+    if(userdetails&&userdetails!==null){
+        let id = payload.id
+        const query = {
+            _id: id,
+        }
+        console.log(query)
+        var arr = [];
+        arr.push(id)
+        console.log(arr)
+        let data = {
+            _id:userdetails._id,
+            article_Id: { '$in': arr }
+        }
+        let final = await DAO.getDataOne(Models.Users, data);
+        console.log(final!==null)
+        console.log(final)
+        
+        if (final && final!=null) {
+            result = await DAO.getDataOne(Models.news, query, {}, {});
+            result.isBookmarked = true;
+            return result
+        }
+        
+        else {
+            result = await DAO.getDataOne(Models.news, query, {}, {});
+            result.isBookmarked = false;
+            return result
+        }
     }
-    console.log(query)
-    var arr = [];
-    arr.push(id)
-    console.log(arr)
-    let data = {
-        _id:userdetails._id,
-        article_Id: { '$in': arr }
-    }
-    let final = await DAO.getDataOne(Models.Users, data);
-    console.log(final!==null)
-    console.log(final)
-    
-    if (final && final!=null) {
-        result = await DAO.getDataOne(Models.news, query, {}, {});
-        result.isBookmarked = true;
+    else{
+        let id = payload.id
+        const query = {
+            _id: id,
+            isDeleted: false
+        }
+        console.log(query)
+        let result = await DAO.getDataOne(Models.news, query, {}, {});
         return result
     }
     
-    else {
-        result = await DAO.getDataOne(Models.news, query, {}, {});
-        result.isBookmarked = false;
-        return result
-    }
     
 }
 

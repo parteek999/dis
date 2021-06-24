@@ -18,7 +18,7 @@ const addContact = async (payload, userDetails) => {
 }
 
 const getContact = async (payload, userdetails) => {
-    console.log(userdetails);
+    // console.log(userdetails);
     const query = {
         isDeleted: false
     }

@@ -42,7 +42,6 @@ const directory = async (payload) => {
 }
 
 const getDirectory = async (payload, userdetails) => {
-    console.log("121212121121", userdetails);
     const query = {
          isDeleted: false
     }
