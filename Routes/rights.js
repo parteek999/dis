@@ -49,7 +49,7 @@ module.exports = [
         path: '/rights/getRights',
         config: {
             description: "getRights",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
+            auth:false ,
             tags: ['api'],
 
             handler: (request, reply) => {

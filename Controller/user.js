@@ -84,13 +84,11 @@ const login = async (payload) => {
 
 const socialLogin = async (payload) => {
     const { email, name, deviceToken, deviceType, socialId } = payload
-
     const query = {
         socialId: payload.socialId,
         email: payload.email,
         isBlocked: false
     };
-
     var Data = {
         name: name,
         email: email,

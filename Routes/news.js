@@ -1,312 +1,351 @@
-const Controller = require('../Controller');
-const UniversalFunctions = require('../Utils/UniversalFunctions');
-const Joi = require('@hapi/joi');
-const Config = require('../Config');
+const Controller = require("../Controller");
+const UniversalFunctions = require("../Utils/UniversalFunctions");
+const Joi = require("@hapi/joi");
+const Config = require("../Config");
 const SUCCESS = Config.responseMessages.SUCCESS;
-const winston = require('winston');
-
+const winston = require("winston");
 
 module.exports = [
-    {
-        method: 'POST',
-        path: '/news/createNews',
-        config: {
-            description: 'createNews',
-            auth: {
-                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
-            tags: ['api', 'createNews'],
-            handler: (request, reply) => {
-                console.log(request.payload)
-                return Controller.news.createNews(request.payload, request.auth.credentials)
 
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            payload: {
-                output: "stream",
-                parse: true,
-                allow: "multipart/form-data",
-                maxBytes: 200000000 * 1000 * 1000
-            },
-            validate: {
+  {
+    method: "POST",
+    path: "/news/createNews",
+    config: {
+      description: "createNews",
+      auth: {
+        strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN],
+      },
+      tags: ["api", "createNews"],
+      handler: (request, reply) => {
+        console.log(request.payload);
+        return Controller.news
+          .createNews(request.payload, request.auth.credentials)
 
-                payload: Joi.object({
-                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
-                    title: Joi.string(),
-                    description: Joi.string()
-
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form'
-                }
-            }
-        }
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
+      payload: {
+        output: "stream",
+        parse: true,
+        allow: "multipart/form-data",
+        maxBytes: 200000000 * 1000 * 1000,
+      },
+      validate: {
+        payload: Joi.object({
+          file: Joi.any().meta({ swaggerType: "file" }).optional(),
+          title: Joi.string(),
+          description: Joi.string(),
+        }),
+        headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
+  },
 
-    {
-        method: 'GET',
-        path: '/news/getNews',
-        config: {
-            description: "getNews",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
-            tags: ['api'],
+  {
+    method: "GET",
+    path: "/news/getNews",
+    config: {
+      description: "getNews",
+      auth: false,
+      // { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER] },
+      tags: ["api"],
 
-            handler: (request, reply) => {
-                return Controller.news.getNews(request.query, request.auth.credentials)
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                query: Joi.object({
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
+      handler: (request, reply) => {
+        return Controller.news
+          .getNews(request.query, request.auth.credentials)
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
+      validate: {
+        query: Joi.object({}),
+        headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
-    {
-        method: 'GET',
-        path: '/news/getUserNews',
-        config: {
-            description: "getUserNews",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
-            tags: ['api'],
+  },
 
-            handler: (request, reply) => {
-                console.log(request.query, request.auth.credentials)
-                return Controller.news.getUserNews(request.query, request.auth.credentials)
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                query: Joi.object({
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
+  {
+    method: "GET",
+    path: "/news/getUserNews",
+    config: {
+      description: "getUserNews",
+      auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER], mode: 'optional' },
+      tags: ["api"],
+
+      handler: (request, reply) => {
+        console.log(request.query, request.auth.credentials);
+        return Controller.news
+          .getUserNews(request.query, request.auth.credentials)
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
+      validate: {
+        query: Joi.object({}),
+    //     headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
+  },
 
-    {
-        method: 'GET',
-        path: '/news/singleNews',
-        config: {
-            description: "singleNews",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN] },
-            tags: ['api'],
+  {
+    method: "GET",
+    path: "/news/singleNews",
+    config: {
+      description: "singleNews",
+      auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN] },
+      tags: ["api"],
 
-            handler: (request, reply) => {
-                return Controller.news.singleNews(request.query, request.auth.credentials)
+      handler: (request, reply) => {
+        return Controller.news
+          .singleNews(request.query, request.auth.credentials)
 
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                query: Joi.object({
-                    id: Joi.string(),
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
+      validate: {
+        query: Joi.object({
+          id: Joi.string(),
+        }),
+        headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
+  },
 
-    {
-        method: 'GET',
-        path: '/news/userSingleNews',
-        config: {
-            description: "userSingleNews",
-            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
-            tags: ['api'],
+  {
+    method: "GET",
+    path: "/news/userSingleNews",
+    config: {
+      description: "userSingleNews",
+      auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER],mode: 'optional' },
+      tags: ["api"],
 
-            handler: (request, reply) => {
-                return Controller.news.userSingleNews(request.query, request.auth.credentials)
-
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                query: Joi.object({
-                    id: Joi.string(),
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
+      handler: (request, reply) => {
+        return Controller.news
+          .userSingleNews(request.query, request.auth.credentials)
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
+      validate: {
+        query: Joi.object({
+          id: Joi.string(),
+        }),
+        // headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
+  },
 
-    {
-        method: 'POST',
-        path: '/news/deleteNews',
-        config: {
-            description: "deleteNews",
-            auth: {
-                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
-            tags: ['api'],
+  {
+    method: "POST",
+    path: "/news/deleteNews",
+    config: {
+      description: "deleteNews",
+      auth: {
+        strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN],
+      },
+      tags: ["api"],
 
-            handler: (request, reply) => {
-                return Controller.news.deleteNews(request.payload, request.auth.credentials)
+      handler: (request, reply) => {
+        return Controller.news
+          .deleteNews(request.payload, request.auth.credentials)
 
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            validate: {
-                payload: Joi.object({
-                    id: Joi.string(),
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
+      validate: {
+        payload: Joi.object({
+          id: Joi.string(),
+        }),
+        headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
+  },
 
-    {
-        method: 'POST',
-        path: '/news/toggleNotification',
-        config: {
-            description: "toggleNotification",
-            auth:
-            {
-                strategies: [Config.APP_CONSTANTS.SCOPE.USER]
-            },
-            tags: ['api'],
+  {
+    method: "POST",
+    path: "/news/toggleNotification",
+    config: {
+      description: "toggleNotification",
+      auth: {
+        strategies: [Config.APP_CONSTANTS.SCOPE.USER],
+      },
+      tags: ["api"],
 
-            handler: (request, reply) => {
-                return Controller.news.toggleNotification(request.payload, request.auth.credentials)
+      handler: (request, reply) => {
+        return Controller.news
+          .toggleNotification(request.payload, request.auth.credentials)
 
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
 
-            validate: {
-                payload: Joi.object({
-                    id: Joi.string(),
-                    mark: Joi.number(),
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form',
-                }
-            }
-        }
+      validate: {
+        payload: Joi.object({
+          id: Joi.string(),
+          mark: Joi.number(),
+        }),
+        headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
+  },
 
+  {
+    method: "POST",
+    path: "/news/editNews",
+    config: {
+      description: "editNews",
+      auth: {
+        strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN],
+      },
+      tags: ["api", "editNews"],
+      handler: (request, reply) => {
+        console.log(request.payload);
+        return Controller.news
+          .editNews(request.payload, request.auth.credentials)
 
-    {
-        method: 'POST',
-        path: '/news/editNews',
-        config: {
-            description: 'editNews',
-            auth: {
-                strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
-            },
-            tags: ['api', 'editNews'],
-            handler: (request, reply) => {
-                console.log(request.payload)
-                return Controller.news.editNews(request.payload, request.auth.credentials)
-
-                    .then(response => {
-                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
-                    })
-                    .catch(error => {
-                        winston.error("=====error=============", error);
-                        return UniversalFunctions.sendError("en", error, reply);
-                    });
-            },
-            payload: {
-                output: "stream",
-                parse: true,
-                allow: "multipart/form-data",
-                maxBytes: 200000000 * 1000 * 1000
-            },
-            validate: {
-
-                payload: Joi.object({
-                    id:Joi.string(),
-                    file: Joi.any().meta({ swaggerType: 'file' }).optional(),
-                    title: Joi.string().allow(''),
-                    description: Joi.string().allow('')
-
-                }),
-                headers: UniversalFunctions.authorizationHeaderObj,
-                failAction: UniversalFunctions.failActionFunction
-            },
-            plugins: {
-                'hapi-swagger': {
-                    payloadType: 'form'
-                }
-            }
-        }
+          .then((response) => {
+            return UniversalFunctions.sendSuccess(
+              "en",
+              SUCCESS.DEFAULT,
+              response,
+              reply
+            );
+          })
+          .catch((error) => {
+            winston.error("=====error=============", error);
+            return UniversalFunctions.sendError("en", error, reply);
+          });
+      },
+      payload: {
+        output: "stream",
+        parse: true,
+        allow: "multipart/form-data",
+        maxBytes: 200000000 * 1000 * 1000,
+      },
+      validate: {
+        payload: Joi.object({
+          id: Joi.string(),
+          file: Joi.any().meta({ swaggerType: "file" }).optional(),
+          title: Joi.string().allow(""),
+          description: Joi.string().allow(""),
+        }),
+        headers: UniversalFunctions.authorizationHeaderObj,
+        failAction: UniversalFunctions.failActionFunction,
+      },
+      plugins: {
+        "hapi-swagger": {
+          payloadType: "form",
+        },
+      },
     },
-
-
-]
+  },
+];
