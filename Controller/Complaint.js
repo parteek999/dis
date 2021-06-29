@@ -5,9 +5,8 @@ const DAO = require('../DAOManager').queries,
 var upload = require('../Libs/uploadManager');
 
 
-
 const complaint = async (payload) => {
-    const { email, name, password, countryCode, phoneNo,work,
+    const { email, name, countryCode, phoneNo,work,
         telephoneNo, occupation, age, recipientName,
         recipientAddress, recipientTelephone,
         description1,
@@ -18,6 +17,8 @@ const complaint = async (payload) => {
         // description6
     } = payload
     var number = await (countryCode + phoneNo)
+   
+   
     var Data = {
         email: email,
         name: name,
@@ -32,12 +33,19 @@ const complaint = async (payload) => {
         recipientAddress: recipientAddress,
         recipientTelephone: recipientTelephone,
         description1: description1,
-        description2:description2,
-        description3:description3,
-        description4:description4,
-        description5:description5,
-        // description6:description6,
+        description2: description2,
+        description3: description3,
+        description4: description4,
+        description5: description5,    
     }
+
+    // if(description2){data.description2=description2};
+    // if(description3){data.description3=description3};
+    // if(description4){data.description4=description4};
+    // if(description5){data.description5=description5};
+
+   
+
     const final = await DAO.saveData(Models.Complaint, Data);
     console.log(final)
     return { final }
