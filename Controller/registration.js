@@ -8,14 +8,11 @@ const DAO = require('../DAOManager').queries,
 
 
 const register = async (payload) => {
-    // console.log(payload)
     const final = await DAO.saveData(Models.registration, payload)
-    console.log(final)
     return { final }
 }
 
 const getRegistration = async (payload, userdetails) => {
-    console.log(userdetails);
     const query = {
         isDeleted: false
     };

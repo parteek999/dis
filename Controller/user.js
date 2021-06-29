@@ -70,8 +70,6 @@ const login = async (payload) => {
     };
 
     const result = await DAO.getDataOne(Models.Users, query, {});
-    console.log("12121212", result);
-    console.log("90990909090909090", payload);
     if (result === null) throw ERROR.EMAIL_NOT_FOUND;
     const checkPassword = Bcrypt.compareSync(password, result.password);
     if (!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
@@ -102,11 +100,10 @@ const login = async (payload) => {
 const socialLogin = async (payload) => {
   const { email, name, deviceToken, deviceType, socialId } = payload;
   console.log("payload",payload)
-
-  if (deviceType =="IOS") {
+  if (deviceType == "IOS") {
     const query = {
       socialId: payload.socialId,
-    //   email: payload.email,
+      //   email: payload.email,
       isBlocked: false,
     };
     var Data = {
@@ -115,7 +112,7 @@ const socialLogin = async (payload) => {
       deviceType: deviceType,
       deviceToken: deviceToken,
       socialId: socialId,
-      socialLoggedIn:true
+      socialLoggedIn: true,
     };
 
     let result = await DAO.getDataOne(Models.Users, query, {});
@@ -131,7 +128,6 @@ const socialLogin = async (payload) => {
       scope: Config.APP_CONSTANTS.SCOPE.USER,
       _id: user._id,
       time: new Date(),
-      // exp:Math.floor(Date.now() / 1000) + 1800
     };
     const Token = await TokenManager.GenerateToken(
       tokenData,
@@ -153,7 +149,7 @@ const socialLogin = async (payload) => {
       deviceType: deviceType,
       deviceToken: deviceToken,
       socialId: socialId,
-      socialLoggedIn:true
+      socialLoggedIn: true,
     };
 
     let result = await DAO.getDataOne(Models.Users, query, {});
@@ -175,6 +171,7 @@ const socialLogin = async (payload) => {
       tokenData,
       Config.APP_CONSTANTS.SCOPE.USER
     );
+
     return {
       user,
       Token,

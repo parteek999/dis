@@ -4,10 +4,8 @@ const DAO = require('../DAOManager').queries,
     var upload = require('../Libs/uploadManager');
    
 const addContact = async (payload, userDetails) => {
-    console.log(payload)
     const { title, number } = payload
     let imgDetail = await upload.upload(payload)
-    console.log("3434343", imgDetail)
     var Data = {
         title: title,
         number: number,
@@ -18,7 +16,6 @@ const addContact = async (payload, userDetails) => {
 }
 
 const getContact = async (payload, userdetails) => {
-    // console.log(userdetails);
     const query = {
         isDeleted: false
     }
@@ -43,7 +40,6 @@ const deleteContact = async (payload,userdetails)=>{
 //         _id:id,
 //         isDeleted: false
 //     }
-//     console.log(query)
 //     let result=await DAO.getDataOne(Models.news, query,{},{});
 //     return result
 // }

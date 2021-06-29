@@ -65,6 +65,7 @@ module.exports = [
             validate: {
                 query: Joi.object({
                 }),
+//     console.log(query)
                 // headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
             },

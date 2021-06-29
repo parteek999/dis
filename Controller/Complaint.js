@@ -47,7 +47,6 @@ const complaint = async (payload) => {
    
 
     const final = await DAO.saveData(Models.Complaint, Data);
-    console.log(final)
     return { final }
 }
 
@@ -72,7 +71,6 @@ const editStatus = async (payload, userdetails) => {
     change = {
         status:status
     }
-    console.log(change,query)
     let result = await DAO.findAndUpdate(Models.Complaint, query,change, { new: true })
     return result
 }

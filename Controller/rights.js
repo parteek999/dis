@@ -8,7 +8,6 @@ const DAO = require('../DAOManager').queries,
 var upload = require('../Libs/uploadManager');
 
 const addRights = async (payload, userDetail) => {
-    console.log(payload)
     const { title, description } = payload
     var Data = {
         title: title,
@@ -19,7 +18,6 @@ const addRights = async (payload, userDetail) => {
 }
 
 const getRights = async (payload, userdetails) => {
-    console.log(userdetails);
     const query = {
         isDeleted: false
     };
@@ -30,13 +28,11 @@ const getRights = async (payload, userdetails) => {
 }
 
 const singleRights = async (payload, userdetails) => {
-    // console.log("12121212121212",payload)
     let id = payload.id
     const query = {
         _id: id,
         isDeleted: false
     }
-    console.log(query)
     let result = await DAO.getDataOne(Models.rights, query, {}, {});
     return result
 }
@@ -47,7 +43,6 @@ const deleteRights = async (payload, userdetails) => {
     const query = {
         _id: id,
     }
-    console.log(query)
     let result = await DAO.findAndUpdate(Models.rights, query, { isDeleted: true }, { new: true })
     return result
 }
@@ -61,7 +56,6 @@ const editRights = async (payload, userDetails) => {
     let data = {}
     if (payload.title) { data.title = payload.title }
     if (payload.description) { data.description = payload.description }
-    console.log(data)
     let result = await DAO.findAndUpdate(Models.rights, query, data, { new: true })
     return result
 

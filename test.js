@@ -28,7 +28,6 @@
 
 // const { array } = require("@hapi/joi");
 
-// console.log(articles)
 // let likes = [1, 5];
 // let b = {};
 // likes.forEach(like => {
@@ -38,7 +37,6 @@
 // //  Your object becomes { 1: true, 5: true }
 
 // articles.forEach(article => {
-// console.log(b[article.id])
 //     if (b[article.id]) {//   If key is present in the object
 //         article.isBookmarked=true;
 //     } else {
@@ -46,13 +44,11 @@
 //     }
 // });
 
-// return console.log(articles);
 
 
 
 // let a=[1,2,3];
 // let b={...a};
-// console.log(b)
 
 // let sum=0
 
