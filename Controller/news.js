@@ -7,10 +7,8 @@ const { sendPushNotification } = require('../Libs/FCMnotification');
 
 
 const createNews = async (payload, userDetails) => {
-    // console.log(payload)
     const { title, description } = payload
     let imgDetail = await upload.upload(payload)
-    // console.log("3434343", imgDetail)
 
     var Data = {
         title: title,
@@ -19,14 +17,12 @@ const createNews = async (payload, userDetails) => {
     }
 
     let result = await DAO.saveData(Models.news, Data);
-    console.log(result)
     const message = {
         message: result,
         type: 2
     }
 
     const deviceToken = await DAO.getUniqueData(Models.Users, { notificationToggle: false }, {}, {}, 'deviceToken');
-    console.log("deviceToken", deviceToken);
 
 try {
     await sendPushNotification(message, deviceToken);
@@ -35,7 +31,6 @@ try {
         notificationToggle: false
     };
     let final_id = await DAO.getUniqueData(Models.Users, query, {}, {}, '_id');
-    console.log("final_id", final_id)
     var data1 = {
         message: result.title,
         article_id: result._id,
@@ -44,13 +39,12 @@ try {
     let notification = await DAO.saveData(Models.Notification, data1);
     
 } catch (error) {
-    console.log(error)
+    return error
 }
     return result
 }
 
 const getNews = async (payload, userdetails) => {
-    console.log("qwq", userdetails);
     const query = {
         isDeleted: false
     }
@@ -58,17 +52,13 @@ const getNews = async (payload, userdetails) => {
 }
 
 const getUserNews = async (payload, userdetails) => {
-    console.log(userdetails);
     if(userdetails&&userdetails!==null){
         const query = {
             isDeleted: false
         }
         let result = await DAO.getData(Models.Users, { _id: userdetails._id }, { article_Id: 1, _id: 0 }, {})
-        // console.log(result, "sjhsdsjd")
-        // console.log(result[0].article_Id)
     
         let news = await DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
-        console.log(news)
     
         let b = {};
         let bookmarkId = result[0].article_Id;
@@ -100,7 +90,6 @@ const singleNews = async (payload, userdetails) => {
         _id: id,
         isDeleted: false
     }
-    console.log(query)
     let result = await DAO.getDataOne(Models.news, query, {}, {});
     return result
 }
@@ -111,17 +100,13 @@ const userSingleNews = async (payload, userdetails) => {
         const query = {
             _id: id,
         }
-        console.log(query)
         var arr = [];
         arr.push(id)
-        console.log(arr)
         let data = {
             _id:userdetails._id,
             article_Id: { '$in': arr }
         }
         let final = await DAO.getDataOne(Models.Users, data);
-        console.log(final!==null)
-        console.log(final)
         
         if (final && final!=null) {
             result = await DAO.getDataOne(Models.news, query, {}, {});
@@ -141,7 +126,6 @@ const userSingleNews = async (payload, userdetails) => {
             _id: id,
             isDeleted: false
         }
-        console.log(query)
         let result = await DAO.getDataOne(Models.news, query, {}, {});
         return result
     }

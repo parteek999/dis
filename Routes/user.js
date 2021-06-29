@@ -17,7 +17,6 @@ module.exports = [
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                 console.log("sasasa",request.payload)
                 return Controller.user.signUp(request.payload)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);

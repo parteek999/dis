@@ -16,10 +16,8 @@ const Login = async (payload) => {
         //     email:email
         // };
     //    var final =await DAO.getData(Models.Admin,query,{},{});
-    //         console.log(final)
 
         var final = await Models.Admin.findOne();   
-        console.log(final) 
         const checkPassword = Bcrypt.compareSync(password, final.password); //compare password string to encrypted string
 
         if (!checkPassword) throw ERROR.INVALID_CREDENTIALS;
@@ -43,21 +41,17 @@ const Login = async (payload) => {
 const changePassword = async (request, userDetails) => {
 
     let { oldPasword, newPassword } = request
-    console.log(oldPasword, newPassword)
 
     const result = await DAO.getDataOne(Models.Admin, { _id: userDetails._id })
 
-    console.log(result.password)
 
     var checkPassword = await Bcrypt.compareSync(oldPasword, result.password)
 
-    console.log(checkPassword)
     if (checkPassword === false) throw ERROR.INVALID_PASSWORDMATCH;
     const pass = await Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
 
     const final = await DAO.findAndUpdate(Models.Admin, { _id: userDetails._id }, { password: pass }, { lean: true, upsert: true, new: true });
 
-    console.log(final)
 
     return { final }
 
@@ -73,7 +67,6 @@ const userCount = async (payload, userDetails) => {
 
 const paginateUser = async (payload, userDteails) => {
     let { limit, pageNo } = payload
-    console.log(limit, pageNo)
     let page = pageNo - 1
     const options = {
         sort: { createdAt: -1 },
@@ -83,7 +76,6 @@ const paginateUser = async (payload, userDteails) => {
         limit: 10
     }
     let result = await DAO.getData(Models.Users, {}, {}, options);
-    console.log(result)
     return result
 }
 
@@ -96,7 +88,6 @@ const getUser = async (payload, userDetails) => {
 }
 
 const singleUser = async (payload, userDetails) => {
-    console.log("1212121212", payload.id)
 
     const query = {
         _id: payload.id
@@ -134,11 +125,9 @@ const article = async (payload) => {
 }
 
 const blockunblockUser = async (payload) => {
-    console.log("121121212121", payload.id)
     let query = { _id: payload.id }
     // let data;
     let result = await DAO.getDataOne(Models.Users, query)
-    console.log(result)
     if (result.isBlocked === false) {
         data = { isBlocked: true }
         return final = await DAO.findAndUpdate(Models.Users, query, data, { new: true })
@@ -150,10 +139,8 @@ const blockunblockUser = async (payload) => {
 }
 
 const uploadImages = async (payload, userDetail) => {
-    console.log(payload)
     const { title, description } = payload
     let imgDetail = await upload.upload(payload)
-    console.log("3434343", imgDetail)
     var Data = {
         title: title,
         description: description,

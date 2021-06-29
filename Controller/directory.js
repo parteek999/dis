@@ -49,7 +49,6 @@ const getDirectory = async (payload, userdetails) => {
         sort: { directoryName: -1 },
     }
     let final = await DAO.getData(Models.Directory, query, {}, options);
-    console.log(final)
     return final
 
 }
@@ -65,7 +64,6 @@ const getUserDirectory = async (payload, userDetails) => {
         sort: { directoryName: -1 },
     }
     var directory = await DAO.getData(Models.Directory, query, {}, options)
-    console.log(directory)
     return directory
 }
 
@@ -73,8 +71,6 @@ const editDirectory = async (payload, userDetails) => {
     let query={
         _id:payload.id
     }
-    console.log("")
-    console.log("query",query)
     let data = {}
 
     if (payload.directoryType!== null && payload.directoryType !== "") { data.title = payload.directoryType }
@@ -93,7 +89,6 @@ const editDirectory = async (payload, userDetails) => {
         data.image = imgDetail
     }
 
-    console.log(data)
     let result = await DAO.findAndUpdate(Models.Directory, query, data, { new: true })
     return result
 }
@@ -106,7 +101,6 @@ const singleDirectory = async (payload, userdetails) => {
         _id: id,
         isDeleted: false
     }
-    console.log(query)
     let directory = await DAO.getDataOne(Models.Directory, query, {}, {});
     return directory
 }
