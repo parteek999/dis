@@ -102,7 +102,7 @@ const login = async (payload) => {
 const socialLogin = async (payload) => {
   const { email, name, deviceToken, deviceType, socialId } = payload;
   console.log("payload",payload)
-  
+
   if (deviceType =="IOS") {
     const query = {
       socialId: payload.socialId,
@@ -115,6 +115,7 @@ const socialLogin = async (payload) => {
       deviceType: deviceType,
       deviceToken: deviceToken,
       socialId: socialId,
+      socialLoggedIn:true
     };
 
     let result = await DAO.getDataOne(Models.Users, query, {});
