@@ -489,13 +489,13 @@ module.exports = [
     },
     {
         method: 'Get',
-        path: '/user/aboutCommission',
+        path: '/user/privacyPocily',
         config: {
-            description: 'aboutCommission',
+            description: 'privacyPocily',
             auth: false,
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                return Controller.user.aboutCommission(request.query, reply)
+                return Controller.user.privacyPocily(request.query, reply)
             },
             plugins: {
                 'hapi-swagger': {
@@ -572,6 +572,7 @@ module.exports = [
             }
         }
     },
+
 
 
 ]
