@@ -383,8 +383,8 @@ const formSubmit = async (payload) => {
   return { query };
 };
 
-const aboutCommission = async (request, reply) => {
-  return reply.view("aboutCommission");
+const privacyPocily = async (request, reply) => {
+  return reply.view("privacyPolicy");
 };
 
 const yourRights = async (request, reply) => {
@@ -417,7 +417,7 @@ module.exports = {
   forgotPasswordPageRender,
   termsAndConditionPage,
   faqPage,
-  aboutCommission,
+  privacyPocily,
   yourRights,
   disabilityAct,
   getHtml,
