@@ -46,6 +46,7 @@ module.exports = [
           file: Joi.any().meta({ swaggerType: "file" }).optional(),
           title: Joi.string(),
           number: Joi.number().required(),
+          contactType:Joi.string().valid("phone","whatsApp","message").required()
         }),
         headers: UniversalFunctions.authorizationHeaderObj,
         failAction: UniversalFunctions.failActionFunction,

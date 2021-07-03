@@ -4,12 +4,13 @@ const DAO = require('../DAOManager').queries,
     var upload = require('../Libs/uploadManager');
    
 const addContact = async (payload, userDetails) => {
-    const { title, number } = payload
+    const { title, number,contactType } = payload
     let imgDetail = await upload.upload(payload)
     var Data = {
         title: title,
         number: number,
         image: imgDetail,
+        contactType:contactType
     }
     let result = await DAO.saveData(Models.Contact, Data)
     return result
