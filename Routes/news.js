@@ -265,8 +265,7 @@ module.exports = [
       tags: ["api"],
 
       handler: (request, reply) => {
-        return Controller.news
-          .toggleNotification(request.payload, request.auth.credentials)
+        return Controller.news.toggleNotification(request.payload, request.auth.credentials)
 
           .then((response) => {
             return UniversalFunctions.sendSuccess(

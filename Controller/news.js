@@ -164,12 +164,19 @@ const editNews = async (payload, userDetails) => {
 const toggleNotification = async (payload, UserDetails) => {
     const { mark, id } = payload;
     if (mark == 1) {
-        var toggler = await DAO.findAndUpdate(Models.Users, { _id: id }, { notificationToggle: true })
+        var toggler = await DAO.findAndUpdate(Models.Users, { _id: id }, { notificationToggle: true },{new:true})
     }
     if (mark == 0) {
-        var toggler = await DAO.findAndUpdate(Models.Users, { _id: id }, { notificationToggle: false })
+        var toggler = await DAO.findAndUpdate(Models.Users, { _id: id }, { notificationToggle: false },{new:true})
     }
-    return (toggler.notificationToggle)
+    
+
+
+    const data=await DAO.formatUser(toggler.toObject())
+
+    console.log(data)
+
+    return (data)
 }
 
 
