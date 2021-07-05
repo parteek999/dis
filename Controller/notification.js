@@ -11,11 +11,11 @@ var upload = require('../Libs/uploadManager');
 
 
 const getUserNotification = async (payload, userdetails) => {
-    var userdetails = "60ca0120a67bbb331329b1ee";
+    var id = userdetails._id;
     const options = {
         sort: { createdAt: -1 }
     }
-var result =  await DAO.getData(Models.Notification, { userId: { $in: [userdetails] } }, {}, options);
+var result =  await DAO.getData(Models.Notification, { userId: { $in: [id] } }, {}, options);
 
 return result
 
