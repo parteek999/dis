@@ -9,21 +9,17 @@ const { sendPushNotification } = require('../Libs/FCMnotification');
 const createNews = async (payload, userDetails) => {
     const { title, description } = payload
     let imgDetail = await upload.upload(payload)
-
     var Data = {
         title: title,
         description: description,
         image: imgDetail,
     }
-
     let result = await DAO.saveData(Models.news, Data);
     const message = {
         message: result,
         type: 2
     }
-
-    const deviceToken = await DAO.getUniqueData(Models.Users, { notificationToggle: false }, {}, {}, 'deviceToken');
-
+    const deviceToken = await DAO.getUniqueData(Models.Users, { notificationToggle: true }, {}, {}, 'deviceToken');
 try {
     await sendPushNotification(message, deviceToken);
     let query = {
