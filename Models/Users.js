@@ -17,7 +17,7 @@ var Users = new Schema({
     profilePic: { type: String, default: "" },
     deviceToken: { type: String, default: "", trim: true },
     article_Id:[{type: String, default: ""}],
-    notificationToggle:{type:Boolean,default:false},
+    notificationToggle:{type:Boolean,default:true},
     loginType:{
         type: String, enum: [
             Config.APP_CONSTANTS.DATABASE_CONSTANT.ACCOUNT_TYPE.GMAIL
