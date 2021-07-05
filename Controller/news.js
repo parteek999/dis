@@ -24,7 +24,7 @@ try {
     await sendPushNotification(message, deviceToken);
     let query = {
         deviceToken: { '$in': deviceToken },
-        notificationToggle: false
+        notificationToggle: true
     };
     let final_id = await DAO.getUniqueData(Models.Users, query, {}, {}, '_id');
     var data1 = {
@@ -32,7 +32,7 @@ try {
         article_id: result._id,
         userId: final_id,
     }
-    let notification = await DAO.saveData(Models.Notification, data1);
+     notification = await DAO.saveData(Models.Notification, data1);
     
 } catch (error) {
     return error
