@@ -219,6 +219,13 @@
      }
  }
  
+ const formatUser = (toggler) => {
+    delete toggler.password;
+    return toggler;
+}
+
+
+
  module.exports = {
      saveData : saveData,
      getData : getData,
@@ -238,5 +245,6 @@
      bulkFindAndUpdate : bulkFindAndUpdate,
      deepPopulateData:deepPopulateData,
      bulkFindAndUpdateOne : bulkFindAndUpdateOne,
-     findAndUpdatePopulate:findAndUpdatePopulate
+     findAndUpdatePopulate:findAndUpdatePopulate,
+     formatUser:formatUser
  };
