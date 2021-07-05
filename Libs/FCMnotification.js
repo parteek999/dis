@@ -6,7 +6,8 @@ async function sendPushNotification(message1,deviceToken) {
             var message = {
                 registration_ids: deviceToken,
                 data: message1.message,
-                priority: 'high'
+                priority: 'high',
+                badge:1
             };
             fcm.send(message, function (err, result) {
                 console.log("hello");
