@@ -21,9 +21,6 @@ return result
 
 }
 
-
-
-
 module.exports = {
     getUserNotification,
 }

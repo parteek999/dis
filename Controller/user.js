@@ -402,6 +402,17 @@ const getHtml = async (query) => {
   return final;
 };
 
+const logout = async (request,userDetails)=>{
+let data={
+  _id:userDetails._id
+}
+let query={
+   $unset: { deviceToken:""  }
+}
+const final=await DAO.findAndUpdate(Models.Users,data,query,{new:true})
+return final
+}
+
 module.exports = {
   signUp,
   login,
@@ -421,4 +432,5 @@ module.exports = {
   yourRights,
   disabilityAct,
   getHtml,
+  logout
 };
