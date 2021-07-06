@@ -26,6 +26,29 @@ async function sendPushNotification(message1,deviceToken) {
     //  })
 }
 
+async function sendIosNotfication(message1,deviceToken) {
+    var message = {
+        registration_ids: deviceToken,
+        notification: {
+            title:message1.message.title,
+            body: message1.message.title,
+            sound: 'default',
+            badge: 1
+        },
+        data: message1.message,
+        priority: 'high'
+    };
+    fcm.send(message, function (err, result) {
+        if (err) {
+            console.log("Something has gone wrong!", err);
+        } else {
+            console.log("Successfully sent with response: ", result);
+        }
+    });
+
+}
+
 module.exports = {
-    sendPushNotification
+    sendPushNotification,
+    sendIosNotfication,
 };

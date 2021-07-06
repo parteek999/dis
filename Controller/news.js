@@ -2,7 +2,7 @@ const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
     Models = require('../Models');
 var upload = require('../Libs/uploadManager');
-const { sendPushNotification } = require('../Libs/FCMnotification');
+const { sendPushNotification,sendIosNotfication } = require('../Libs/FCMnotification');
 
 
 
@@ -19,9 +19,14 @@ const createNews = async (payload, userDetails) => {
         message: result,
         type: 2
     }
-    const deviceToken = await DAO.getUniqueData(Models.Users, { notificationToggle: true }, {}, {}, 'deviceToken');
-try {
-    await sendPushNotification(message, deviceToken);
+
+    console.log("zdsasada",message)
+    const deviceToken = await DAO.getUniqueData(Models.Users,  { notificationToggle: true,deviceType : "IOS"}, {}, {}, 'deviceToken');
+    const deviceToken1 = await DAO.getUniqueData(Models.Users, { notificationToggle: true,deviceType : "ANDROID"}, {}, {}, 'deviceToken');
+console.log("deviceToken",deviceToken)
+    try {
+    await sendIosNotfication (message,deviceToken);
+    await sendPushNotification(message, deviceToken1);
     let query = {
         deviceToken: { '$in': deviceToken },
         notificationToggle: true
