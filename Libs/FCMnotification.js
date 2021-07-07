@@ -3,6 +3,7 @@ const serverKey = 'AAAAPbzQd4Q:APA91bGdeFq31WQwocKOhIExpNocV5Cq7hTyA2k7UF2p1HO5Z
 const fcm = new FCM(serverKey);
 
 async function sendPushNotification(message1,deviceToken) {
+    console.log("sdsds",deviceToken)
             var message = {
                 registration_ids: deviceToken,
                 data: message1.message,
@@ -13,9 +14,9 @@ async function sendPushNotification(message1,deviceToken) {
                 console.log("hello");
                 if (err) {
                     // reject(err)
-                    console.log("Something has gone wrong!", err);
+                    console.log("Something has gone wrong222!", err);
                 } else {
-                    console.log("Successfully sent with response: ", result);
+                    console.log("Successfully sent with response1212: ", result);
                     // resolve(result)
                 }
             });
@@ -36,13 +37,14 @@ async function sendIosNotfication(message1,deviceToken) {
             badge: 1
         },
         data: message1.message,
-        priority: 'high'
+        priority: 'high',
+        badge:1
     };
     fcm.send(message, function (err, result) {
         if (err) {
-            console.log("Something has gone wrong!", err);
+            console.log("Something has gone wrong123!", err);
         } else {
-            console.log("Successfully sent with response: ", result);
+            console.log("Successfully sent with response111: ", result);
         }
     });
 

@@ -24,6 +24,7 @@ const createNews = async (payload, userDetails) => {
     const deviceToken = await DAO.getUniqueData(Models.Users,  { notificationToggle: true,deviceType : "IOS"}, {}, {}, 'deviceToken');
     const deviceToken1 = await DAO.getUniqueData(Models.Users, { notificationToggle: true,deviceType : "ANDROID"}, {}, {}, 'deviceToken');
 console.log("deviceToken",deviceToken)
+console.log("deviceToken1",deviceToken1)
     try {
     await sendIosNotfication (message,deviceToken);
     await sendPushNotification(message, deviceToken1);

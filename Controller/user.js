@@ -73,14 +73,14 @@ const login = async (payload) => {
     if (result === null) throw ERROR.EMAIL_NOT_FOUND;
     const checkPassword = Bcrypt.compareSync(password, result.password);
     if (!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
-    if (result.deviceToken) {
-      Response = await DAO.findAndUpdate(
-        Models.Users,
+    if (result) {
+     response = await DAO.findAndUpdate(Models.Users,
         { email: email },
         { deviceToken: deviceToken, deviceType: deviceType },
         { new: true }
       );
     }
+    
     const user = await DAO.getDataOne(Models.Users, query, { password: 0 }, {});
     let tokenData = {
       scope: Config.APP_CONSTANTS.SCOPE.USER,
