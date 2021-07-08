@@ -1,56 +1,38 @@
-const FCM = require('fcm-node');
-const serverKey = 'AAAAPbzQd4Q:APA91bGdeFq31WQwocKOhIExpNocV5Cq7hTyA2k7UF2p1HO5Zk96aOkPLhqo1XOYxMh_KolQ534l2utcIYCqxvFW0WE4bW5x7n8PwJGYxHNKAdSM_4yZ8VcDaQcuGaZg3kJd1a0dY16Q';
-const fcm = new FCM(serverKey);
+const OneSignal = require("onesignal-node");
+const client = new OneSignal.Client(
+  "dc0cb514-750f-4112-bd9d-033d4ec0ae84",
+  "YjNjNGI5MjAtY2Y3NC00YmYzLThjOTMtYmUwMTc4MDllMGJh"
+);
+const userClient = new OneSignal.UserClient(
+  "MmFjMGEwNmQtMGIwZS00YjU5LWIzZTgtMWMzNTVhYjY4YzEy"
+);
 
-async function sendPushNotification(message1,deviceToken) {
-    console.log("sdsds",deviceToken)
-            var message = {
-                registration_ids: deviceToken,
-                data: message1.message,
-                priority: 'high',
-                badge:1
-            };
-            fcm.send(message, function (err, result) {
-                console.log("hello");
-                if (err) {
-                    // reject(err)
-                    console.log("Something has gone wrong222!", err);
-                } else {
-                    console.log("Successfully sent with response1212: ", result);
-                    // resolve(result)
-                }
-            });
-        // }
-    //     catch (err) {
-    //         reject(err)
-    //     }
-    //  })
-}
-
-async function sendIosNotfication(message1,deviceToken) {
-    var message = {
-        registration_ids: deviceToken,
-        notification: {
-            title:message1.message.title,
-            body: message1.message.title,
-            sound: 'default',
-            badge: 1
-        },
-        data: message1.message,
-        priority: 'high',
-        badge:1
+var sendPushNotification = async (message,deviceToken) => {
+  return new Promise((res, rej) => {
+    const notification = {
+      contents: {
+        en:`${message.message.title}`,
+      },
+      headings: {
+        en: "New News Added",
+      },
+      data: message.message,
+      include_player_ids: deviceToken,
     };
-    fcm.send(message, function (err, result) {
-        if (err) {
-            console.log("Something has gone wrong123!", err);
-        } else {
-            console.log("Successfully sent with response111: ", result);
-        }
-    });
 
-}
+    return client.createNotification(notification)
+      .then((response) => {
+        console.log(response);
+        return res(response);
+      })
+      .catch((e) => {
+        console.log(e);
+        return rej(e);
+      });
+  });
+};
 
 module.exports = {
-    sendPushNotification,
-    sendIosNotfication,
+  sendPushNotification,
 };
+
