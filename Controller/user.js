@@ -11,6 +11,8 @@ var email = require("../DAOManager/sendmail");
 const Jwt = require("jsonwebtoken");
 let fs = require("fs");
 
+
+
 const signUp = async (payload) => {
   const {
     email,
@@ -216,6 +218,9 @@ const editProfile = async (payload, userDetails) => {
       phoneNo: payload.phoneNo,
       fullNo: number,
     };
+
+
+
     const user = await DAO.findAndUpdate(
       Models.Users,
       { _id: userDetails._id },

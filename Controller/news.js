@@ -1,10 +1,7 @@
 const DAO = require('../DAOManager').queries,
-    Config = require('../Config'),
     Models = require('../Models');
 var upload = require('../Libs/uploadManager');
-const { sendPushNotification,sendIosNotfication } = require('../Libs/FCMnotification');
-
-
+const {sendPushNotification} = require('../Libs/FCMnotification');
 
 const createNews = async (payload, userDetails) => {
     const { title, description } = payload
@@ -19,15 +16,15 @@ const createNews = async (payload, userDetails) => {
         message: result,
         type: 2
     }
+    
+    const deviceToken = await DAO.getUniqueData(Models.Users,  { notificationToggle: true}, {}, {}, 'deviceToken');
 
-    console.log("zdsasada",message)
-    const deviceToken = await DAO.getUniqueData(Models.Users,  { notificationToggle: true,deviceType : "IOS"}, {}, {}, 'deviceToken');
-    const deviceToken1 = await DAO.getUniqueData(Models.Users, { notificationToggle: true,deviceType : "ANDROID"}, {}, {}, 'deviceToken');
-console.log("deviceToken",deviceToken)
-console.log("deviceToken1",deviceToken1)
     try {
-    await sendIosNotfication (message,deviceToken);
-    await sendPushNotification(message, deviceToken1);
+    // devices=[
+    //     "55a60c71-912f-4a54-bccd-5b4c97bbbb0f",
+    //     "5d758829-0f7a-4e2b-bd06-20e60561034a",
+    //   ];
+    await sendPushNotification(message,deviceToken)
     let query = {
         deviceToken: { '$in': deviceToken },
         notificationToggle: true
@@ -41,7 +38,7 @@ console.log("deviceToken1",deviceToken1)
      notification = await DAO.saveData(Models.Notification, data1);
     
 } catch (error) {
-    return error
+    return result
 }
     return result
 }
@@ -67,7 +64,6 @@ const getUserNews = async (payload, userdetails) => {
         bookmarkId.forEach(like => {
             b[like] = true
         });
-    
         news.forEach(article => {
             if (b[article._id]) {
                 article.isBookmarked = true;
@@ -83,7 +79,6 @@ const getUserNews = async (payload, userdetails) => {
         }
         return DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
     }
-    
 }
 
 const singleNews = async (payload, userdetails) => {
@@ -115,7 +110,6 @@ const userSingleNews = async (payload, userdetails) => {
             result.isBookmarked = true;
             return result
         }
-        
         else {
             result = await DAO.getDataOne(Models.news, query, {}, {});
             result.isBookmarked = false;
