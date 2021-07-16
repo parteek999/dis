@@ -12,7 +12,6 @@ require('dotenv').config();
 //             }
 //         });
 //        console.log("111",_id)
-
 //        function send(email,_id) {
 //             return new Promise((resolve, reject) => {        
 //                 var info = {
@@ -21,7 +20,6 @@ require('dotenv').config();
 //                     subject: "Reset Password",
 //                     html: ` <h2><p>Click on the <a href="http://localhost:8000/user/forgotPasswordPageRender?id=${_id}">link</a> to change your password</p></h2>`
 //                 };
-        
 //                 transporter.send(info, (error, accept) => {
 //                     if (error) { reject(error) }
 //                     else {
@@ -32,7 +30,6 @@ require('dotenv').config();
 //         }
 //     catch(err){
 //         throw err
-    
 //     }
 
 
@@ -76,6 +73,5 @@ function upload(file) {
     })
 }
 module.exports = {
-    // sentmail: sentmail,
     Uplaod: upload
 };

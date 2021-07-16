@@ -42,14 +42,12 @@ const createNews = async (payload, userDetails) => {
 }
     return result
 }
-
 const getNews = async (payload, userdetails) => {
     const query = {
         isDeleted: false
     }
     return DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
 }
-
 const getUserNews = async (payload, userdetails) => {
     if(userdetails&&userdetails!==null){
         const query = {
@@ -80,7 +78,6 @@ const getUserNews = async (payload, userdetails) => {
         return DAO.getData(Models.news, query, {}, { sort: { createdAt: -1 } });
     }
 }
-
 const singleNews = async (payload, userdetails) => {
     let id = payload.id
     const query = {
@@ -90,7 +87,6 @@ const singleNews = async (payload, userdetails) => {
     let result = await DAO.getDataOne(Models.news, query, {}, {});
     return result
 }
-
 const userSingleNews = async (payload, userdetails) => {
     if(userdetails&&userdetails!==null){
         let id = payload.id
@@ -125,10 +121,7 @@ const userSingleNews = async (payload, userdetails) => {
         let result = await DAO.getDataOne(Models.news, query, {}, {});
         return result
     }
-    
-    
 }
-
 const deleteNews = async (payload, userdetails) => {
     let id = payload.id
     const query = {
@@ -137,14 +130,10 @@ const deleteNews = async (payload, userdetails) => {
     let result = await DAO.findAndUpdate(Models.news, query, { isDeleted: true }, { new: true })
     return result
 }
-
 const editNews = async (payload, userDetails) => {
     let query = { _id: payload.id };
     let data = {}
-
     console.log('edit paylod', payload)
-
-
     if (payload.title !== null && payload.title !== "") { data.title = payload.title }
     if (payload.description !== null && payload.description !== "") { data.description = payload.description }
     if (payload['file']) {
@@ -156,7 +145,6 @@ const editNews = async (payload, userDetails) => {
     let result = await DAO.findAndUpdate(Models.news, query, data, { new: true })
     return result
 }
-
 const toggleNotification = async (payload, UserDetails) => {
     console.log(payload)
     const { mark, id } = payload;

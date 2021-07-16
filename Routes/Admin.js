@@ -18,7 +18,7 @@ module.exports = [
             auth: false,
             tags: ['api', 'admin'],
             handler: (request, reply) => {
-                console.log(request.payload)
+            
                 return Controller.Admin.Login(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
@@ -56,7 +56,7 @@ module.exports = [
             },
             tags: ['api', 'user'],
             handler: (request, reply) => {
-                console.log("12121212", request.payload)
+                
                 return Controller.Admin.changePassword(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);

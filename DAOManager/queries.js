@@ -26,8 +26,10 @@
  }
  
  function getDataOne(model, query, projection, options) {
+     
      return new Promise((resolve, reject) => {
          try {
+             
              let findData = model.findOne(query, projection, options);
              return resolve(findData);
          } catch (err) {
