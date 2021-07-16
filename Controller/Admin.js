@@ -12,12 +12,11 @@ var upload = require('../Libs/uploadManager');
 const Login = async (payload) => {
     try {
         const { email, password } = payload;
-        //  query = {
-        //     email:email
-        // };
-    //    var final =await DAO.getData(Models.Admin,query,{},{});
+        console.log({email})
+        const final = await Models.Admin.findOne({email:email});   
 
-        var final = await Models.Admin.findOne();   
+        // const result = await DAO.getDataOne(Models.Admin, { _id: userDetails._id })
+        console.log("gjkhljlkghjlkjh|",final)
         const checkPassword = Bcrypt.compareSync(password, final.password); //compare password string to encrypted string
 
         if (!checkPassword) throw ERROR.INVALID_CREDENTIALS;
@@ -41,18 +40,23 @@ const Login = async (payload) => {
 const changePassword = async (request, userDetails) => {
 
     let { oldPasword, newPassword } = request
+    console.log(request)
 
     const result = await DAO.getDataOne(Models.Admin, { _id: userDetails._id })
 
+    console.log(result)
 
-    var checkPassword = await Bcrypt.compareSync(oldPasword, result.password)
+    const checkPassword =   Bcrypt.compareSync(oldPasword, result.password)
 
     if (checkPassword === false) throw ERROR.INVALID_PASSWORDMATCH;
-    const pass = await Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
+    console.log(checkPassword)
+
+    const pass =  Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
+    console.log(pass)
 
     const final = await DAO.findAndUpdate(Models.Admin, { _id: userDetails._id }, { password: pass }, { lean: true, upsert: true, new: true });
 
-
+console.log(final)
     return { final }
 
 }
@@ -60,7 +64,7 @@ const changePassword = async (request, userDetails) => {
 const userCount = async (payload, userDetails) => {
 
     // let Data = await DAO.getData(Models.Users);
-    let result = Models.Users.find({}).count()
+    let result = Models.Users.find({}).countDocuments()
 
     return result
 }

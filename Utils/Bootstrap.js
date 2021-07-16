@@ -27,18 +27,18 @@ const Run = async () => {
     let adminDetails1 = {
         name : "NCPD ADMIN",
         email: "developer@csbtechemporium.com",
-        password: password,           //q%E7<HIKL,*B~9b|
+        $setOnInsert:{password: password},           //q%E7<HIKL,*B~9b|
     };
     
     let adminDetails2 = {
         name : "NCPD ADMIN",
-        email: "Admin@AccessAbilityBahamas.org",
-        password: password,           //q%E7<HIKL,*B~9b|
+       email: "admin@accessabilitybahamas.org",
+       $setOnInsert:{ password: password},           //q%E7<HIKL,*B~9b|
     };
     let adminDetails3 = {
         name : "NCPD ADMIN",
-        email: "Admin@ncpd.com",
-        password: password,           //q%E7<HIKL,*B~9b|
+        email: "admin@ncpd.com",
+        $setOnInsert:{password: password},           //q%E7<HIKL,*B~9b|
     };
     CreateAdmin(adminDetails2);
     CreateAdmin(adminDetails1);
