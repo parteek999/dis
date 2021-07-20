@@ -32,24 +32,44 @@ const deleteContact = async (payload,userdetails)=>{
     return result 
 }
 
+const editContact = async (payload, userDetails) => {
+    let query={
+        _id:payload.id
+    }
+    let data = {}
+    // console.log(payload.number)
+       console.log(!payload.number)
+    if (payload.title) { data.title = payload.title }
+    if (payload.number) { data.number = payload.number }
+    if (payload.contactType) { data.contactType = payload.contactType }
+    if (payload['file']) {
+        let imgDetail = await upload.upload(payload);
+        data.image = imgDetail
+    }
+
+    let result = await DAO.findAndUpdate(Models.Contact, query, data, { new: true })
+    return result
+}
 
 
 
-// const singleContact = async (payload, userdetails) => {
-//     let  id = payload.id
-//     const query = {
-//         _id:id,
-//         isDeleted: false
-//     }
-//     let result=await DAO.getDataOne(Models.news, query,{},{});
-//     return result
-// }
+const singleContact = async (payload, userdetails) => {
+    console.log("hello")
+    // let  id = payload.id
+    const query = {
+        _id:payload.id,
+        isDeleted: false
+    }
+    let result=await DAO.getDataOne(Models.Contact, query,{},{});
+    return result
+}
 
 
 
 module.exports = {
     addContact, 
     getContact,
-    // singleContact,
-     deleteContact
+    singleContact,
+    deleteContact,
+    editContact
 }

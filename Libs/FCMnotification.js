@@ -1,10 +1,10 @@
 const OneSignal = require("onesignal-node");
 const client = new OneSignal.Client(
-  "dc0cb514-750f-4112-bd9d-033d4ec0ae84",
-  "YjNjNGI5MjAtY2Y3NC00YmYzLThjOTMtYmUwMTc4MDllMGJh"
+  "b422c7c0-8a0c-430c-9420-d699543a2388",
+  "NmJjYjFlZGEtYWJiYS00NTkzLWFhOGYtM2E0MjdkMGNiZDJh"
 );
 const userClient = new OneSignal.UserClient(
-  "MmFjMGEwNmQtMGIwZS00YjU5LWIzZTgtMWMzNTVhYjY4YzEy"
+  "NWIwM2ZlNTQtMjg0My00NzNiLThiNDAtOGYyZjgzMzU5MTI1"
 );
 
 var sendPushNotification = async (message,deviceToken) => {

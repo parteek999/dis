@@ -145,4 +145,79 @@ module.exports = [
       },
     },
   },
+  {
+    method: 'GET',
+    path: '/contact/singleContact',
+    config: {
+        description: "singleContact",
+        auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN] },
+        tags: ['api', "singleContact"],
+        handler: (request, reply) => {
+            return Controller.Contact.singleContact(request.query, request.auth.credentials)
+                .then(response => {
+                    return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                })
+                .catch(error => {
+                    winston.error("=====error=============", error);
+                    return UniversalFunctions.sendError("en", error, reply);
+                });
+        },
+        validate: {
+            query: Joi.object({
+               id:Joi.string(),
+            }),
+            headers: UniversalFunctions.authorizationHeaderObj,
+            failAction: UniversalFunctions.failActionFunction
+        },
+        plugins: {
+            'hapi-swagger': {
+                payloadType: 'form',
+            }
+        }
+    }
+},
+  {
+    method: 'POST',
+    path: '/contact/editContact',
+    config: {
+        description: 'editContact',
+        auth: {
+            strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN]
+        },
+        tags: ['api', 'directory'],
+        handler: (request, reply) => {
+            return Controller.Contact.editContact(request.payload, request.auth.credentials)
+
+                .then(response => {
+                    return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                })
+                .catch(error => {
+                    winston.error("=====error=============", error);
+                    return UniversalFunctions.sendError("en", error, reply);
+                });
+        },
+        payload : {
+            output: "stream",
+            parse: true,
+            allow: "multipart/form-data",
+            maxBytes: 200000000 * 1000 * 1000
+        },
+        validate: {
+            payload: Joi.object({
+              id:Joi.string(),
+              file: Joi.any().meta({ swaggerType: "file" }).optional(),
+              title: Joi.string().allow(''),
+              number: Joi.number().allow(''),
+              contactType:Joi.string().valid("phone","whatsApp","message").allow(''),
+            }),
+            headers: UniversalFunctions.authorizationHeaderObj,
+            failAction: UniversalFunctions.failActionFunction
+        },
+        plugins: {
+            'hapi-swagger': {
+                payloadType: 'form'
+            }
+        }
+    }
+}
 ];
