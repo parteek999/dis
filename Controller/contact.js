@@ -65,11 +65,20 @@ const singleContact = async (payload, userdetails) => {
 }
 
 
+const contactOrder = async (payload, userdetails) => {
+
+    console.log("hello",payload)
+
+    return "hello"
+}
+
+
 
 module.exports = {
     addContact, 
     getContact,
     singleContact,
     deleteContact,
-    editContact
+    editContact,
+    contactOrder
 }
