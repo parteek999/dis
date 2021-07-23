@@ -1,20 +1,25 @@
-const data = [
-    {name: 'Page A', count: 4000},
-    {name: 'Page B', count: 3000},
-    {name: 'Page C', count: 2000},
-    ];
+// const data = [
+//     {name: 'Page A', count: 4000},
+//     {name: 'Page B', count: 3000},
+//     {name: 'Page C', count: 2000},
+//     ];
   
-  let wantedArray = data.map((obj, index) => {
-      return {
-        name: obj.name,
-        [`count${index+1}`]: obj.count,
-        order:index+1
-      }
-   });
-   console.log(wantedArray)
+//   let wantedArray = data.map((obj, index) => {
+//       return {
+//         name: obj.name,
+//         [`count${index+1}`]: obj.count,
+//         order:index+1
+//       }
+//    });
+//    console.log(wantedArray)
 
 
-
+var hello='[{"id":"gary","name":"Gary Goodspeed","order":0},{"id":"kvn","name":"KVN","order":1},{"id":"cato","name":"Little Cato","order":2},{"id":"mooncake","name":"Mooncake","order":3},{"id":"quinn","name":"Quinn Ergon","order":4}]'
+var str = hello.replace(/^"|"$/g, '')
+var hel=str.split(',')
+console.log(typeof(str))
+console.log("hello",str)
+console.log(JSON.parse(hello))
 
 
 
