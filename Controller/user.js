@@ -105,7 +105,7 @@ const socialLogin = async (payload) => {
   if (deviceType == "IOS") {
     const query = {
       socialId: payload.socialId,
-      //   email: payload.email,
+      //email: payload.email,
       isBlocked: false,
     };
     var Data = {
@@ -116,7 +116,6 @@ const socialLogin = async (payload) => {
       socialId: socialId,
       socialLoggedIn: true,
     };
-
     let result = await DAO.getDataOne(Models.Users, query, {});
     result !== null
       ? (user = await DAO.findAndUpdate(
@@ -218,9 +217,6 @@ const editProfile = async (payload, userDetails) => {
       phoneNo: payload.phoneNo,
       fullNo: number,
     };
-
-
-
     const user = await DAO.findAndUpdate(
       Models.Users,
       { _id: userDetails._id },
@@ -248,7 +244,6 @@ const editProfile = async (payload, userDetails) => {
       Data,
       { new: true }
     );
-
     return {
       user,
     };

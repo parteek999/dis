@@ -1,107 +1,127 @@
+// const data = [
+//     {name: 'Page A', count: 4000},
+//     {name: 'Page B', count: 3000},
+//     {name: 'Page C', count: 2000},
+//     ];
+
+//   let wantedArray = data.map((obj, index) => {
+//       return {
+//         name: obj.name,
+//         [`count${index+1}`]: obj.count,
+//         order:index+1
+//       }
+//    });
+//    console.log(wantedArray)
+
+var hello =
+  '[{"id":"gary","name":"Gary Goodspeed","order":0},{"id":"kvn","name":"KVN","order":1},{"id":"cato","name":"Little Cato","order":2},{"id":"mooncake","name":"Mooncake","order":3},{"id":"quinn","name":"Quinn Ergon","order":4}]';
+var str = hello.replace(/^"|"$/g, "");
+var hel = str.split(",");
+console.log(typeof str);
+console.log("hello", str);
+console.log(JSON.parse(hello))
+
+[
+  {
+    _id: "60fa652b09d0855ed21ea66d",
+    order: 1,
+  },
+  {
+    _id: "60fa653409d0855ed21ea66e",
+    order: 2,
+  },
+  {
+    _id: ObjectId("60fa654009d0855ed21ea66f"),
+    order: 3,
+  }
+];
+
 // let articles = [
 //     {
 //         id: 1,
 //         title: "1",
-//         // isBookmarked: false
+//         isBookmarked: false
 //     },
 //     {
 //         id: 2,
 //         title: "2",
-//         // isBookmarked: false
+//         isBookmarked: false
 //     },
 //     {
 //         id: 3,
 //         title: "3",
-//         // isBookmarked: false
+//         isBookmarked: true
 //     },
 //     {
 //         id: 4,
 //         title: "4",
-//         // isBookmarked: false
+//         isBookmarked: false
 //     },
 //     {
 //         id: 5,
 //         title: "5",
-//         // isBookmarked: false
+//         isBookmarked: false
 //     },
 // ]
 
-// const { array } = require("@hapi/joi");
-
 // let likes = [1, 5];
+
 // let b = {};
 // likes.forEach(like => {
 //     b[like] = true
-
 // });
 // //  Your object becomes { 1: true, 5: true }
 
 // articles.forEach(article => {
+// // console.log(b[article.id])
+
 //     if (b[article.id]) {//   If key is present in the object
 //         article.isBookmarked=true;
 //     } else {
 //         article.isBookmarked=false;
+
+//     }
+// });
+// return console.log(articles);
+// let articles = [
+//     {
+//         id: 1,
+//         title: "1",
+//     },
+//     {
+//         id: 2,
+//         title: "2",
+//     },
+//     {
+//         id: 3,
+//         title: "3",
+//     },
+//     {
+//         id: 4,
+//         title: "4",
+//     },
+//     {
+//         id: 5,
+//         title: "5",
+//     },
+// ]
+
+// let likes = [1, 5];
+
+// let b = {};
+// likes.forEach(like => {
+//     b[like] = true
+// });
+// console.log(b)
+// //  Your object becomes { 1: true, 5: true }
+
+// articles.forEach(article => {
+//     console.log(b[article.id])
+//     if(b[article.id]) {//   If key is present in the object
+//         b['isBookmarked'] = true;
+//     } else {
+//         b['isBookmarked'] = false;
 //     }
 // });
 
-
-
-
-// let a=[1,2,3];
-// let b={...a};
-
-// let sum=0
-
-// function hello(array){
-//     sum=sum+1
-
-// console.log(sum ,array, "ist loop" )
-// }
-
-
-// async function splitIntoChunk(arr, chunk) {
-
-//     while(arr.length > 0) {
-
-//         let tempArray;
-//         tempArray = arr.splice(0, chunk);
-//         console.log(tempArray,"helllo");
-//         await hello(tempArray)
-        
-//     }
-// }
-
-// const array = [1, 2, 3, 4, 5, 6, 7, 8,0];
-// const chunk = 2;
-// splitIntoChunk(array,chunk);
-
-
-// const array = [1, 2, 3, 4, 5, 6, 7, 8, 0];
-//     const chunk = 2;
-
-//     while (array.length > 0) {
-
-//         let tempArray;
-//         tempArray = array.splice(0, chunk);
-//         console.log(tempArray, "helllo");
-
-//         // await sendPushNotification(message, deviceToken);
-
-//     }
-
-
-// var colors = ["red","blue","green","yellow","asas","rtasas","reere"];
-
-// let value=10;
-
-
-
-// var arsray=[];
-// var randColor = colors[Math.floor(Math.random() * colors.length)];
-// arsray.push(randColor); 
-
-// }
-
-// console.log(arsray,"hello")
-
-// console.log(Math.floor(Date.now()+15 * 60 / 1000) + 1800)
+// return console.log(p);

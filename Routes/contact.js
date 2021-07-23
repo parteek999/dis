@@ -219,5 +219,49 @@ module.exports = [
             }
         }
     }
-}
+},
+{
+  method: "POST",
+  path: "/contact/contactOrder",
+  config: {
+    description: "contactOrder",
+    auth: {
+      strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN_USER],
+      mode: "optional",
+    },
+    tags: ["api"],
+
+    handler: (request, reply) => {
+      // console.log(request.payload)
+      return Controller.Contact.contactOrder(
+        request.payload,
+        request.auth.credentials
+      )
+        .then((response) => {
+          return UniversalFunctions.sendSuccess(
+            "en",
+            SUCCESS.DEFAULT,
+            response,
+            reply
+          );
+        })
+        .catch((error) => {
+          winston.error("=====error=============", error);
+          return UniversalFunctions.sendError("en", error, reply);
+        });
+    },
+    // validate: {
+    //   payload: Joi.object({
+    //    list
+    //   }),
+    //   // headers: UniversalFunctions.authorizationHeaderObj,
+    //   failAction: UniversalFunctions.failActionFunction,
+    // },
+    plugins: {
+      "hapi-swagger": {
+        payloadType: "form",
+      },
+    },
+  },
+},
 ];

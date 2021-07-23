@@ -7,8 +7,7 @@ const winston = require('winston');
 
 
 module.exports = [
-
-
+    
     //................LOGIN......................//
     {
         method: 'POST',
@@ -70,8 +69,6 @@ module.exports = [
                 payload: Joi.object({
                     oldPasword: Joi.string().required(),
                     newPassword: Joi.string().required(),
-
-
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction,
@@ -83,7 +80,6 @@ module.exports = [
             }
         }
     },
-
 
     {
         method: 'GET',
