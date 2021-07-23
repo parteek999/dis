@@ -3,7 +3,7 @@
 //     {name: 'Page B', count: 3000},
 //     {name: 'Page C', count: 2000},
 //     ];
-  
+
 //   let wantedArray = data.map((obj, index) => {
 //       return {
 //         name: obj.name,
@@ -13,25 +13,28 @@
 //    });
 //    console.log(wantedArray)
 
-
-var hello='[{"id":"gary","name":"Gary Goodspeed","order":0},{"id":"kvn","name":"KVN","order":1},{"id":"cato","name":"Little Cato","order":2},{"id":"mooncake","name":"Mooncake","order":3},{"id":"quinn","name":"Quinn Ergon","order":4}]'
-var str = hello.replace(/^"|"$/g, '')
-var hel=str.split(',')
-console.log(typeof(str))
-console.log("hello",str)
+var hello =
+  '[{"id":"gary","name":"Gary Goodspeed","order":0},{"id":"kvn","name":"KVN","order":1},{"id":"cato","name":"Little Cato","order":2},{"id":"mooncake","name":"Mooncake","order":3},{"id":"quinn","name":"Quinn Ergon","order":4}]';
+var str = hello.replace(/^"|"$/g, "");
+var hel = str.split(",");
+console.log(typeof str);
+console.log("hello", str);
 console.log(JSON.parse(hello))
 
-
-
-
-
-
-
-
-
-
-
-
+[
+  {
+    _id: "60fa652b09d0855ed21ea66d",
+    order: 1,
+  },
+  {
+    _id: "60fa653409d0855ed21ea66e",
+    order: 2,
+  },
+  {
+    _id: ObjectId("60fa654009d0855ed21ea66f"),
+    order: 3,
+  }
+];
 
 // let articles = [
 //     {

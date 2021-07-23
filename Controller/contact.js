@@ -5,12 +5,14 @@ const DAO = require('../DAOManager').queries,
    
 const addContact = async (payload, userDetails) => {
     const { title, number,contactType } = payload
+    var totalContact =await DAO.count(Models.Contact)
     let imgDetail = await upload.upload(payload)
     var Data = {
         title: title,
         number: number,
         image: imgDetail,
-        contactType:contactType
+        contactType:contactType,
+        order:totalContact+1
     }
     let result = await DAO.saveData(Models.Contact, Data)
     return result
@@ -20,7 +22,11 @@ const getContact = async (payload, userdetails) => {
     const query = {
         isDeleted: false
     }
-    return DAO.getData(Models.Contact, query);
+    const options = {
+        sort: { order: 1 },
+      };
+    return DAO.getData(Models.Contact, query,{},options);
+    
 }
 
 const deleteContact = async (payload,userdetails)=>{
@@ -46,12 +52,9 @@ const editContact = async (payload, userDetails) => {
         let imgDetail = await upload.upload(payload);
         data.image = imgDetail
     }
-
     let result = await DAO.findAndUpdate(Models.Contact, query, data, { new: true })
     return result
 }
-
-
 
 const singleContact = async (payload, userdetails) => {
     console.log("hello")
@@ -66,16 +69,24 @@ const singleContact = async (payload, userdetails) => {
 
 
 const contactOrder = async (payload, userdetails) => {
-    console.log("hello",payload)
-
-
-
-
-
-    return payload
+    console.log(payload)
+    const data =JSON.parse(payload.hello)
+      const promises = [];
+      data.forEach((element) => {
+          promises.push(
+            Models.Contact.findByIdAndUpdate(
+                element._id,
+                {
+                    $set: {
+                        order:element.order
+                    }
+                }
+            )
+          )
+      });
+    await Promise.all(promises);
+    return 
 }
-
-
 
 module.exports = {
     addContact, 

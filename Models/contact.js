@@ -9,6 +9,7 @@ const contact = new Schema({
     image: { type: String ,default:""},
     isDeleted: { type: Boolean, default: false, },
     contactType:{type: String ,default:""},
+    order:{type:Number,required:true}
 },
     {
         timestamps: {
