@@ -250,13 +250,6 @@ module.exports = [
           return UniversalFunctions.sendError("en", error, reply);
         });
     },
-    // validate: {
-    //   payload: Joi.object({
-    //    list
-    //   }),
-    //   // headers: UniversalFunctions.authorizationHeaderObj,
-    //   failAction: UniversalFunctions.failActionFunction,
-    // },
     plugins: {
       "hapi-swagger": {
         payloadType: "form",
