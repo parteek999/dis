@@ -26,7 +26,6 @@ const getContact = async (payload, userdetails) => {
         sort: { order: 1 },
       };
     return DAO.getData(Models.Contact, query,{},options);
-    
 }
 
 const deleteContact = async (payload,userdetails)=>{
