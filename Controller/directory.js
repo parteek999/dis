@@ -20,6 +20,7 @@ const directory = async (payload) => {
         instagramLInk,
         twitterLink
     } = payload
+console.log(payload)
 
     let imgDetail = await upload.upload(payload)
 
@@ -50,7 +51,6 @@ const getDirectory = async (payload, userdetails) => {
     }
     let final = await DAO.getData(Models.Directory, query, {}, options);
     return final
-
 }
 
 const getUserDirectory = async (payload, userDetails) => {
@@ -61,7 +61,7 @@ const getUserDirectory = async (payload, userDetails) => {
         isDeleted:false
     };
     var options = {
-        sort: { directoryName: -1 },
+        sort: { createdAt: -1 },
     }
     var directory = await DAO.getData(Models.Directory, query, {}, options)
     return directory
