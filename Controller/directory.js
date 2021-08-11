@@ -47,7 +47,7 @@ const getDirectory = async (payload, userdetails) => {
     isDeleted: false,
   };
   var options = {
-    sort: { directoryName: -1 },
+    sort: { directoryName: 1 },
   };
   let final = await DAO.getData(Models.Directory, query, {}, options);
   return final;
@@ -61,8 +61,9 @@ const getUserDirectory = async (payload, userDetails) => {
     isDeleted: false,
   };
   var options = {
-    sort: { updatedAt: -1 },
+    sort: { directoryName: 1 },
   };
+  
   var directory = await DAO.getData(Models.Directory, query, {}, options);
   
   directory.forEach((data) => {
@@ -75,6 +76,7 @@ const getUserDirectory = async (payload, userDetails) => {
     console.log(c)
     data.endTime=c;
   });
+
   return directory;
 };
 
