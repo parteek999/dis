@@ -105,9 +105,9 @@ const socialLogin = async (payload) => {
   if (deviceType == "IOS") {
     const query = {
       socialId: payload.socialId,
-      //email: payload.email,
       isBlocked: false,
     };
+
     var Data = {
       name: name,
       email: email,
@@ -301,6 +301,7 @@ const resetPassword = async (request, reply) => {
   ));
 };
 
+
 const forgotPasswordPageRender = async (request, reply) => {
   console.log("request", request);
   return (tokenVerification = Jwt.verify(
@@ -316,9 +317,11 @@ const forgotPasswordPageRender = async (request, reply) => {
   ));
 };
 
+
 const renderConfirmPage = async (request, reply) => {
   return reply.view("form1");
 };
+
 
 const termsAndConditionPage = async (request, reply) => {
   return reply.view("terms");
@@ -368,7 +371,6 @@ const bookmarkedId = async (payload, userDetails) => {
     isDeleted: false,
   };
   let final = await DAO.getData(Models.news, query, {}, {});
-
   return final;
 };
 

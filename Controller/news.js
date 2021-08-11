@@ -154,13 +154,8 @@ const toggleNotification = async (payload, UserDetails) => {
     if (mark == 0) {
         var toggler = await DAO.findAndUpdate(Models.Users, { _id: id }, { notificationToggle: false },{new:true})
     }
-    
-
-
     const data=await DAO.formatUser(toggler.toObject())
-
     console.log(data)
-
     return (data)
 }
 

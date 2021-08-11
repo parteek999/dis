@@ -1,29 +1,3 @@
-<!-- 
-<html>
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forgot password</title>
-</head>
-
-<body>
-
-  <h2 autofocus="true">Create your new password</h2>
-  <form action="/user/resetPassword?id={{name}}" method="POST">
-    <input type="password" class="login-username" autofocus="true" id="bt" required="true" placeholder="password"
-      name="password" />
-    <input type="password" class="login-password" required="true" placeholder="confirmPassword"
-      name="confirmPassword" />
-    <input type="submit" value="Confirm" class="login-submit">
-  </form>
-  </form>
-
-</body>
-
-</html> -->
-
 <html>
 <head>
 <title> Verification of valid Password </title>
@@ -33,21 +7,18 @@ function verifyPassword() {
   var Npw = document.getElementById("Npswd").value;
   var Cpw = document.getElementById("Cpswd").value;
 
-  //check empty password field
   if(Npw==""||Cpw=="") {
      document.getElementById("message").innerHTML = "**Fill the password in both fields please!";
      return false;
   }
- 
- //minimum password length validation
+
   if(Npw.length < 6) {
      document.getElementById("message").innerHTML = "**Password length must be atleast 6 characters";
      return false;
   }
 
-//maximum length of password validation
   if(Npw!==Cpw) {
-     document.getElementById("message").innerHTML = "**Password and confirm password does matched";
+     document.getElementById("message").innerHTML = "**Password and confirm password does not matched";
      return false;
   }
 }
