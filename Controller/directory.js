@@ -68,11 +68,13 @@ const getUserDirectory = async (payload, userDetails) => {
 
   directory.forEach((data) => {
     console.log("start time",data.startTime)
-
-    const a = moment(data.startTime).format("hh:mm A")
+    // const start = new Date(data.startTime);
+    const a=moment(data.startTime).format("hh:mm A");
+    // const a = moment.utc(data.startTime).local().format("hh:mm A")
     console.log("aaaaaa",a)
     data.startTime = a;
     const c= moment(data.endTime).format("hh:mm A")
+    console.log("cccccccc",c)
     data.endTime = c;
     // const start = new Date(data.startTime);
 
