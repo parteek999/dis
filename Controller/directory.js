@@ -67,16 +67,25 @@ const getUserDirectory = async (payload, userDetails) => {
   var directory = await DAO.getData(Models.Directory, query, {}, options);
 
   directory.forEach((data) => {
-    const start = new Date(data.startTime);
-    console.log(start.toLocaleTimeString());
+    // const start = new Date(data.startTime);
+
+    const start = new Date(data.startTime).toLocaleString('en-US', {
+      timeZone: 'America/Nassau'
+    });
+
+
+    // const date=start.toLocaleTimeString();
     // const b = moment(start).format("hh:mm A");
-    const b = moment.utc(start.toLocaleTimeString()).local().format("hh:mm A");
+    const b = moment.utc(start).local().format("hh:mm A");
     console.log(b);
     data.startTime = b;
-    const end = new Date(data.endTime);
-    console.log(end.toLocaleTimeString());
+    // const end = new Date(data.endTime);
+    const end = new Date(data.endTime).toLocaleString('en-US', {
+      timeZone: 'America/Nassau'
+    });
+    console.log(end);
     // const c = moment(end).format("hh:mm A");
-    const c = moment.utc(end.toLocaleTimeString()).local().format("hh:mm A");
+    const c = moment.utc(end).local().format("hh:mm A");
     console.log(c);
     data.endTime = c;
   });
