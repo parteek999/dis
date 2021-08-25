@@ -68,14 +68,15 @@ const getUserDirectory = async (payload, userDetails) => {
 
   directory.forEach((data) => {
     const start = new Date(data.startTime);
-    console.log(start);
+    console.log(start.toLocaleTimeString());
     // const b = moment(start).format("hh:mm A");
-    const b = moment.utc(start).local().format("hh:mm A");
+    const b = moment.utc(start.toLocaleTimeString()).local().format("hh:mm A");
     console.log(b);
     data.startTime = b;
     const end = new Date(data.endTime);
+    console.log(end.toLocaleTimeString());
     // const c = moment(end).format("hh:mm A");
-    const c = moment.utc(end).local().format("hh:mm A");
+    const c = moment.utc(end.toLocaleTimeString()).local().format("hh:mm A");
     console.log(c);
     data.endTime = c;
   });
