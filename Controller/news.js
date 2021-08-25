@@ -25,7 +25,7 @@ const createNews = async (payload, userDetails) => {
     //     "5d758829-0f7a-4e2b-bd06-20e60561034a",
     //   ];
     await sendPushNotification(message,deviceToken)
-    let query = {
+    let query = { 
         deviceToken: { '$in': deviceToken },
         notificationToggle: true
     };
@@ -42,6 +42,7 @@ const createNews = async (payload, userDetails) => {
 }
     return result
 }
+
 const getNews = async (payload, userdetails) => {
     const query = {
         isDeleted: false

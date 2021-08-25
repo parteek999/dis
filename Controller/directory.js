@@ -63,18 +63,21 @@ const getUserDirectory = async (payload, userDetails) => {
   var options = {
     sort: { directoryName: 1 },
   };
-  
+
   var directory = await DAO.getData(Models.Directory, query, {}, options);
-  
+
   directory.forEach((data) => {
     const start = new Date(data.startTime);
-    const b = moment(start).format("hh:mm A");
-    console.log(b)
+    console.log(start);
+    // const b = moment(start).format("hh:mm A");
+    const b = moment.utc(start).local().format("hh:mm A");
+    console.log(b);
     data.startTime = b;
-    const end=new Date(data.endTime);
-    const c=moment(end).format("hh:mm A");
-    console.log(c)
-    data.endTime=c;
+    const end = new Date(data.endTime);
+    // const c = moment(end).format("hh:mm A");
+    const c = moment.utc(end).local().format("hh:mm A");
+    console.log(c);
+    data.endTime = c;
   });
 
   return directory;

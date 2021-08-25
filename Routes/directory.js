@@ -5,11 +5,9 @@ const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const ERROR = Config.responseMessages.ERROR;
 
-
 const winston = require('winston');
 
 module.exports = [
-
     {
         method: 'POST',
         path: '/directory/addDirectory',
