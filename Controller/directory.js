@@ -68,35 +68,12 @@ const getUserDirectory = async (payload, userDetails) => {
 
   directory.forEach((data) => {
     console.log("start time",data.startTime)
-    // const start = new Date(data.startTime);
     const a=moment.utc(data.startTime).format("hh:mm A");
-    // const a = moment.utc(data.startTime).local().format("hh:mm A")
     console.log("aaaaaa",a)
     data.startTime = a;
     const c= moment.utc(data.endTime).format("hh:mm A")
     console.log("cccccccc",c)
     data.endTime = c;
-    // const start = new Date(data.startTime);
-
-    // const start = new Date(data.startTime).toLocaleString('en-US', {
-    //   timeZone: 'America/Nassau'
-    // });
-
-
-    // // const date=start.toLocaleTimeString();
-    // // const b = moment(start).format("hh:mm A");
-    // const b = moment.utc(start).local().format("hh:mm A");
-    // console.log(b);
-    // data.startTime = b;
-    // // const end = new Date(data.endTime);
-    // const end = new Date(data.endTime).toLocaleString('en-US', {
-    //   timeZone: 'America/Nassau'
-    // });
-    // console.log(end);
-    // // const c = moment(end).format("hh:mm A");
-    // const c = moment.utc(end).local().format("hh:mm A");
-    // console.log(c);
-    // data.endTime = c;
   });
 
   return directory;
@@ -175,6 +152,7 @@ const deleteDirectory = async (payload, userdetails) => {
   );
   return result;
 };
+
 
 module.exports = {
   directory,

@@ -125,3 +125,24 @@ console.log(JSON.parse(hello))
 // });
 
 // return console.log(p);
+
+// user getDirectory
+
+    // const start = new Date(data.startTime);
+    // const start = new Date(data.startTime).toLocaleString('en-US', {
+    //   timeZone: 'America/Nassau'
+    // });
+    // // const date=start.toLocaleTimeString();
+    // // const b = moment(start).format("hh:mm A");
+    // const b = moment.utc(start).local().format("hh:mm A");
+    // console.log(b);
+    // data.startTime = b;
+    // // const end = new Date(data.endTime);
+    // const end = new Date(data.endTime).toLocaleString('en-US', {
+    //   timeZone: 'America/Nassau'
+    // });
+    // console.log(end);
+    // // const c = moment(end).format("hh:mm A");
+    // const c = moment.utc(end).local().format("hh:mm A");
+    // console.log(c);
+    // data.endTime = c;
