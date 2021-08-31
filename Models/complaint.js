@@ -5,7 +5,7 @@ var Config = require('../Config');
 var Complaint = new Schema({
    
     countryCode: { type: String },
-    email: { type: String, trim: true },
+    email: { type: String, trim: true},
     phoneNo: { type: String },
     telephoneNo:{ type: String },
     fullNo:{type:String,default:""},
