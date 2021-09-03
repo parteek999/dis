@@ -53,13 +53,56 @@ const getDirectory = async (payload, userdetails) => {
   return final;
 };
 
-const getUserDirectory = async (payload, userDetails) => {
-  const { directoryType } = payload;
 
-  const query = {
+
+
+// const getUsers = catchAsync(async (req, res) => {
+//   console.log("sdsd", req.query);
+//   var query = {
+//     userType: "User",
+//     isDeleted:false
+//   };
+//   if (req.query.search) {
+//     let search = RegExp(req.query.search, "i");
+//     query = {
+//       ...query,
+//       $or: [{ name: { $regex: search } }],
+//     };
+//   }
+//   const options = {
+//     sort: { _id: -1 },
+//     skip: req.query.page * req.query.limit,
+//     limit: req.query.limit,
+//     lean: true,
+//   };
+//   const [users, count] = await Promise.all([
+//     User.find(query, {}, options),
+//     User.countDocuments(query),
+//   ]);
+//   const formattedUsers = formatUser(users);
+//   return res.send(successMessage(200, { formattedUsers, count }));
+// });
+
+
+
+
+
+const getUserDirectory = async (payload, userDetails) => {
+  const { directoryType,search } = payload;
+
+  var query = {
     directoryType: directoryType,
     isDeleted: false,
   };
+  
+  if (search) {
+    let data = RegExp(search, "i");
+    query = {
+      ...query,
+      $or: [{ directoryName: { $regex: data } }],
+    };
+  }
+
   var options = {
     sort: { directoryName: 1 },
   };
@@ -78,6 +121,10 @@ const getUserDirectory = async (payload, userDetails) => {
 
   return directory;
 };
+
+
+
+
 
 const editDirectory = async (payload, userDetails) => {
   let query = {
