@@ -118,6 +118,7 @@ module.exports = [
                         Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.NGO,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.SERVICEANDSUPPORT,
                     ),
+                    search:Joi.string().allow("")
                 }),
                 // headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
@@ -129,6 +130,60 @@ module.exports = [
             }
         }
     },
+
+
+
+
+
+
+    // {
+    //     method: 'GET',
+    //     path: '/directory/getSearchUserDirectory',
+    //     config: {
+    //         description: "getUserDirectory",
+    //         auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER], mode: 'optional' },
+    //         tags: ['api', "getUserDirectory"],
+    //         handler: (request, reply) => {
+    //             return Controller.directory.getSearchUserDirectory(request.query, request.auth.credentials)
+    //                 .then(response => {
+    //                     return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+    //                 })
+    //                 .catch(error => {
+    //                     winston.error("=====error=============", error);
+    //                     return UniversalFunctions.sendError("en", error, reply);
+    //                 });
+    //         },
+    //         validate: {
+    //             query: Joi.object({
+    //                 directoryType:Joi.string().valid(
+    //                     Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.GOVERNMENT,
+    //                     Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.NGO,
+    //                     Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.SERVICEANDSUPPORT,
+    //                 ),
+    //                 search:Joi.string().allow("")
+    //             }),
+    //             // headers: UniversalFunctions.authorizationHeaderObj,
+    //             failAction: UniversalFunctions.failActionFunction
+    //         },
+    //         plugins: {
+    //             'hapi-swagger': {
+    //                 payloadType: 'form',
+    //             }
+    //         }
+    //     }
+    // },
+
+
+
+
+
+
+
+
+
+
+
+
     {
         method: 'GET',
         path: '/directory/singleDirectory',
