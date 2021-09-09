@@ -19,10 +19,12 @@ const directory = async (payload) => {
     facebookLInk,
     instagramLInk,
     twitterLink,
+    email
   } = payload;
   console.log(payload);
 
   let imgDetail = await upload.upload(payload);
+
 
   var Data = {
     directoryType: directoryType,
@@ -37,6 +39,7 @@ const directory = async (payload) => {
     instagramLInk: instagramLInk,
     twitterLink: twitterLink,
     image: imgDetail,
+    email:email
   };
   let directory = await DAO.saveData(Models.Directory, Data);
   return directory;
@@ -52,37 +55,6 @@ const getDirectory = async (payload, userdetails) => {
   let final = await DAO.getData(Models.Directory, query, {}, options);
   return final;
 };
-
-
-
-
-// const getUsers = catchAsync(async (req, res) => {
-//   console.log("sdsd", req.query);
-//   var query = {
-//     userType: "User",
-//     isDeleted:false
-//   };
-//   if (req.query.search) {
-//     let search = RegExp(req.query.search, "i");
-//     query = {
-//       ...query,
-//       $or: [{ name: { $regex: search } }],
-//     };
-//   }
-//   const options = {
-//     sort: { _id: -1 },
-//     skip: req.query.page * req.query.limit,
-//     limit: req.query.limit,
-//     lean: true,
-//   };
-//   const [users, count] = await Promise.all([
-//     User.find(query, {}, options),
-//     User.countDocuments(query),
-//   ]);
-//   const formattedUsers = formatUser(users);
-//   return res.send(successMessage(200, { formattedUsers, count }));
-// });
-
 
 
 
@@ -165,6 +137,10 @@ const editDirectory = async (payload, userDetails) => {
   if (payload.twitterLink !== null && payload.twitterLink !== "") {
     data.twitterLink = payload.twitterLink;
   }
+  if (payload.email !== null && payload.email !== "") {
+    data.email = payload.email;
+  }
+
   if (payload["file"]) {
     let imgDetail = await upload.upload(payload);
     data.image = imgDetail;

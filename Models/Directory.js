@@ -24,6 +24,7 @@ const Directory = new Schema(
     instagramLInk: { type: String, default: "" },
     twitterLink: { type: String, default: "" },
     isDeleted: { type: Boolean, default: false },
+    email: { type: String, trim: true },
   },
   { timestamps: true }
 );
