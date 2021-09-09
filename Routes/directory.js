@@ -33,7 +33,7 @@ module.exports = [
                 output: "stream",
                 parse: true,
                 allow: "multipart/form-data",
-                maxBytes: 200000000 * 1000 * 1000
+                maxBytes: 1000 * 1000 * 50
             },
             validate: {
                 payload: Joi.object({
@@ -45,11 +45,12 @@ module.exports = [
                     ).required(),
                     directoryName: Joi.string().required(),
                     aboutDirectory: Joi.string().allow(""),
-                    phoneNO: Joi.number().required(),
-                    address: Joi.string().required(),
+                    phoneNO: Joi.number().required().allow(""),
+                    address: Joi.string().required().allow(""),
                     website: Joi.string().allow(""),
-                    startTime: Joi.string().required(),
-                    endTime: Joi.string().required(),
+                    email:Joi.string().email().lowercase().trim().required().allow(""),
+                    startTime: Joi.string().required().allow(""),
+                    endTime: Joi.string().required().allow(""),
                     facebookLInk: Joi.string().allow(""),
                     instagramLInk: Joi.string().allow(""),
                     twitterLink: Joi.string().allow(""),
@@ -275,7 +276,7 @@ module.exports = [
                 output: "stream",
                 parse: true,
                 allow: "multipart/form-data",
-                maxBytes: 200000000 * 1000 * 1000
+                maxBytes: 1000 * 1000 * 50
             },
             validate: {
                 payload: Joi.object({
@@ -298,6 +299,7 @@ module.exports = [
                     facebookLInk: Joi.string().allow(''),
                     instagramLInk: Joi.string().allow(''),
                     twitterLink: Joi.string().allow(''),
+                    email:Joi.string().email().lowercase().trim().required().allow("")
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
