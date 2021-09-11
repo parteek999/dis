@@ -7,11 +7,9 @@ const DAO = require("../DAOManager").queries,
 let mail = require("../DAOManager").mail;
 var upload = require("../Libs/uploadManager");
 var path = require("path");
-var email = require("../DAOManager/sendmail");
+var { send, Emailverify } = require("../DAOManager/sendmail");
 const Jwt = require("jsonwebtoken");
 let fs = require("fs");
-
-
 
 const signUp = async (payload) => {
   const {
@@ -25,16 +23,10 @@ const signUp = async (payload) => {
   } = payload;
   let query = {
     email: email,
-    socialId: "",
+    // socialId: "",
   };
 
-  let result = await DAO.getData(Models.Users, query, { _id: 1 }, {});
-  if (result.length) {
-    throw ERROR.EMAIL_ALREADY_EXIST;
-  }
-
-  pass = await Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
-
+  var pass = Bcrypt.hashSync(password, Config.APP_CONSTANTS.SERVER.SALT);
   var number = await (countryCode + phoneNo);
 
   var Data = {
@@ -48,19 +40,84 @@ const signUp = async (payload) => {
     deviceToken: deviceToken,
   };
 
-  const User = await DAO.saveData(Models.Users, Data);
-  const user = await DAO.getDataOne(Models.Users, query, { password: 0 }, {});
+  var result = await DAO.getDataOne(Models.Users, query, {}, {});
+  console.log("dsdsdsds", result);
 
+  if (!result) {
+    var result = await DAO.saveData(Models.Users, Data);
+  }
+  if (result != null && result.isVerified == true) {
+    throw ERROR.VERIFIED_LOGIN;
+  }
+  
+  console.log("ggihgkhj", result);
   let tokenData = {
     scope: Config.APP_CONSTANTS.SCOPE.USER,
-    _id: User._id,
+    _id: result._id,
     time: new Date(),
   };
-  const Token = await TokenManager.GenerateToken(
+
+  const Token = Jwt.sign(
     tokenData,
-    Config.APP_CONSTANTS.SCOPE.USER
+    Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER,
+    {
+      expiresIn: "15m",
+    }
   );
-  return { user, Token };
+
+  await Emailverify(email, Token);
+
+  return {
+    message: { msg: "Verification email sent" },
+  };
+};
+
+const verifySignup = async (request, reply) => {
+  return (tokenVerification = Jwt.verify(
+    request.id,
+    Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER,
+    async (err, decoded) => {
+      if (err) {
+        return reply.view("verificationEmail", {
+          title: "Account verification",
+          errorMessage: "Your link has been expired",
+          projectName: process.env.PROJECT_NAME,
+        });
+      } else {
+        if (decoded) {
+          const result = await DAO.getDataOne(
+            Models.Users,
+            { _id: decoded._id },
+            {},
+            { lean: true }
+          );
+          console.log("hi", result);
+          if (result.isVerified == false) {
+            const final = await DAO.findAndUpdate(
+              Models.Users,
+              { _id: decoded._id },
+              { isVerified: true },
+              { new: true }
+            );
+
+            console.log("00000000", final);
+            return reply.view("verificationEmail", {
+              title: "Account Verification",
+              successMessage:
+                "You have successfully verified you account please login",
+              projectName: process.env.PROJECT_NAME,
+            });
+          } else {
+            return reply.view("verificationEmail", {
+              title: "Account Verified",
+              successMessage: "Your account is already verified",
+              projectName: process.env.PROJECT_NAME,
+            });
+          }
+        }
+      }
+    }
+  ));
 };
 
 const login = async (payload) => {
@@ -68,21 +125,42 @@ const login = async (payload) => {
     const { email, password, deviceToken, deviceType } = payload;
     const query = {
       email: email,
-      socialId: "",
+      // socialId: "",
+      // isVerified: true,
     };
 
     const result = await DAO.getDataOne(Models.Users, query, {});
     if (result === null) throw ERROR.EMAIL_NOT_FOUND;
+
     const checkPassword = Bcrypt.compareSync(password, result.password);
     if (!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
+
+    if (result != null && result.isVerified == false) {
+      let tokenData = {
+        scope: Config.APP_CONSTANTS.SCOPE.USER,
+        _id: result._id,
+        time: new Date(),
+      };
+      const Token = Jwt.sign(
+        tokenData,
+        Config.APP_CONSTANTS.SERVER.JWT_SECRET_KEY_USER,
+        {
+          expiresIn: "15m",
+        }
+      );
+      await Emailverify(email, Token);
+      throw ERROR.IS_VERIFIED;
+    }
+
     if (result) {
-     response = await DAO.findAndUpdate(Models.Users,
+      response = await DAO.findAndUpdate(
+        Models.Users,
         { email: email },
-        { deviceToken: deviceToken, deviceType: deviceType },
+        { deviceToken: deviceToken, deviceType: deviceType,socialLoggedIn: false },
         { new: true }
       );
     }
-    
+
     const user = await DAO.getDataOne(Models.Users, query, { password: 0 }, {});
     let tokenData = {
       scope: Config.APP_CONSTANTS.SCOPE.USER,
@@ -93,21 +171,23 @@ const login = async (payload) => {
       tokenData,
       Config.APP_CONSTANTS.SCOPE.USER
     );
+
     return { user, Token };
   } catch (err) {
     throw err;
   }
 };
 
+
+
 const socialLogin = async (payload) => {
   const { email, name, deviceToken, deviceType, socialId } = payload;
-  console.log("payload",payload)
+  console.log("payload", payload);
   if (deviceType == "IOS") {
     const query = {
       socialId: payload.socialId,
       isBlocked: false,
     };
-
     var Data = {
       name: name,
       email: email,
@@ -172,13 +252,20 @@ const socialLogin = async (payload) => {
       tokenData,
       Config.APP_CONSTANTS.SCOPE.USER
     );
-
     return {
       user,
       Token,
     };
   }
 };
+
+
+
+
+
+
+
+
 
 const changePassword = async (request, userDetails) => {
   const { newPassword, oldPassword } = request.payload;
@@ -301,7 +388,6 @@ const resetPassword = async (request, reply) => {
   ));
 };
 
-
 const forgotPasswordPageRender = async (request, reply) => {
   console.log("request", request);
   return (tokenVerification = Jwt.verify(
@@ -317,11 +403,9 @@ const forgotPasswordPageRender = async (request, reply) => {
   ));
 };
 
-
 const renderConfirmPage = async (request, reply) => {
   return reply.view("form1");
 };
-
 
 const termsAndConditionPage = async (request, reply) => {
   return reply.view("terms");
@@ -404,19 +488,22 @@ const getHtml = async (query) => {
   return final;
 };
 
-const logout = async (request,userDetails)=>{
-let data={
-  _id:userDetails._id
-}
-let query={
-   $unset: { deviceToken:""  }
-}
-const final=await DAO.findAndUpdate(Models.Users,data,query,{new:true})
-return final
-}
+const logout = async (request, userDetails) => {
+  let data = {
+    _id: userDetails._id,
+  };
+  let query = {
+    $unset: { deviceToken: "" },
+  };
+  const final = await DAO.findAndUpdate(Models.Users, data, query, {
+    new: true,
+  });
+  return final;
+};
 
 module.exports = {
   signUp,
+  verifySignup,
   login,
   socialLogin,
   changePassword,
@@ -434,5 +521,5 @@ module.exports = {
   yourRights,
   disabilityAct,
   getHtml,
-  logout
+  logout,
 };
