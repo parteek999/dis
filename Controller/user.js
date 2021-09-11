@@ -49,7 +49,7 @@ const signUp = async (payload) => {
   if (result != null && result.isVerified == true) {
     throw ERROR.VERIFIED_LOGIN;
   }
-  
+
   console.log("ggihgkhj", result);
   let tokenData = {
     scope: Config.APP_CONSTANTS.SCOPE.USER,
@@ -129,10 +129,10 @@ const login = async (payload) => {
 
     const result = await DAO.getDataOne(Models.Users, query, {});
     if (result === null) throw ERROR.EMAIL_NOT_FOUND;
-    
-    // if(result.password==null&&!result.password){
-      
-    // }
+    console.log(result.password)
+    if(!result.password){
+      throw ERROR.SOCIAL_LOGIN_ONLY
+    }
 
     const checkPassword = Bcrypt.compareSync(password, result.password);
     if (!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
@@ -158,7 +158,11 @@ const login = async (payload) => {
       response = await DAO.findAndUpdate(
         Models.Users,
         { email: email },
-        { deviceToken: deviceToken, deviceType: deviceType,socialLoggedIn: false },
+        {
+          deviceToken: deviceToken,
+          deviceType: deviceType,
+          socialLoggedIn: false,
+        },
         { new: true }
       );
     }
@@ -180,16 +184,40 @@ const login = async (payload) => {
   }
 };
 
-
-
 const socialLogin = async (payload) => {
-  const { email, name, deviceToken, deviceType, socialId,iosId,facebookId} = payload;
-  console.log("payload", payload);
-  if (deviceType == "IOS") {
-    const query = {
-      $or: [{ email:email },{iosId:iosId}],
+  const { email, name, deviceToken, deviceType, socialId, iosId, facebookId } =
+    payload;
+
+
+console.log(payload)
+
+  var query = {
+    iosId:iosId,
+    isBlocked: false
+  };
+
+  if (email&&facebookId) {
+    console.log("hi")
+   query = {
+      $or: [{ email: email }, { facebookId: facebookId }],
       isBlocked: false,
     };
+  }
+  
+  if (email&&iosId) {
+   query = { $or: [{ email: email }, { iosId: iosId }], isBlocked: false };
+  }
+
+ 
+
+  console.log("payload", payload);
+
+console.log("cdsd",query)
+  if (deviceType == "IOS") {
+    // const query = {
+    //   $or: [{ email: email }, { iosId: iosId }],
+    //   isBlocked: false,
+    // };
     var Data = {
       name: name,
       email: email,
@@ -197,18 +225,28 @@ const socialLogin = async (payload) => {
       deviceToken: deviceToken,
       iosId: iosId,
       socialLoggedIn: true,
-      isVerified: true
+      isVerified: true,
     };
     let result = await DAO.getDataOne(Models.Users, query, {});
+
+console.log(result)
     result !== null
       ? (user = await DAO.findAndUpdate(
           Models.Users,
-          { iosId: iosId },
-          { deviceToken: payload.deviceToken, deviceType: payload.deviceType,
-            isVerified: true,iosId: iosId,socialLoggedIn: true},
+          query,
+          {
+            deviceToken: payload.deviceToken,
+            deviceType: payload.deviceType,
+            isVerified: true,
+            iosId: iosId,
+            socialLoggedIn: true,
+          },
           { new: true }
         ))
       : (user = await DAO.saveData(Models.Users, Data));
+
+
+      console.log("user",user)
     let tokenData = {
       scope: Config.APP_CONSTANTS.SCOPE.USER,
       _id: user._id,
@@ -223,12 +261,15 @@ const socialLogin = async (payload) => {
       Token,
     };
   } else {
-    const query = {
-      facebookId:facebookId,
-      email: payload.email,
-      isBlocked: false,
-      
-    };
+
+
+
+    console.log("hiiiiii")
+    // const query = {
+    //   facebookId: facebookId,
+    //   email: payload.email,
+    //   isBlocked: false,
+    // };
     var Data = {
       name: name,
       email: email,
@@ -236,16 +277,21 @@ const socialLogin = async (payload) => {
       deviceToken: deviceToken,
       socialId: socialId,
       socialLoggedIn: true,
-      isVerified: true
+      isVerified: true,
     };
 
     let result = await DAO.getDataOne(Models.Users, query, {});
     result !== null
       ? (user = await DAO.findAndUpdate(
           Models.Users,
-          { socialId: socialId },
-          { deviceToken: payload.deviceToken, deviceType: payload.deviceType,
-            isVerified: true,facebookId:facebookId,socialLoggedIn: true },
+          query,
+          {
+            deviceToken: payload.deviceToken,
+            deviceType: payload.deviceType,
+            isVerified: true,
+            facebookId: facebookId,
+            socialLoggedIn: true,
+          },
           { new: true }
         ))
       : (user = await DAO.saveData(Models.Users, Data));
@@ -265,14 +311,6 @@ const socialLogin = async (payload) => {
     };
   }
 };
-
-
-
-
-
-
-
-
 
 const changePassword = async (request, userDetails) => {
   const { newPassword, oldPassword } = request.payload;
