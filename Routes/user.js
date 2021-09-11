@@ -135,10 +135,19 @@ module.exports = [
 
             validate: {
                 payload: Joi.object({
+
+                    // facebookId: Joi.string(),
+                    // googleId: Joi.string(),
+                    // name: joi.NAME,
+                    // email: joi.EMAIL,
+                    // deviceType: Joi.string().valid("IOS", "ANDROID"),
+                    // deviceToken:Joi.string().required()
+
+
                     // socialId: Joi.string().trim().required(),
-                    iosId:Joi.string().trim().required(),
-                    facebookId:Joi.string().trim().required(),
-                    email: Joi.string().email().lowercase().trim().allow(''),
+                    iosId:Joi.string(),
+                    facebookId:Joi.string(),
+                    email: Joi.string().lowercase().trim().allow(''),
                     name: Joi.string().trim().required().allow(''),
                     deviceType: Joi.string().valid(
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.DEVICE_TYPES.IOS,

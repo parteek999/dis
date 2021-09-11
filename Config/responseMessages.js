@@ -10,6 +10,15 @@ exports.ERROR = {
         type: 'EMAIL_ALREADY_EXIST'
     },
 
+    SOCIAL_LOGIN_ONLY: {
+        statusCode: 400,
+        customMessage: {
+            en : 'User does not exist'
+           
+        },
+        type: 'EMAIL_NOT_EXIST'
+    },
+
 
 
     IS_VERIFIED: {
