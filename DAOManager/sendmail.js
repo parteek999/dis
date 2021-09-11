@@ -38,7 +38,7 @@ try {
         from:"testingpmai999@gmail.com",
         to: email,
         subject: "Email Verify",
-        html: `<h2><p>Click on the  <a href=http://localhost:8000/user/verifySignup?id=${Token}>link</a> for eamil verification . Link will be expire in 10 minutes</p></h2>`,
+        html: `<h2><p>Click on the  <a href=${process.env.BASE_URL}/user/verifySignup?id=${Token}>link</a> for eamil verification . Link will be expire in 10 minutes</p></h2>`,
       };
 
       transporter.sendMail(info, (error, accept) => {

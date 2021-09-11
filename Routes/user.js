@@ -135,7 +135,9 @@ module.exports = [
 
             validate: {
                 payload: Joi.object({
-                    socialId: Joi.string().trim().required(),
+                    // socialId: Joi.string().trim().required(),
+                    iosId:Joi.string().trim().required(),
+                    facebookId:Joi.string().trim().required(),
                     email: Joi.string().email().lowercase().trim().allow(''),
                     name: Joi.string().trim().required().allow(''),
                     deviceType: Joi.string().valid(

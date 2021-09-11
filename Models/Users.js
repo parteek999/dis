@@ -12,11 +12,8 @@ var Users = new Schema({
     fullNo:{type:String,default:""},
     // accessToken:{type:String,default:""},
     facebookId:{type: String,trim: true,default:""},
-     
-
-
-
-    socialId:{type: String,trim: true,default:""},
+    iosId:{type: String,trim: true,default:""},
+    // socialId:{type: String,trim: true,default:""},
     socialLoggedIn:{type:String,default:false},
     name: { type: String, trim: true ,default:""},
     profilePic: { type: String, default: "" },
