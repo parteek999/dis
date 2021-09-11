@@ -1,5 +1,29 @@
 
 exports.ERROR = {
+
+    VERIFIED_LOGIN: {
+        statusCode: 400,
+        customMessage: {
+            en : 'Account is already verified please login '
+           
+        },
+        type: 'EMAIL_ALREADY_EXIST'
+    },
+
+
+
+    IS_VERIFIED: {
+        statusCode: 400,
+        customMessage: {
+            en : 'Verification email sent please verify your account first'
+           
+        },
+        type: 'EMAIL_ALREADY_EXIST'
+    },
+
+
+
+
     INVALID_PASSWORDMATCH: {
         statusCode: 400,
         customMessage: {

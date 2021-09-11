@@ -53,6 +53,26 @@ module.exports = [
             }
         }
     },
+
+    //-----------------verifying Signup---------------------------//
+    {
+        method: 'Get',
+        path: '/user/verifySignup',
+        config: {
+            description: 'verifySignup',
+            auth: false,
+            tags: ['api', 'user'],
+            handler: (request, reply) => {
+                return Controller.user.verifySignup(request.query, reply)
+            },
+            plugins: {
+                'hapi-swagger': {
+            
+                }
+            }
+        }
+    },
+
     //...................LOGIN..........................//
     {
         method: 'POST',

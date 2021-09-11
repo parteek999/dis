@@ -57,8 +57,6 @@ const getDirectory = async (payload, userdetails) => {
 };
 
 
-
-
 const getUserDirectory = async (payload, userDetails) => {
   const { directoryType,search } = payload;
 
