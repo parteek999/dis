@@ -125,16 +125,15 @@ const login = async (payload) => {
     const { email, password, deviceToken, deviceType } = payload;
     const query = {
       email: email,
-      // socialId: "",
-      // isVerified: true,
     };
 
     const result = await DAO.getDataOne(Models.Users, query, {});
     if (result === null) throw ERROR.EMAIL_NOT_FOUND;
     
-    if(result.password==null&&!result.password){
+    // if(result.password==null&&!result.password){
       
-    }
+    // }
+
     const checkPassword = Bcrypt.compareSync(password, result.password);
     if (!checkPassword) throw ERROR.INVALID_PASSWORDMATCH;
 
@@ -189,7 +188,6 @@ const socialLogin = async (payload) => {
   if (deviceType == "IOS") {
     const query = {
       $or: [{ email:email },{iosId:iosId}],
-      // iosId: iosId,
       isBlocked: false,
     };
     var Data = {
@@ -229,6 +227,7 @@ const socialLogin = async (payload) => {
       facebookId:facebookId,
       email: payload.email,
       isBlocked: false,
+      
     };
     var Data = {
       name: name,
@@ -237,6 +236,7 @@ const socialLogin = async (payload) => {
       deviceToken: deviceToken,
       socialId: socialId,
       socialLoggedIn: true,
+      isVerified: true
     };
 
     let result = await DAO.getDataOne(Models.Users, query, {});
@@ -244,7 +244,8 @@ const socialLogin = async (payload) => {
       ? (user = await DAO.findAndUpdate(
           Models.Users,
           { socialId: socialId },
-          { deviceToken: payload.deviceToken, deviceType: payload.deviceType },
+          { deviceToken: payload.deviceToken, deviceType: payload.deviceType,
+            isVerified: true,facebookId:facebookId,socialLoggedIn: true },
           { new: true }
         ))
       : (user = await DAO.saveData(Models.Users, Data));
