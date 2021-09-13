@@ -71,7 +71,6 @@ const signUp = async (payload) => {
     message: { msg: "Verification email sent" },
   };
 };
-
 const verifySignup = async (request, reply) => {
   return (tokenVerification = Jwt.verify(
     request.id,
@@ -119,7 +118,6 @@ const verifySignup = async (request, reply) => {
     }
   ));
 };
-
 const login = async (payload) => {
   try {
     const { email, password, deviceToken, deviceType } = payload;
@@ -183,7 +181,6 @@ const login = async (payload) => {
     throw err;
   }
 };
-
 const socialLogin = async (payload) => {
   const { email, name, deviceToken, deviceType, socialId, iosId, facebookId } =
     payload;
@@ -311,7 +308,6 @@ console.log(result)
     };
   }
 };
-
 const changePassword = async (request, userDetails) => {
   const { newPassword, oldPassword } = request.payload;
   const result = await DAO.getDataOne(Models.Users, { _id: userDetails._id });
@@ -336,7 +332,6 @@ const changePassword = async (request, userDetails) => {
   console.log(final);
   return { user };
 };
-
 const editProfile = async (payload, userDetails) => {
   // console.log(payload.file)
   // console.log(payload['file'])
@@ -381,7 +376,6 @@ const editProfile = async (payload, userDetails) => {
     };
   }
 };
-
 const forgetPassword = async (payload) => {
   let query = {
     email: payload.email,
@@ -408,7 +402,6 @@ const forgetPassword = async (payload) => {
     message: "A reset password link is sent to your registered email address",
   };
 };
-
 const resetPassword = async (request, reply) => {
   console.log(request.query);
   console.log(request.payload);
@@ -432,7 +425,6 @@ const resetPassword = async (request, reply) => {
     }
   ));
 };
-
 const forgotPasswordPageRender = async (request, reply) => {
   console.log("request", request);
   return (tokenVerification = Jwt.verify(
@@ -447,19 +439,15 @@ const forgotPasswordPageRender = async (request, reply) => {
     }
   ));
 };
-
 const renderConfirmPage = async (request, reply) => {
   return reply.view("form1");
 };
-
 const termsAndConditionPage = async (request, reply) => {
   return reply.view("terms");
 };
-
 const faqPage = async (request, reply) => {
   return reply.view("faq");
 };
-
 const bookMarked = async (payload, userDetails) => {
   console.log("hello");
   const { article_Id, mark } = payload;
@@ -492,7 +480,6 @@ const bookMarked = async (payload, userDetails) => {
   console.log(result);
   return result;
 };
-
 const bookmarkedId = async (payload, userDetails) => {
   console.log(payload);
   let query = {
@@ -502,7 +489,6 @@ const bookmarkedId = async (payload, userDetails) => {
   let final = await DAO.getData(Models.news, query, {}, {});
   return final;
 };
-
 const formSubmit = async (payload) => {
   const { fname, email, phoneNumber, about } = payload;
   let query = {
@@ -513,15 +499,12 @@ const formSubmit = async (payload) => {
   };
   return { query };
 };
-
 const privacyPocily = async (request, reply) => {
   return reply.view("privacyPolicy");
 };
-
 const yourRights = async (request, reply) => {
   return reply.view("yourRights");
 };
-
 const disabilityAct = async (request, reply) => {
   return reply.view("disabilityAct");
 };
@@ -532,7 +515,6 @@ const getHtml = async (query) => {
   let final = await DAO.getDataOne(Models.pages, data, {}, {});
   return final;
 };
-
 const logout = async (request, userDetails) => {
   let data = {
     _id: userDetails._id,

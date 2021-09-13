@@ -57,7 +57,7 @@ const upload = (payload) => {
             var result = [];
 
             p = unique + " " + payload['file'].hapi.filename
-            key = "http://192.241.139.55:8000/" + p;
+            key = "https://api.accessabilitybahamas.org/" + p;
             result.push(p);
             const value = fs.createWriteStream("./uploads/" + p)
             const well = payload["file"].pipe(value)
