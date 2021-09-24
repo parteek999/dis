@@ -6,7 +6,7 @@ var upload = require('../Libs/uploadManager');
 
 
 const complaint = async (payload) => {
-    const { email, name, countryCode, phoneNo,work,
+    const { email, name, countryCode,address, phoneNo,work,
         telephoneNo, occupation, age, recipientName,
         recipientAddress, recipientTelephone,
         description1,
@@ -17,8 +17,7 @@ const complaint = async (payload) => {
         // description6
     } = payload
     var number = await (countryCode + phoneNo)
-   
-   
+      
     var Data = {
         email: email,
         name: name,
@@ -26,6 +25,7 @@ const complaint = async (payload) => {
         phoneNo: phoneNo,
         fullNo: number,
         work:work,
+        address:address,
         telephoneNo: telephoneNo,
         occupation: occupation,
         age: age,
@@ -74,8 +74,6 @@ const editStatus = async (payload, userdetails) => {
     let result = await DAO.findAndUpdate(Models.Complaint, query,change, { new: true })
     return result
 }
-
-
 
 module.exports = {
     singleComlaint,
