@@ -1,23 +1,6 @@
 const nodemailer = require("nodemailer");
 
 try {
-  // var transporter = nodemailer.createTransport({
-  //   service: "gmail",
-  //   auth: {
-  //     user:process.env.EMAIL,
-  //     pass:process.env.PASSWORD,
-  //   },
-  // });
-
-  // var transporter=nodemailer.createTransport('SMTP',{
-  //   host: "giowm1098.siteground.biz",
-  //   port: 465,
-  //   secure: false, // upgrade later with STARTTLS
-  //   auth: {
-  //     user: "registrations@accessabilitybahamas.org",
-  //     pass: "91*b|7w]d2xi",
-  //   },
-  // });
 
   var transporter = nodemailer.createTransport({
     host: "accessabilitybahamas.org",
