@@ -19,12 +19,11 @@ const directory = async (payload) => {
     facebookLInk,
     instagramLInk,
     twitterLink,
-    email
+    email,
   } = payload;
   console.log(payload);
 
   let imgDetail = await upload.upload(payload);
-
 
   var Data = {
     directoryType: directoryType,
@@ -39,32 +38,58 @@ const directory = async (payload) => {
     instagramLInk: instagramLInk,
     twitterLink: twitterLink,
     image: imgDetail,
-    email:email
+    email: email,
   };
   let directory = await DAO.saveData(Models.Directory, Data);
   return directory;
 };
 
-const getDirectory = async (payload, userdetails) => {
-  const query = {
+const getDirectory = async (query, userdetails) => {
+  
+  const { search,directoryType } = query;
+  console.log(query)
+
+
+
+  var query = {
     isDeleted: false,
   };
+
+  if (directoryType!="ALL") {
+    query = {
+      isDeleted: false,
+      directoryType: directoryType,
+    };
+  }
+
+  console.log(query)
+
+
+  if (search) {
+    let data = RegExp(search, "i");
+    query = {
+      ...query,
+      $or: [{ directoryName: { $regex: data } }],
+    };
+  }
+
   var options = {
     sort: { directoryName: 1 },
   };
+
   let final = await DAO.getData(Models.Directory, query, {}, options);
   return final;
+
 };
 
-
 const getUserDirectory = async (payload, userDetails) => {
-  const { directoryType,search } = payload;
+  const { directoryType, search } = payload;
 
   var query = {
     directoryType: directoryType,
     isDeleted: false,
   };
-  
+
   if (search) {
     let data = RegExp(search, "i");
     query = {
@@ -80,21 +105,17 @@ const getUserDirectory = async (payload, userDetails) => {
   var directory = await DAO.getData(Models.Directory, query, {}, options);
 
   directory.forEach((data) => {
-    console.log("start time",data.startTime)
-    const a=moment.utc(data.startTime).format("hh:mm A");
-    console.log("aaaaaa",a)
+    console.log("start time", data.startTime);
+    const a = moment.utc(data.startTime).format("hh:mm A");
+    console.log("aaaaaa", a);
     data.startTime = a;
-    const c= moment.utc(data.endTime).format("hh:mm A")
-    console.log("cccccccc",c)
+    const c = moment.utc(data.endTime).format("hh:mm A");
+    console.log("cccccccc", c);
     data.endTime = c;
   });
 
   return directory;
 };
-
-
-
-
 
 const editDirectory = async (payload, userDetails) => {
   let query = {
@@ -174,7 +195,6 @@ const deleteDirectory = async (payload, userdetails) => {
   return result;
 };
 
-
 module.exports = {
   directory,
   getDirectory,
@@ -182,4 +202,5 @@ module.exports = {
   getUserDirectory,
   deleteDirectory,
   editDirectory,
+
 };

@@ -65,6 +65,10 @@ module.exports = [
             }
         }
     },
+
+
+
+
     {
         method: 'GET',
         path: '/directory/getDirectory',
@@ -84,6 +88,13 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
+                    search:Joi.string().allow(""),
+                    directoryType:Joi.string().valid(
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.GOVERNMENT,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.NGO,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.SERVICEANDSUPPORT,
+                        Config.APP_CONSTANTS.DATABASE_CONSTANT. DIRECTORY_TYPE.ALL,
+                    ),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
@@ -95,6 +106,7 @@ module.exports = [
             }
         }
     },
+
     {
         method: 'GET',
         path: '/directory/getUserDirectory',
